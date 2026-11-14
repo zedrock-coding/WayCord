@@ -1,7 +1,7 @@
 # Waypoint Pricing Strategy & Monetization Architecture
 
 **Document Version:** 1.0.0  
-**Target Applications:** WES Foundation Deployment, University Incubators (*Eureka!*, *Imprenditore*, *Pitch-to-Elevate*), Standalone App Distribution  
+**Target Applications:** Educational & Institutional Deployment, University Incubators (*Eureka!*, *Imprenditore*, *Pitch-to-Elevate*), Standalone App Distribution  
 **System Architecture:** Hybrid Local-First (Flutter + Hive + Supabase + Gemini 3.5 Flash-Lite)
 
 ---
@@ -30,7 +30,7 @@ Waypoint is a local-first, AI-augmented task execution and workspace system. Unl
 ### Competitive Differentiation
 1. **Cost Advantage:** Waypoint's compute cost is orders of magnitude lower than Motion or Notion AI.
 2. **Data Sovereignty:** Tasks and transcripts reside locally; institutional data syncs only via dedicated Supabase tenants.
-3. **Institutional Synergy:** Native support for WES Foundation initiatives, event ledgers, and student cells.
+3. **Institutional Synergy:** Native support for student initiatives, event ledgers, and student cells.
 
 ---
 
@@ -40,14 +40,14 @@ Waypoint is a local-first, AI-augmented task execution and workspace system. Unl
 graph TD
     A["Free Core (Local-First)"] --> B["Pro ($3.99 / mo)"]
     A --> C["Team / Institutional ($4.00 / seat / mo)"]
-    C --> D["Custom Enterprise / WES Foundation"]
+    C --> D["Custom Enterprise / Institutional"]
 ```
 
 ### Tier Comparison Table
 
-| Feature / Capability | Free Core | Pro Tier | Team / Institutional | Enterprise / WES |
+| Feature / Capability | Free Core | Pro Tier | Team / Institutional | Enterprise |
 | :--- | :---: | :---: | :---: | :---: |
-| **Target User** | Students, Individuals | Power Users | Student Orgs, Labs, WES | Universities, Non-Profits |
+| **Target User** | Students, Individuals | Power Users | Student Orgs, Labs | Universities, Non-Profits |
 | **Pricing (Monthly)** | \$0.00 | \$3.99 | \$4.99 / seat | Custom Contract |
 | **Pricing (Annual)** | \$0.00 | \$2.99 / mo (\$35.88/yr) | \$3.99 / seat / mo | Custom Contract |
 | **Task Persistence** | Local Hive DB | Local Hive + Supabase Cloud | Multi-device Cloud Sync | Dedicated Database Instance |
@@ -55,7 +55,7 @@ graph TD
 | **Voice Processing** | Heuristic Parser | Multi-Task Needle AI (Cloud) | Multi-Task Needle AI + TTS | Priority Edge Concurrency |
 | **Collaboration** | Local-Only | 2 Workspaces (Self + Guest) | Unlimited Workspaces | Multi-Tenant Hierarchy |
 | **RBAC Governance** | Single User | Single User | 3-Tier Weighted RBAC | Custom Role Hierarchies |
-| **Audit Logs & Ledger** | None | 30-day History | Full Audit Trail | WES Event/Coupon Ledger |
+| **Audit Logs & Ledger** | None | 30-day History | Full Audit Trail | Institutional Event Ledger |
 | **Support SLA** | Community | Standard Email | Priority Support | Dedicated Account Manager |
 
 ---
@@ -132,7 +132,7 @@ stateDiagram-v2
 #### Slide 4: Target Addressable Market (TAM / SAM / SOM)
 - **TAM:** Global Task Management & Collaborative Software (\$5.8B by 2027).
 - **SAM:** Higher Education, Student Startups, and Independent Developers (\$420M).
-- **SOM:** Initial deployment across WES Foundation partners and university innovation cells (15,000 target seats in Year 1).
+- **SOM:** Initial deployment across institutional partners and university innovation cells (15,000 target seats in Year 1).
 
 #### Slide 5: Revenue Forecast (3-Year Projection)
 
@@ -153,5 +153,5 @@ stateDiagram-v2
    - Supabase customer table integration with Stripe / Razorpay Webhooks.
    - Offline license token validation via cryptographic signatures.
 3. **Phase 3: Institutional Portal**
-   - Multi-seat management console for WES Foundation campus chapters.
+   - Multi-seat management console for campus chapters.
    - Bulk seat provisioning and centralized team analytics.

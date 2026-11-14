@@ -364,7 +364,7 @@ class _TaskCreationDrawerState extends State<TaskCreationDrawer> {
                       if (_titleError) setState(() => _titleError = false);
                     },
                     decoration: InputDecoration(
-                      hintText: 'e.g., Deliver WES Foundation quarterly ledger audit',
+                      hintText: 'e.g., Deliver quarterly project review presentation',
                       hintStyle: TextStyle(
                         fontSize: 13,
                         color: AppTheme.onSurfaceVariant.withValues(alpha: 0.5),

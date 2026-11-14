@@ -711,16 +711,27 @@ class NeedleReconciliationEngine {
     String? prompt = geminiClarificationMsg;
 
     if (clarificationNeeded && (prompt == null || prompt.isEmpty)) {
-      final parts = <String>[];
+      final scheduledParts = <String>[];
+      final missingParts = <String>[];
       for (final t in reconciledTasks) {
         final title = t['title'] ?? 'task';
-        if (t['due_date'] == null) {
-          parts.add('When is "$title" due?');
+        if (t['due_date'] != null) {
+          final due = DateTime.tryParse(t['due_date'].toString());
+          const days = ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+          final dayName = (due != null && due.weekday >= 1 && due.weekday <= 7) ? days[due.weekday] : '';
+          scheduledParts.add(dayName.isNotEmpty ? '"$title" for $dayName' : '"$title"');
+        } else {
+          missingParts.add('What time should I schedule the "$title" task?');
         }
       }
-      prompt = parts.isNotEmpty
-          ? parts.join(' ')
-          : 'Could you clarify the details for these tasks?';
+
+      if (scheduledParts.isNotEmpty && missingParts.isNotEmpty) {
+        prompt = "I've set ${scheduledParts.join(' and ')}. ${missingParts.join(' ')}";
+      } else if (missingParts.isNotEmpty) {
+        prompt = missingParts.join(' ');
+      } else {
+        prompt = 'Could you clarify the details for these tasks?';
+      }
     }
 
     return NeedleReconciliationResult(

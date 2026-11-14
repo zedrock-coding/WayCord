@@ -35,7 +35,7 @@ class _CommunitiesOverviewViewState extends State<CommunitiesOverviewView> {
           decoration: InputDecoration(
             labelText: 'Community Name',
             labelStyle: AppTheme.monoStyle(fontSize: 11, color: AppTheme.onSurfaceVariant),
-            hintText: 'e.g. WES Foundation or Engineering Team',
+            hintText: 'e.g. Product Design or Engineering Team',
             hintStyle: TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant.withValues(alpha: 0.5)),
             filled: true,
             fillColor: AppTheme.surfaceContainerLowest,

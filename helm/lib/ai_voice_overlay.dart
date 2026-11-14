@@ -257,6 +257,7 @@ class AIVoiceOverlayState extends State<AIVoiceOverlay>
             _currentDraft = {
               ...?_currentDraft,
               ...reconciliation.task,
+              if (reconciliation.tasks.length > 1) 'tasks': reconciliation.tasks,
             };
             _clarificationQuestion = disambiguationPrompt;
             _currentState = AIState.clarifying;

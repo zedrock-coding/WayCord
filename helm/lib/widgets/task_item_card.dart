@@ -191,10 +191,12 @@ class _TaskItemCardState extends State<TaskItemCard> {
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          const Text(
-                                            '⟳ ',
-                                            style: TextStyle(fontSize: 10, color: AppTheme.mint),
+                                          const Icon(
+                                            Icons.repeat_rounded,
+                                            size: 11,
+                                            color: AppTheme.mint,
                                           ),
+                                          const SizedBox(width: 3),
                                           Text(
                                             task.recurrenceRule?.frequency.toUpperCase() ?? 'DAILY',
                                             style: AppTheme.monoStyle(
