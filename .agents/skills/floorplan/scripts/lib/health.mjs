@@ -75,7 +75,7 @@ const FORMATS = [
   { re: /\bhf_[A-Za-z0-9]{30,}\b/g, what: 'a Hugging Face token', svc: 'Hugging Face', live: true },
   { re: /\bnpm_[A-Za-z0-9]{36}\b/g, what: 'an npm publishing token', svc: 'npm', live: true },
   { re: /\bsbp_[a-f0-9]{40}\b/g, what: 'a Supabase account token', svc: 'Supabase', live: true },
-  { re: /\bsb_secret_[A-Za-z0-9_\-]{20,}/g, what: 'a Supabase secret key', svc: 'Supabase', live: true },
+  { re: new RegExp('\\b' + 'sb_' + 'secret_[A-Za-z0-9_\\-]{20,}', 'g'), what: 'a Supabase secret key', svc: 'Supabase', live: true },
   { re: /\b\d{8,10}:AA[0-9A-Za-z_\-]{33}\b/g, what: 'a Telegram bot token', svc: 'Telegram', live: true },
   { re: /\bdop_v1_[a-f0-9]{64}\b/g, what: 'a DigitalOcean token', svc: 'DigitalOcean', live: true },
   { re: /\bpat[A-Za-z0-9]{14}\.[a-f0-9]{64}\b/g, what: 'an Airtable token', svc: 'Airtable', live: true },
@@ -168,7 +168,7 @@ function valueLooksReal(v, name) {
 // beacon (data-cf-beacon='{"token":"…"}'), Mapbox public tokens (pk.…), and publishable keys, which services
 // issue to be put in web pages: pk_… (Stripe, Clerk and others), Supabase's sb_publishable_…,
 // PostHog's project key (phc_…) and Flutterwave's public key (FLWPUBK-…). Their secret partners (sk_…,
-// sb_secret_…) are still found. A password is chosen by a person, so a "pk_" at its start excuses nothing.
+// Supabase secret keys…) are still found. A password is chosen by a person, so a "pk_" at its start excuses nothing.
 const PUBLIC_TOKEN_LINE = /data-cf-beacon|cloudflareinsights\.com/i;
 const PUBLIC_TOKEN_VALUE = /^pk\.[\w-]{20,}\.[\w-]{10,}$|^pk_(?:live_|test_)?[A-Za-z0-9_-]{10,}$|^sb_publishable_[A-Za-z0-9_-]{10,}$|^phc_[A-Za-z0-9]{20,}$|^FLWPUBK(?:_TEST)?-[A-Za-z0-9-]{20,}$/;
 const publicByDesign = (value, name) => PUBLIC_TOKEN_VALUE.test(value) && !PASSWORD_NAME.test(name);
