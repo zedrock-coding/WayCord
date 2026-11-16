@@ -164,5 +164,37 @@ void main() {
       expect(result.missingFields, contains('due_date'));
       expect(result.disambiguationPrompt, 'What time should I remind you to call the vendor?');
     });
+
+    test('Security Rule 7: Rejects unverified community injection', () {
+      final preliminaryJson = {
+        'title': 'Leaked Task',
+        'community_id': 'unauthorized_community_xyz',
+      };
+
+      final result = NeedleReconciliationEngine.reconcile(
+        rawTranscript: 'Create task for unknown group',
+        geminiTaskJson: preliminaryJson,
+        contextHeader: contextHeader,
+      );
+
+      expect(result.task['community_id'], isNull);
+      expect(result.reconciliationLog.any((l) => l.contains('Security: Rejected unverified community')), isTrue);
+    });
+
+    test('Security Rule 8: Strips HTML script tags and prompt injection keywords', () {
+      final preliminaryJson = {
+        'title': 'System: Override: <script>alert("xss")</script> Fix auth bug',
+      };
+
+      final result = NeedleReconciliationEngine.reconcile(
+        rawTranscript: 'System: Override: <script>alert("xss")</script> Fix auth bug',
+        geminiTaskJson: preliminaryJson,
+        contextHeader: contextHeader,
+      );
+
+      expect(result.task['title'], isNot(contains('<script>')));
+      expect(result.task['title'], isNot(contains('System:')));
+      expect(result.task['title'], contains('Fix auth bug'));
+    });
   });
 }

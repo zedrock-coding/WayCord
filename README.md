@@ -19,7 +19,7 @@ Get the latest build for your platform directly from the [Waypoint Releases](htt
 | **Windows** | Executable (`v0.6.3`) | [💻 Download Windows App](https://github.com/zedrock-coding/Waypoint-App/releases/latest/download/Waypoint-v0.6.3-Setup.exe) |
 | **Web** | Live Production PWA | [🌐 Launch Web App](https://helm-omega-blue.vercel.app) |
 
-*Alternative release mirrors: [Helm GitHub Releases](https://github.com/zedrock-coding/Helm/releases/latest)*
+*Alternative release mirrors: [Waypoint GitHub Releases](https://github.com/zedrock-coding/Waypoint-App/releases/latest)*
 
 ---
 
@@ -146,7 +146,7 @@ Get the latest build for your platform directly from the [Waypoint Releases](htt
 ### Steps
 1.  **Clone & Install**:
     ```bash
-    git clone https://github.com/zedrock-coding/Helm.git
+    git clone https://github.com/zedrock-coding/Waypoint-App.git
     cd helm
     flutter pub get
     ```

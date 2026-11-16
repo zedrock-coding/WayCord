@@ -241,12 +241,24 @@ class NeedleReconciliationEngine {
       }
     }
 
+    // Strip control characters, HTML/XML tags, and prompt injection attempts
+    t = t.replaceAll(RegExp(r'[\x00-\x08\x0B\x0C\x0E-\x1F]'), '').replaceAll(RegExp(r'<[^>]*>'), ' ').trim();
+    final promptInjections = [
+      RegExp(r'\b(?:system\s*:\s*|override\s*:\s*|ignore\s+(?:all\s+)?previous\s+instructions?|developer\s+mode\s*:\s*)', caseSensitive: false),
+    ];
+    for (final pi in promptInjections) {
+      if (pi.hasMatch(t)) {
+        t = t.replaceAll(pi, ' ').trim();
+        stripped = true;
+      }
+    }
+
     // Strip trailing punctuation & quotes
     t = t.replaceAll(RegExp(r'^["\s]+|["\s.,;:]+$'), '').trim();
 
-    // Strip temporal keywords if attached at tail
+    // Strip temporal keywords if attached at tail (non-backtracking ReDoS-safe)
     final trailingTemporal = RegExp(
-      r'\s+(?:by|at|on|for)?\s*(?:today|tonight|tomorrow|in \d+\s+(?:hours?|minutes?|mins?)|this\s+[a-zA-Z]+|next\s+[a-zA-Z]+|\d{1,2}(?::\d{2})?\s*(?:am|pm)?)$',
+      r'\s+(?:(?:by|at|on|for)\s+)?(?:today|tonight|tomorrow|in \d+\s+(?:hours?|minutes?|mins?)|this\s+[a-zA-Z]+|next\s+[a-zA-Z]+|\d{1,2}(?::\d{2})?\s*(?:am|pm)?)$',
       caseSensitive: false,
     );
     if (trailingTemporal.hasMatch(t)) {
@@ -454,7 +466,14 @@ class NeedleReconciliationEngine {
     }
 
     if (geminiAssignee != null && geminiAssignee.isNotEmpty && geminiAssignee != 'null') {
-      return geminiAssignee;
+      if (geminiAssignee == 'me') return 'me';
+      final isValid = members.any((m) {
+        final id = m is Map ? (m['id'] ?? m['userId'] ?? '').toString() : m.toString();
+        final name = m is Map ? (m['full_name'] ?? m['name'] ?? '').toString() : m.toString();
+        return id == geminiAssignee || name.toLowerCase() == geminiAssignee.toLowerCase();
+      });
+      if (isValid) return geminiAssignee;
+      log.add('Security: Rejected unverified assignee "$geminiAssignee" outside accessible members.');
     }
     return null;
   }
@@ -485,7 +504,13 @@ class NeedleReconciliationEngine {
     }
 
     if (geminiCommunity != null && geminiCommunity.isNotEmpty && geminiCommunity != 'null') {
-      return geminiCommunity;
+      final isValid = communities.any((c) {
+        final id = c is Map ? (c['id'] ?? '').toString() : c.toString();
+        final name = c is Map ? (c['name'] ?? '').toString() : c.toString();
+        return id == geminiCommunity || name.toLowerCase() == geminiCommunity.toLowerCase();
+      });
+      if (isValid) return geminiCommunity;
+      log.add('Security: Rejected unverified community "$geminiCommunity" outside accessible workspaces.');
     }
     return null;
   }
@@ -552,6 +577,8 @@ class NeedleReconciliationEngine {
 
   static String _cleanSubtaskString(String s) {
     var clean = s
+        .replaceAll(RegExp(r'[\x00-\x08\x0B\x0C\x0E-\x1F]'), '')
+        .replaceAll(RegExp(r'<[^>]*>'), ' ')
         .replaceAll(RegExp(r'^\s*[-*•\d+.)]+\s*'), '')
         .replaceAll(RegExp(r'[,;.]+$'), '')
         .replaceAll(RegExp(r'^(?:then|also|and|make sure to|ensure to)\s+', caseSensitive: false), '')

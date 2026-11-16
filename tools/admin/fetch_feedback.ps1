@@ -35,6 +35,8 @@ try {
     $items = @($response)
     if ($items.Count -eq 0) {
         $json = "[]"
+    } elseif ($items.Count -eq 1) {
+        $json = "[`n" + ($items[0] | ConvertTo-Json -Depth 5) + "`n]"
     } else {
         $json = $items | ConvertTo-Json -Depth 5
     }

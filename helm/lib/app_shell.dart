@@ -187,7 +187,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
           ),
           EscapeIntent: CallbackAction<EscapeIntent>(
             onInvoke: (_) {
-              if (navProvider.currentView != WaypointNavView.today) {
+              if (navProvider.currentView != WaypointNavView.today || navProvider.selectedCommunityId != null) {
                 navProvider.setView(WaypointNavView.today);
               }
               return null;
@@ -419,7 +419,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
                   icon: Icons.calendar_today_rounded,
                   label: 'Today',
                   count: '$activeCount',
-                  isActive: navProvider.currentView == WaypointNavView.today,
+                  isActive: navProvider.currentView == WaypointNavView.today && navProvider.selectedCommunityId == null,
                   onTap: () => navProvider.setView(WaypointNavView.today),
                 ),
 
@@ -1258,7 +1258,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
           _buildMobileDockItem(
             icon: Icons.calendar_today_rounded,
             label: 'Today',
-            isActive: navProvider.currentView == WaypointNavView.today,
+            isActive: navProvider.currentView == WaypointNavView.today && navProvider.selectedCommunityId == null,
             onTap: () => navProvider.setView(WaypointNavView.today),
           ),
           _buildMobileDockItem(

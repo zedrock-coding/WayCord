@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -123,10 +124,31 @@ class _MarkdownView extends StatelessWidget {
 
   const _MarkdownView({required this.assetPath});
 
+  Future<String> _loadFormattedDocument() async {
+    final raw = await rootBundle.loadString(assetPath);
+    try {
+      final configJson = await rootBundle.loadString('assets/config/organization.json');
+      final Map<String, dynamic> config = jsonDecode(configJson) as Map<String, dynamic>;
+      var text = raw;
+      config.forEach((key, val) {
+        if (val != null) {
+          text = text.replaceAll('{{$key}}', val.toString());
+        }
+      });
+      final orgName = config['organization_name']?.toString();
+      if (orgName != null && orgName.isNotEmpty && orgName != '[INSERT_LEGAL_ENTITY_NAME_HERE]') {
+        text = text.replaceAll('[INSERT_LEGAL_ENTITY_NAME_HERE]', orgName);
+      }
+      return text;
+    } catch (_) {
+      return raw;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<String>(
-      future: rootBundle.loadString(assetPath),
+      future: _loadFormattedDocument(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());

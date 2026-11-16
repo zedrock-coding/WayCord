@@ -337,14 +337,21 @@
             data.forEach(item => grid.appendChild(renderCard(item)));
         }
 
+        function getCliRecords() {
+            if (!window.FEEDBACK_RECORDS) return [];
+            if (Array.isArray(window.FEEDBACK_RECORDS)) return window.FEEDBACK_RECORDS;
+            return [window.FEEDBACK_RECORDS];
+        }
+
         function loadFromCliScript() {
-            if (window.FEEDBACK_RECORDS && Array.isArray(window.FEEDBACK_RECORDS) && window.FEEDBACK_RECORDS.length > 0) {
-                displayRecords(window.FEEDBACK_RECORDS, 'Loaded from feedback_data.js');
+            const list = getCliRecords();
+            if (list.length > 0) {
+                displayRecords(list, 'Loaded from feedback_data.js');
             } else {
                 const status = document.getElementById('cli-status-banner');
                 status.style.display = 'block';
                 status.style.color = 'var(--warning-color)';
-                status.textContent = 'feedback_data.js contains 0 records. Run fetch_feedback.ps1 in terminal first.';
+                status.textContent = 'feedback_data.js contains 0 records. Run view_feedback.bat first.';
             }
         }
 
@@ -361,8 +368,9 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            if (window.FEEDBACK_RECORDS && Array.isArray(window.FEEDBACK_RECORDS) && window.FEEDBACK_RECORDS.length > 0) {
-                displayRecords(window.FEEDBACK_RECORDS, 'Auto-loaded from CLI export');
+            const list = getCliRecords();
+            if (list.length > 0) {
+                displayRecords(list, 'Auto-loaded from CLI export');
             }
         });
 
@@ -402,7 +410,12 @@
             } catch (err) {
                 loading.style.display = 'none';
                 errorBanner.style.display = 'block';
-                errorBanner.innerText = 'Fetch Failed: ' + (err.message || JSON.stringify(err));
+                const msg = err.message || JSON.stringify(err);
+                if (msg.includes('Forbidden use of secret API key in browser')) {
+                    errorBanner.innerText = 'Supabase blocks secret keys in web browsers. Run view_feedback.bat to fetch records locally.';
+                } else {
+                    errorBanner.innerText = 'Fetch Failed: ' + msg;
+                }
                 console.error(err);
             }
         }

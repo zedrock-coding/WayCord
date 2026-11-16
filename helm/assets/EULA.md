@@ -1,76 +1,80 @@
-# EULA Policy
+# Waypoint End User License Agreement (EULA)
 
-## END USER LICENSE AGREEMENT
-**Effective Date:** 2026-08-09
+**Effective Date:** August 15, 2026  
+**Last Updated:** November 15, 2026
 
-This end user license agreement (hereinafter referred to as the “EULA”) constitute a legal and binding agreement between Lakshya Jadhav, with place of residence at 178 Indus Empire Near Shahpura thana, Gulmohar, Bhopal, Madhya Pradesh, India 462039, (hereinafter collectively referred to as “Us”, “We”, or “Our”) and any person or entity and its heirs, agents, successors and assigns that have purchased, or is authorized to, access Our Helm Software (hereinafter singularly and collectively referred to as “You” or “Your”).
+---
 
-**IMPORTANT NOTICE:** Your continued use of the Helm Software constitutes Your expressed acceptance of, and agreement to be bound by, this EULA, as in force from time to time. Therefore, You understand and acknowledge that by downloading, accessing, installing or using the Helm Software You agree to be bound by the terms of this EULA. If You do not accept such terms in their entirety, You must not download, access, install or use the Helm Software. If You agree to this EULA on behalf of an entity, or in connection with providing or receiving services on behalf of an entity, You represent and warrant that You have the authority to bind that entity to this EULA. In such an event, “You” and “Your” will refer and apply to that entity or agency.
+## 1. Agreement & Acceptance
 
-## DEFINITIONS
-The following capitalized terms shall have the meanings set forth below, provided that the singular includes the plural and vice-versa, and any gender shall include the other genders:
+This End User License Agreement ("EULA") is a binding legal contract between you (either an individual or a legal entity, "User", "You", or "Your") and **[INSERT_LEGAL_ENTITY_NAME_HERE]** ("Organization", "Licensor", "We", "Us", or "Our") governing your access to and use of the **Waypoint** task execution and workspace management application ("Application", "Software", or "Service").
 
-1. **“Data”** means any information, text, message, software, picture, sound, video, music and any library, data, content, or material transmitted or conveyed through the Helm Software and/or the related Services. 
-2. **“Commencement Date”** means any of the following moments, whichever occurs first: (i) Your express acceptance of this EULA; (ii) Your download and/or installation of the Helm Software; (iii) Your registration of an account on the Helm Software website at https://github.com/zedrock-coding/Helm; (iv) Your acceptance of any valid communication with Us or any of Our authorized representative that refers to this EULA. 
-3. **“Force Majeure”** means any act, event or cause, except in relation to obligations to make payments, beyond the reasonable control of the Party affected by that force majeure including, without limitation, any act of God or any public enemy, fire, flood, explosion, landslide, epidemic, breakdown of or damage to plant, equipment or facilities, inability to obtain or unavailability of or damage to materials, ingredients or supplies, strikes, labor disputes, war, sabotage, riot, insurrection, civil commotion, national emergency and martial law, expropriation, restraint, prohibition, embargo, decree or order of any government, governmental authority or court.
-4. **“Intellectual Property Rights” or “IP Rights”** means all intellectual property and other similar proprietary rights in any jurisdiction, whether owned or held for use under license, whether registered or unregistered, including such rights in and to: trademarks, logos, trade names, patents and patent applications, utility models, inventions, discoveries, writings and other works of authorship, trade secrets, information that is not generally known to the public or that constitutes a trade secret under any applicable Law, Software (including, without limitation, data files, source code, object code, application programming interfaces, databases and other software-related specifications and documentation), advertising and promotional materials, as well as claims, causes of action and defenses relating to the enforcement of any of the foregoing. In each case above, “IP Rights” include also any registrations of, applications to register, and renewals and extensions of, any of the foregoing before or by any governmental authority in any jurisdiction.
-5. **“Law”** means, collectively and indistinctly, any applicable local, state, national, and international laws, by-laws, rules, regulation, circulars, notifications, ordinances, protocols, codes, guidelines, policies, notices, directions, orders, decrees, judgments of courts, or other requirements of any governmental authority.
-6. **“Party”** means either You or Us, while “Parties” means, collectively, both You and Us.
-7. **“Helm Software”** means, collectively and indistinctly, Our “Helm” proprietary Software and any Third-Party Software integrated thereto, which is made available to You according to this EULA false. In particular, the said “Helm” Software has the following features: Helm is a modern task management and productivity application designed for personal task tracking, custom category filtering, and community-based collaboration. **“Personal Data”** means any Data referred to an identified or identifiable natural person. **“Personal Data Protection Laws”** mean any applicable Law regarding the protection of Personal Data. **“Software”** means, collectively and indistinctly, any software, including, without limitation, computer software, documentation (including, without limitation, standard product documentation, user and technical documentation, further documents that describe the standard functionalities thereof, etc.), tool, application, application programming interface (API), development libraries, user interfaces, component, user interface, appearance (including, without limitation, images, designs, fonts, etc.), code (including, without limitation, assemblers, applets, compilers, source code, source code listings, object code, plug-in, etc.), as well as any fixes, patches, updates or upgrades to such items.
-8. **“Services”** means, collectively and indistinctly, the services (including, without limitation, SaaS, internet-based service, etc.) made available to You according to this EULA false. To such purpose, “Services” include also the access to any Software_Name Software’s website platform and any associated feature or service, as well as any Software or Data to which is provided access to You as part of the Helm Software and/or the same Services.
-9. **“Third-Party Software”** means, collectively and indistinctly, any Software developed, distributed or sold by an entity other than the Parties.
+BY DOWNLOADING, INSTALLING, REGISTERING AN ACCOUNT, OR USING WAYPOINT, YOU AGREE TO BE BOUND BY THE TERMS OF THIS EULA. IF YOU DO NOT AGREE, DO NOT INSTALL OR USE THE APPLICATION.
 
-## SOURCES, ACCESS, DELIVERY AND REQUIREMENTS
-**Authorized sources.** You must lawfully acquire the Helm Software by purchasing, downloading or accessing it from Our website at https://github.com/zedrock-coding/Helm or from any of Our authorized reseller, partner or provider. In the latter case, You shall also comply with the terms and conditions of such resellers, partners or providers.
-1. **Access.** Your access to the Helm Software is granted subject to an account registration to Our website at https://github.com/zedrock-coding/Helm, as well as under the terms of this EULA false. false
-2. **Requirements.** Only the Software running on the hardware and in the environment specified in the Helm Software’s documentation is unconditionally eligible for running the same, as well as for Our support and other services. You agree that You are solely responsible for these requirements, as well as for any needed changes, updates and fees.
+---
 
-## RIGHTS GRANTED
-1. **Grant of license.** false You are granted a limited, worldwide, non-assignable, non-sublicensable, non-transferable and non-exclusive license to use the Helm Software according to the terms herein.
-2. **Allowed devices.** You are permitted to access and use the Helm Software by running only no. devices. false
-3. **Scope of the license.** You agree that You will use the Helm Software only in connection with Your own normal internal commercial use, and You will not – unless otherwise provided in this EULA false – sell, lease, re-distribute, provide managed service, or otherwise provide or make available, either directly or via other means, or otherwise, the Helm Software to any third party.
-4. **Third-Party Software.** You expressly acknowledge and accept that certain content, products and services available via the Helm Software may include Third-Party Software, as specified in the Helm Software’s documentation. All Third-Party Software is licensed to You under the terms of this EULA, unless We provide other terms along with the Helm Software’s documentation. To any Third-Party Software shall apply Sects. 9.1), 9.2), 9.3) and 9.4) below and, therefore, without limiting the foregoing, We are not responsible for examining or evaluating the content or accuracy of the Third-Party Software nor provide any warranty, express or implied, with respect to any Third-Party Software and expressly disclaim any warranty or condition of merchantability, fitness for a particular purpose, title, and non-infringement.
-5. **Reservation of rights.** We expressly reserve all rights not expressly granted to You in this EULA.
+## 2. License Grant & Service Tiers
 
-## YOUR RESPONSIBILITIES
-1. **General responsibilities.** You are entirely responsible for the use of the Helm Software and, to such purpose, You shall not use, encourage, promote, facilitate, instruct (or induce others to do the foregoing on) the Helm Software for any activity that violates any applicable Law or to transmit, store, display, distribute or otherwise make available any Data that is illegal or that would encourage or constitute a criminal or civil liability under any Law.
-2. **Data lawfulness.** You undertake to have all the interest and title (including, without limitation, any related Intellectual Property Right) in and to the Data that You may transmit, store, display, distribute or otherwise make available through the Helm Software, and that You are the sole responsible for the accuracy, quality, integrity, legality, reliability, and appropriateness thereof. Without limiting the foregoing, You warrant and represent that such Data is fully compliant with any applicable Law. In no way whatsoever We will be responsible for any of such Data.
-3. **Updates.** In case the Helm Software needs any update as provided in Sect. 5.1) below, You expressly agree to install such updates as soon as they are available, bearing any and all the related costs, if any. You shall bear full risk of any loss or damage in case any updates are not properly and timely installed due to Your fault; We expressly disclaim any liability in such respect.
-4. **Export regulations compliance.** You expressly acknowledge that You are not an entity targeted by any Law which provides economic sanctions, export controls, import regulations or trade embargoes, nor You are otherwise owned or controlled by, or acting on behalf of, any person or entity targeted or in any way affected by the foregoing. Furthermore, You expressly acknowledge that You will not download or otherwise export or re-export the Helm Software’s content, products or services or any related technical data directly or indirectly to any person or entity targeted by the aforementioned Law or for any end-use prohibited or restricted by such Law.
-5. **Indemnification.** To any third party’s claim arising out of a violation of Your obligations under this Section 4 (Your Responsibilities), Sects. 10.1 and 10.2 below shall apply, in addition to any other rights or remedies afforded to Us under this EULA and/or as per the applicable Law.
+Subject to compliance with this Agreement, Licensor grants you a non-exclusive, non-transferable, revocable, limited license to install and use Waypoint across authorized platforms according to your service tier:
 
-## LICENSE CHECKS, UPDATES, AVAILABILITY AND DISCONTINUATION
-1. **Updates.** We, in Our sole discretion, reserve the right to add or remove tools, utilities, improvements, Third-Party Software, features or functions, or to provide programming fixes, updates and upgrades, to the Helm Software in order to improve and enhance the features and performance thereof and/or according to Our discontinuation policy. false Given the preceding, You expressly acknowledge and agree that: (i) We have no obligation to make available and/or provide any updates; (ii) in case We provide any updates, this EULA shall automatically apply thereto, unless We provide other terms along with such updates; (iii) We disclaim any liability in case any updates result in an unavailability, deficiency or incompatibility of any Third-Party Software (and/or of any other pre-existing feature or function) with the updated Software.
-2. **Availability.** We will use commercially reasonable efforts to ensure the availability of the Helm Software for Our customers. Regardless, You acknowledge and agree that We have no control or liability over the availability of the Helm Software on a continuous or uninterrupted basis, so that from time to time the same may be inaccessible or inoperable, including, without limitation, for: (i) equipment malfunctions, periodic maintenance procedures or repairs; (ii) Force Majeure; (iii) limitations due to Your particular device or hardware; (iv) unavailability, deficiency or incompatibility of any Third-Party Software with the Helm Software for any reason (e.g., third-party’s or Our discontinuation policy, incompatibilities between any updates and a Third-Party Software, etc.); (v) Your violation of any relevant provision of this EULA. [SubscriptionPlan_YES: Any unavailability of the Helm Software under this Sect. 5.3) shall not excuse You from Your obligation to make timely payment(s) under the applicable Subscription Plan.]
-3. **Discontinuation policy.** You expressly acknowledge and accept that the Helm Software is subject to Our discontinuation policy and, therefore, We reserve the right – without Our liability in such respect towards You or any other third party – to discontinue any false Software’s feature, content or service (including, without limitation, access to technical support, access to Third-Party Software, etc.), in accordance with such discontinuation policy. The preceding applies also to any Third-Party Software, which is subject to such third party’s discontinuation policy, without Our liability towards You or any other third party in case any updates result in an unavailability, deficiency or incompatibility of any pre-existing Third-Party Software with the updated Software.
+1. **Free Core Tier (Local-First):** Personal, single-user task execution utilizing on-device local storage (Hive). Includes natural language processing, priority organization, and local notifications.
+2. **Pro Tier:** Multi-device synchronization, cloud encrypted backups, advanced recurrence intervals, and extended AI task breakdown capabilities.
+3. **Institutional & Team Tier:** Multi-seat organizational governance, collaborative shared workspaces, community task boards, and administrative audit logging.
 
-## TERM AND TERMINATION
-1. **Term.** The rights herein conferred to You are provided as of the Commencement Date unless terminated as provided below false.
-2. **Termination for breach.** In case of Your breach of any term herein provided not cured within 10 (ten) days after Our initial notice thereof, We are entitled to terminate the EULA false.
-3. **Trial Period.** The trial period is designed to enable You to evaluate – for free and for [Trial_Period] calendar days as of the corresponding Commencement Date – all or part of the [Software_Name] Software and the related Services before taking out a paid Subscription Plan. Upon the expiration of the said trial period of [Trial_Period] days without the purchase of a Subscription Plan, You will be prevented to access the evaluated Helm Software and the Services; to such purpose, You expressly acknowledge and accept that We are not be liable towards You, any Authorized User or any other third party for any Data and/or customization that might be lost due to the said limited access or fruition of the Helm Software and/or the related Services.
-4. **No access after termination.** Upon the termination, for any reason whatsoever, of this EULA, You no longer have rights to access or use the Helm Software and, if applicable, We will delete or otherwise make inaccessible Your account and any Data in the Helm Software, if any. We shall not be liable towards You or any other third party for the loss of any Data and/or customization after the termination of this EULA for whatever reason or cause.
+---
 
-## INTELLECTUAL PROPERTY RIGHTS
-We hold and retain all an any title and interest in and to the Helm Software, as well as in any Intellectual Property Right associated with the same and, therefore, nothing in this EULA will be interpreted as a transfer, in whole or in part, of any IP Rights in and to the Helm Software to You or any other third party. Accordingly, You must not, and must not cause or permit others to: (i) remove or alter any Helm Software identification code, marking or notice from Us or Our licensors; (ii) copy, modify, adapt, make derivative works of, disassemble, decompile, reverse engineer, reproduce, distribute or republish any part of the Helm Software; (iii) perform or disclose any benchmark or performance tests of the Helm Software or any associated infrastructure (such as, without limitation, network discovery, port and service identification, vulnerability scanning, password cracking, remote access testing, penetration testing, etc.); and (iv) license, sell, rent, lease, transfer, assign, distribute, host, outsource, permit timesharing or service bureau use, or otherwise commercially exploit or make available the Helm Software to any third party. 
+## 3. Local Data Architecture & Backup Liability
 
-## PRIVACY AND DATA PROTECTION
-1. **Privacy Policy.** You declare to have carefully read Our Privacy Policy (available at undefined) and got a clear understanding of how We collect, use, protect or otherwise handle Personal Data in the provision of the Services.
-2. **Anonymized Data analysis.** We are allowed to analyze anonymized Data (i.e., Data that are no more Personal Data and that, therefore, do not include personal identifiers of a person, such as his or her name, e-mail address, address, etc.) for the purpose to maintain, update or improve the Helm Software and/or the Services, as well as to conduct internal statistics and analytics on the use and proper functioning of the same Services. You have no right, title or interest in any result of these analyses performed by Us, which shall be deemed as Our Intellectual Property Rights.
+1. **Local-First Paradigm:** Waypoint stores tasks, categories, subtasks, and offline mutation queues directly on your local device. 
+2. **User Backup Responsibility:** You acknowledge that you are responsible for maintaining device integrity and connectivity. Licensor is not liable for data loss arising from operating system cache purges, unrooted device formatting, hardware malfunction, or unflushed offline queues resulting from extended disconnection.
+3. **Optimistic Synchronization:** Offline actions are committed locally first and synchronized asynchronously upon connection restoration. In the event of competing edits from multiple offline sessions, last-write-wins (LWW) resolution based on UTC timestamps applies.
 
-## WARRANTY AND LIABILITY
-1. **Limited warranty.** THE Helm SOFTWARE IS PROVIDED “AS IS”, “AS AVAILABLE” AND “WITH ALL FAULTS”, WITHOUT WARRANTY OF ANY KIND. TO THE MAXIMUM EXTENT PERMITTED BY THE APPLICABLE LAW, WE DISCLAIM ANY AND ALL WARRANTIES, WHETHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION, ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, AND ANY WARRANTY THAT MAY ARISE OUT OF COURSE OF DEALING, COURSE OF PERFORMANCE, USAGE OR TRADE PRACTICE.
-2. **Disclaimer of liability.** IN NO EVENT SHALL WE BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, COMPUTER FAILURE OR MALFUNCTION, LOSS OF DATA OR PROFITS, BUSINESS INTERRUPTION, ETC.) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE Helm SOFTWARE, EVEN IF WE ARE AWARE OF OR HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-3. **Remedies.** EXCEPT FOR CLAIMS WITH RESPECT TO FRAUD, DEATH OR PERSONAL INJURY, FOR WHICH NO LIMIT SHALL APPLY, IN NO EVENT – TO THE MAXIMUM EXTENT PERMITTED BY THE APPLICABLE LAW – OUR LIABILITY SHALL IN THE AGGREGATE EXCEED $10.
-4. **Mandatory legal provisions.** Some jurisdictions do not allow certain limitations of warranty or liability, therefore some or all of the limitations above provided may not apply to You. In such case, the limitations provided herein shall be applicable to the fullest and maximum extent permitted by the applicable Law.
+---
 
-## INDEMNIFICATION
-1. **Indemnification.** You shall indemnify and hold Us harmless from and against all damages, losses, and expenses of any kind (including reasonable legal fees and costs) arose by any claim made by any third party (including, without limitation, any agency, public administrations, entities, etc.) against Us in connection with any of Your: (i) violation or breach of any term of this EULA; (ii) violation of any applicable Law, whether or not referenced herein; (iii) violation of any rights of any third party; (iv) use or misuse of the Helm Software.
-2. **Remedies.** You expressly agree and acknowledge that any violation of Your obligations pursuant to this EULA may cause Us irreparable harm and damage, which may not be recovered at law. Therefore, You agree that Our remedies for breach of this EULA may be in equity by way of injunctive relief, as well and any other relief available, whether in law or in equity.
+## 4. Institutional Terms & Role-Based Governance
 
-## MISCELLANEOUS
-1. **Assignment.** You are not allowed to assign this EULA or any rights hereunder, unless with Our previous written consent. Conversely, We are allowed, at Our sole discretion, to assign this EULA or any rights hereunder to any third party, without giving You any prior notice.
-2. **Force majeure.** A Party shall not be responsible for any failure to perform due to any event of Force Majeure. In the event of any such delay, the affected Party will be excused from such performance to the extent it is delayed or prevented by such cause. However, the other Party may terminate this EULA forthwith on written notice if such Force Majeure condition continues for a period of sixty (60) days.
-3. **No implied waiver.** Any tolerance or silence by Us, even if on a continuous and reiterated basis, in relation to any breach or default by You of any provision of this EULA shall not be considered as a consent to such breaches and defaults and shall not affect the validity of the clause breached nor shall be construed as a waiver to any of the rights pertaining to Us pursuant to this EULA and/or the applicable Law.
-4. **Governing law and exclusive jurisdiction.** This EULA is governed by the substantive and procedural Laws of India. Any dispute arising out of, or relating to, this EULA shall be submitted to the exclusive jurisdiction of the Court of India.
-5. **Severability.** Should any part of this EULA be declared illegal or unenforceable, the remaining portion will remain in full force and effects.
-6. **Amendments.** The effective date of the last version of this EULA is written above. We have the right to amend this EULA at any time, and to change, delete, discontinue or impose conditions on use of the Helm Software, in which case the new terms and conditions will supersede prior terms. Any changes will be effective after thirty (30) days from the time We first notify You about such changes via email or/and notifications while using the Helm Software and/or other reasonable means. Your continued use of the Helm Software following changes to this EULA after the effective date of a revised version thereof constitutes Your expressed acceptance of, and agreement to be bound by, this EULA as in force from time to time. If You do not accept modified EULA in part or full, You must terminate Your account and stop using the Helm Software before the change takes effect.
+For users participating in an Institutional or Team deployment, access and editing permissions are governed by Weighted Role-Based Access Control (RBAC):
+
+1. **Owner (Weight 3):** Full organization administration, billing, workspace creation, and member role assignment. Cannot be demoted or removed by lower-tier roles.
+2. **Admin (Weight 2):** Workspace management, member invites, and task delegation. Cannot demote or alter Owner accounts.
+3. **Member (Weight 1):** Workspace collaboration, task creation, assignment execution, and commenting (subject to task update comment quotas).
+4. **Guest / Viewer:** Scoped, read-only visibility into specified tasks without modification rights.
+5. **Administrative Audit Logging:** Institutional administrators may review organizational task metrics, velocity scores, and workspace activity feeds for compliance and resource allocation.
+
+---
+
+## 5. Prohibited Conduct
+
+You agree not to:
+1. Decompile, reverse engineer, disassemble, or derive the source code of Waypoint, except to the extent permitted by applicable open-source licenses.
+2. Circumvent, modify, or defeat Row-Level Security (RLS) policies, authentication mechanisms, or AI rate-limit quotas.
+3. Deploy automated scripts, bots, or scrapers to extract data from Waypoint servers or services.
+4. Transmit illegal, harmful, harassing, or infringing content through shared task descriptions, comments, or workspaces.
+
+---
+
+## 6. Intellectual Property
+
+Waypoint, including its logos, UI design system (Dark Slate `#1E2124` / Mint Green `#88C0A4`), documentation, and proprietary heuristic engines, is the intellectual property of **[INSERT_LEGAL_ENTITY_NAME_HERE]** and its licensors. All rights not expressly granted herein are reserved.
+
+---
+
+## 7. Disclaimer of Warranties & Limitation of Liability
+
+1. **"As-Is" Provision:** TO THE MAXIMUM EXTENT PERMITTED BY LAW, WAYPOINT IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+2. **Liability Cap:** TO THE EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL LICENSOR BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OF OR INABILITY TO USE WAYPOINT. OUR TOTAL AGGREGATE LIABILITY SHALL NOT EXCEED THE AMOUNT PAID BY YOU FOR THE SERVICE IN THE PRECEDING TWELVE (12) MONTHS, OR USD $10.00, WHICHEVER IS GREATER.
+
+---
+
+## 8. Governing Law & Jurisdiction
+
+This EULA shall be governed by, and construed in accordance with, the laws of **Applicable Local Jurisdiction**. Any legal dispute arising under or relating to this Agreement shall be subject to the exclusive jurisdiction of the competent courts within that territory.
+
+---
+
+## 9. Contact & Inquiries
+
+For legal notices or questions regarding this EULA:
+- **Licensor:** [INSERT_LEGAL_ENTITY_NAME_HERE]
+- **Support & Notices:** support@waypoint.internal
+- **Privacy Contact:** privacy@waypoint.internal

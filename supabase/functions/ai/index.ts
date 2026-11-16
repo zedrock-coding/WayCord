@@ -19,11 +19,24 @@ const DAILY_LIMIT = 30;
 /// Recordings are capped client-side at 30s; base64 inflates by ~4/3.
 const MAX_AUDIO_BASE64_CHARS = 4 * 1024 * 1024 * 1.4;
 
-const CORS_HEADERS: Record<string, string> = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+function getCorsHeaders(req: Request): Record<string, string> {
+  const rawOrigins = Deno.env.get("ALLOWED_ORIGINS") ??
+    "https://helm-omega-blue.vercel.app,http://localhost:3000,http://127.0.0.1:3000";
+  const allowedOrigins = rawOrigins.split(",").map((o) => o.trim()).filter(Boolean);
+  const origin = req.headers.get("Origin");
+
+  const headers: Record<string, string> = {
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Vary": "Origin",
+  };
+
+  if (origin && allowedOrigins.includes(origin)) {
+    headers["Access-Control-Allow-Origin"] = origin;
+  }
+
+  return headers;
+}
 
 const SYSTEM_INSTRUCTION = `Act as an expert data extraction and task reconciliation engine for Waypoint, a team task manager.
 Your goal is to parse user natural language or transcribed speech into a structured JSON object supporting single and multiple tasks, recurring patterns, and subtask milestones.
@@ -111,16 +124,16 @@ SCHEMA:
   ]
 }`;
 
-function json(body: unknown, status = 200): Response {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
-  });
-}
-
 Deno.serve(async (req: Request) => {
+  const corsHeaders = getCorsHeaders(req);
+  const json = (body: unknown, status = 200): Response =>
+    new Response(JSON.stringify(body), {
+      status,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+
   if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: CORS_HEADERS });
+    return new Response("ok", { headers: corsHeaders });
   }
   if (req.method !== "POST") {
     return json({ error: "Method not allowed." }, 405);
