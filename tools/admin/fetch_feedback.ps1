@@ -29,7 +29,7 @@ $headers = @{
 }
 
 try {
-    $response = Invoke-RestMethod -Uri $url -Headers $headers -Method Get -UserAgent "WaypointAdmin/1.0"
+    $response = Invoke-RestMethod -Uri $url -Headers $headers -Method Get -UserAgent "WaycordAdmin/1.0"
     
     # Handle single object or array correctly
     $items = @($response)

@@ -134,7 +134,7 @@ class _AuthScreenState extends State<AuthScreen> {
     try {
       await Supabase.instance.client.auth.signInWithOtp(
         email: email,
-        emailRedirectTo: kIsWeb ? null : 'waypoint://login-callback',
+        emailRedirectTo: kIsWeb ? null : 'waycord://login-callback',
         shouldCreateUser: true,
       );
 
@@ -231,7 +231,7 @@ class _AuthScreenState extends State<AuthScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Account setup complete! Welcome to Waypoint.'),
+            content: Text('Account setup complete! Welcome to Waycord.'),
             behavior: SnackBarBehavior.floating,
             backgroundColor: Color(0xFF88C0A4),
           ),
@@ -263,7 +263,7 @@ class _AuthScreenState extends State<AuthScreen> {
     try {
       await Supabase.instance.client.auth.resetPasswordForEmail(
         email,
-        redirectTo: kIsWeb ? null : 'waypoint://login-callback',
+        redirectTo: kIsWeb ? null : 'waycord://login-callback',
       );
 
       if (mounted) {
@@ -462,7 +462,7 @@ class _AuthScreenState extends State<AuthScreen> {
       children: [
         Text('Welcome Back', style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
         const SizedBox(height: 6),
-        Text('Sign in to access your Waypoint workspace.', style: textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant)),
+        Text('Sign in to access your Waycord workspace.', style: textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant)),
         const SizedBox(height: 24),
 
         TextFormField(

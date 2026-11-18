@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
-/// Interactive audio waveform visualizer widget matching Waypoint's
+/// Interactive audio waveform visualizer widget matching Waycord's
 /// Dark Slate (#1E2124) and Mint Green (#88C0A4) design system.
 ///
 /// Features smooth physics-based dampening, idle ambient oscillation,

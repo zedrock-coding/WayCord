@@ -19,6 +19,24 @@ const DAILY_LIMIT = 30;
 /// Recordings are capped client-side at 30s; base64 inflates by ~4/3.
 const MAX_AUDIO_BASE64_CHARS = 4 * 1024 * 1024 * 1.4;
 
+// Per-user sliding window rate limiting: max 10 requests/minute to prevent budget exhaustion
+const userRateLimits = new Map<string, number[]>();
+const RATE_LIMIT_WINDOW_MS = 60 * 1000;
+const MAX_REQUESTS_PER_MINUTE = 10;
+
+function isRateLimited(userId: string): boolean {
+  const now = Date.now();
+  const timestamps = (userRateLimits.get(userId) ?? []).filter(
+    (t) => now - t < RATE_LIMIT_WINDOW_MS,
+  );
+  if (timestamps.length >= MAX_REQUESTS_PER_MINUTE) {
+    return true;
+  }
+  timestamps.push(now);
+  userRateLimits.set(userId, timestamps);
+  return false;
+}
+
 function getCorsHeaders(req: Request): Record<string, string> {
   const rawOrigins = Deno.env.get("ALLOWED_ORIGINS") ??
     "https://helm-omega-blue.vercel.app,http://localhost:3000,http://127.0.0.1:3000";
@@ -38,7 +56,7 @@ function getCorsHeaders(req: Request): Record<string, string> {
   return headers;
 }
 
-const SYSTEM_INSTRUCTION = `Act as an expert data extraction and task reconciliation engine for Waypoint, a team task manager.
+const SYSTEM_INSTRUCTION = `Act as an expert data extraction and task reconciliation engine for Waycord, a team task manager.
 Your goal is to parse user natural language or transcribed speech into a structured JSON object supporting single and multiple tasks, recurring patterns, and subtask milestones.
 
 EXTRACTION RULES:
@@ -160,6 +178,11 @@ Deno.serve(async (req: Request) => {
     return json({ error: "Sign in to use AI commands." }, 401);
   }
 
+  // Prevent budget exhaustion: max 10 requests per minute per user
+  if (isRateLimited(userData.user.id)) {
+    return json({ error: "Too many requests. Please wait a moment before sending more AI commands." }, 429);
+  }
+
   let payload: Record<string, unknown>;
   try {
     payload = await req.json();
@@ -183,18 +206,23 @@ Deno.serve(async (req: Request) => {
     return json({ error: "AI proxy is not configured." }, 500);
   }
 
-  // Quota is consumed only after the request has been validated, so malformed
-  // calls cannot burn a user's daily allowance.
-  const { data: remaining, error: quotaError } = await supabase.rpc("consume_ai_quota", {
-    p_limit: DAILY_LIMIT,
-  });
+  // Check subscription entitlement and increment monthly usage quota
+  const { data: quotaResult, error: quotaError } = await supabase.rpc("consume_cloud_ai_quota");
 
   if (quotaError) {
-    if (`${quotaError.message}`.includes("rate_limit_exceeded")) {
-      return json({ error: "Daily AI limit reached. Try again tomorrow." }, 429);
+    const errMsg = `${quotaError.message}`;
+    if (errMsg.includes("monthly_ai_limit_exceeded")) {
+      return json({ error: "Monthly cloud AI limit reached (20 calls). Upgrade to Waycord Pro for unlimited cloud AI." }, 429);
     }
-    console.error("consume_ai_quota failed", quotaError);
-    return json({ error: "AI quota check failed." }, 500);
+    // Fallback to daily quota if entitlement RPC is not yet promoted
+    const { error: legacyError } = await supabase.rpc("consume_ai_quota", { p_limit: DAILY_LIMIT });
+    if (legacyError) {
+      if (`${legacyError.message}`.includes("rate_limit_exceeded")) {
+        return json({ error: "Daily AI limit reached. Try again tomorrow." }, 429);
+      }
+      console.error("AI quota check failed", quotaError, legacyError);
+      return json({ error: "AI quota check failed." }, 500);
+    }
   }
 
   const parts: Record<string, unknown>[] = [{ text: prompt }];
@@ -250,5 +278,6 @@ Deno.serve(async (req: Request) => {
     return json({ error: "The AI provider returned an empty response." }, 502);
   }
 
-  return json({ text, remaining: typeof remaining === "number" ? remaining : null });
+  const remaining = quotaResult?.calls_remaining ?? null;
+  return json({ text, remaining });
 });

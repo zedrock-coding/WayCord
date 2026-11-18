@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# publish.sh - Automated Public Release Pipeline for Waypoint
+# publish.sh - Automated Public Release Pipeline for Waycord
 #
 # Bridges the private repository (EventsManager / Helm) to the public
-# distribution repository (Helm-App).
+# distribution repository (Waycord-App).
 #
 # Workflow:
 #  1. Runs existing build runner (helm/build.ps1) for Windows + Android.
@@ -103,12 +103,12 @@ if [[ -z "$VERSION" ]]; then
     fatal "Could not determine release version."
 fi
 
-RELEASE_TITLE="Waypoint-v${VERSION}"
+RELEASE_TITLE="Waycord-v${VERSION}"
 if [[ -n "$BUILD_NUMBER" ]]; then
-    RELEASE_TITLE="Waypoint-v${VERSION}+${BUILD_NUMBER}"
+    RELEASE_TITLE="Waycord-v${VERSION}+${BUILD_NUMBER}"
 fi
 
-info "Publishing Waypoint version: v${VERSION} (${RELEASE_TITLE})"
+info "Publishing Waycord version: v${VERSION} (${RELEASE_TITLE})"
 info "Release date: ${TODAY}"
 
 # --- 2. Resolve & Verify Public Repository Path ---
@@ -186,7 +186,7 @@ if [[ "$SKIP_BUILD" == false ]]; then
     "$PS_BIN" -NoProfile -ExecutionPolicy Bypass -Command "& '$HELM_DIR_WIN\\build.ps1' -Target apk"
 
     # Ensure Windows Inno Setup installer is compiled if CMake did not invoke it
-    if [[ ! -f "$HELM_DIR/build/windows/installer/Waypoint-v${VERSION}-Setup.exe" ]]; then
+    if [[ ! -f "$HELM_DIR/build/windows/installer/Waycord-v${VERSION}-Setup.exe" && ! -f "$HELM_DIR/build/windows/installer/Waypoint-v${VERSION}-Setup.exe" ]]; then
         info "Running package_windows.ps1 to generate Inno Setup installer..."
         "$PS_BIN" -NoProfile -ExecutionPolicy Bypass -Command "& '$HELM_DIR_WIN\\tools\\package_windows.ps1' -Build:\$false" || true
     fi
@@ -203,6 +203,10 @@ locate_artifacts() {
 
     # Windows candidate paths (ordered by installer priority)
     local win_candidates=(
+        "$HELM_DIR/build/windows/installer/Waycord-v${VERSION}-Setup.exe"
+        "$HELM_DIR/build/windows/installer/waycord-v${VERSION}-windows.zip"
+        "$HELM_DIR/build/windows/x64/runner/Release/waycord-v${VERSION}.exe"
+        "$HELM_DIR/build/windows/x64/runner/Release/waycord.exe"
         "$HELM_DIR/build/windows/installer/Waypoint-v${VERSION}-Setup.exe"
         "$HELM_DIR/build/windows/installer/waypoint-v${VERSION}-windows.zip"
         "$HELM_DIR/build/windows/x64/runner/Release/waypoint-v${VERSION}.exe"
@@ -218,6 +222,8 @@ locate_artifacts() {
 
     # Android candidate paths
     local apk_candidates=(
+        "$HELM_DIR/build/app/outputs/flutter-apk/waycord-v${VERSION}.apk"
+        "$HELM_DIR/build/app/outputs/apk/release/waycord-v${VERSION}.apk"
         "$HELM_DIR/build/app/outputs/flutter-apk/waypoint-v${VERSION}.apk"
         "$HELM_DIR/build/app/outputs/apk/release/waypoint-v${VERSION}.apk"
         "$HELM_DIR/build/app/outputs/flutter-apk/app-release.apk"

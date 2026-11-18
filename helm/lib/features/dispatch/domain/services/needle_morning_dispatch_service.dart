@@ -33,10 +33,10 @@ void dispatchCallbackDispatcher() {
 }
 
 class NeedleMorningDispatchService {
-  static const String taskName = 'waypoint_dispatch_morning';
-  static const String taskTag = 'waypoint_dispatch_tag';
-  static const String channelId = 'waypoint_dispatch';
-  static const String channelName = 'Waypoint Daily Dispatch';
+  static const String taskName = 'waycord_dispatch_morning';
+  static const String taskTag = 'waycord_dispatch_tag';
+  static const String channelId = 'waycord_dispatch';
+  static const String channelName = 'Waycord Daily Dispatch';
   static const String playBriefingActionId = 'play_briefing';
   static const String localNotificationsKey = 'local_notifications_list';
   static const String briefingScriptKey = 'latest_daily_briefing_script';
@@ -196,7 +196,7 @@ class NeedleMorningDispatchService {
 
         await plugin.show(
           8000,
-          'Waypoint Daily Dispatch',
+          'Waycord Daily Dispatch',
           script,
           notificationDetails,
           payload: '$playBriefingActionId::$script',

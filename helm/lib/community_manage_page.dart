@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'core/entitlements/entitlement_service.dart';
+import 'core/entitlements/waycord_upgrade_sheet.dart';
 import 'widgets/user_avatar.dart';
 import 'services/supabase_service.dart';
 import 'theme/app_theme.dart';
@@ -65,16 +67,31 @@ class _CommunityManagePageState extends State<CommunityManagePage> {
     }
   }
 
-  void _copyInviteLink() {
-    final String link = 'waypoint://invite?communityId=${widget.communityId}';
+  Future<void> _copyInviteLink() async {
+    final members = await _membersFuture;
+    final entitlements = EntitlementService();
+    if (entitlements.capabilities.maxMembersPerWorkspace != -1 &&
+        members.length >= entitlements.capabilities.maxMembersPerWorkspace &&
+        mounted) {
+      WaycordUpgradeSheet.show(
+        context,
+        featureName: 'Workspace Member Limit',
+        description: 'You have reached the maximum of ${entitlements.capabilities.maxMembersPerWorkspace} members for this workspace. Upgrade your tier to invite more team members.',
+      );
+      return;
+    }
+
+    final String link = 'waycord://invite?communityId=${widget.communityId}';
     Clipboard.setData(ClipboardData(text: link));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Copied: $link'), 
-        behavior: SnackBarBehavior.floating,
-        action: SnackBarAction(label: 'OK', onPressed: () {}),
-      ),
-    );
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Copied: $link'), 
+          behavior: SnackBarBehavior.floating,
+          action: SnackBarAction(label: 'OK', onPressed: () {}),
+        ),
+      );
+    }
   }
 
   Future<void> _removeMember(String targetUserId) async {
@@ -134,6 +151,14 @@ class _CommunityManagePageState extends State<CommunityManagePage> {
   }
 
   void _showRoleDialog(String userId, String memberName, String currentRole) {
+    if (!EntitlementService().capabilities.canUseWeightedRbac) {
+      WaycordUpgradeSheet.show(
+        context,
+        featureName: '3-Tier Weighted RBAC',
+        description: 'Configuring custom roles and weighted permissions requires a Waycord Team subscription.',
+      );
+      return;
+    }
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -232,7 +257,7 @@ class _CommunityManagePageState extends State<CommunityManagePage> {
 
   @override
   Widget build(BuildContext context) {
-    final String inviteLink = 'waypoint://invite?communityId=${widget.communityId}';
+    final String inviteLink = 'waycord://invite?communityId=${widget.communityId}';
 
     return Scaffold(
       backgroundColor: AppTheme.bg(context),

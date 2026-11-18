@@ -147,7 +147,7 @@ class _AccountViewState extends State<AccountView> {
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: AppTheme.onSurface),
         ),
         content: const Text(
-          'Are you sure you want to sign out of Waypoint on this device?',
+          'Are you sure you want to sign out of Waycord on this device?',
           style: TextStyle(fontSize: 13, color: AppTheme.onSurfaceVariant),
         ),
         actions: [

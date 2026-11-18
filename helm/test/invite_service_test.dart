@@ -3,6 +3,11 @@ import 'package:waypoint/services/invite_service.dart';
 
 void main() {
   group('InviteService URI parsing tests', () {
+    test('extracts communityId from waycord custom scheme', () {
+      final uri = Uri.parse('waycord://invite?communityId=comm-waycord');
+      expect(InviteService.extractCommunityId(uri), 'comm-waycord');
+    });
+
     test('extracts communityId from waypoint custom scheme', () {
       final uri = Uri.parse('waypoint://invite?communityId=comm-123');
       expect(InviteService.extractCommunityId(uri), 'comm-123');

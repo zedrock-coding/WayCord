@@ -546,42 +546,73 @@ class _CommandBarWidgetState extends State<CommandBarWidget>
       builder: (context, child) {
         final double glow = _isLoading ? _glowController.value : 0;
 
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(32),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppTheme.surfaceContainer.withValues(alpha: 0.82),
-                borderRadius: BorderRadius.circular(32),
-                boxShadow: [
-                  BoxShadow(
-                    color: _isListening
-                        ? const Color(0xFF88C0A4).withValues(alpha: 0.25)
-                        : colorScheme.primary.withValues(alpha: 0.15 * glow),
-                    blurRadius: _isListening ? 16 : 10 * glow,
-                    spreadRadius: _isListening ? 2 : 2 * glow,
-                  )
-                ],
-                border: Border.all(
-                  color: _isListening
-                      ? const Color(0xFF88C0A4)
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ValueListenableBuilder<bool>(
+              valueListenable: AiService.monthlyQuotaReached,
+              builder: (context, quotaReached, _) {
+                if (!quotaReached) return const SizedBox.shrink();
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 6),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppTheme.surfaceContainerLowest.withValues(alpha: 0.9),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: AppTheme.mint.withValues(alpha: 0.4)),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.bolt, size: 12, color: AppTheme.mint),
+                      const SizedBox(width: 4),
+                      Text(
+                        'Cloud AI quota reached (20/mo) • Offline parser active',
+                        style: AppTheme.monoStyle(fontSize: 10, color: AppTheme.mint),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(32),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: AppTheme.surfaceContainer.withValues(alpha: 0.82),
+                    borderRadius: BorderRadius.circular(32),
+                    boxShadow: [
+                      BoxShadow(
+                        color: _isListening
+                            ? const Color(0xFF88C0A4).withValues(alpha: 0.25)
+                            : colorScheme.primary.withValues(alpha: 0.15 * glow),
+                        blurRadius: _isListening ? 16 : 10 * glow,
+                        spreadRadius: _isListening ? 2 : 2 * glow,
+                      )
+                    ],
+                    border: Border.all(
+                      color: _isListening
+                          ? const Color(0xFF88C0A4)
+                          : (_isLoading
+                              ? colorScheme.primary
+                              : AppTheme.surfaceVariant),
+                      width: (_isListening || _isLoading) ? 2 : 1,
+                    ),
+                  ),
+                  child: _isAiSpeaking
+                      ? _buildAiSpeakingPill(colorScheme)
                       : (_isLoading
-                          ? colorScheme.primary
-                          : AppTheme.surfaceVariant),
-                  width: (_isListening || _isLoading) ? 2 : 1,
+                          ? _buildLoadingPill(colorScheme)
+                          : (_isListening
+                              ? _buildListeningPill(colorScheme)
+                              : _buildNormalInput(colorScheme))),
                 ),
               ),
-              child: _isAiSpeaking
-                  ? _buildAiSpeakingPill(colorScheme)
-                  : (_isLoading
-                      ? _buildLoadingPill(colorScheme)
-                      : (_isListening
-                          ? _buildListeningPill(colorScheme)
-                          : _buildNormalInput(colorScheme))),
             ),
-          ),
+          ],
         );
       },
     );

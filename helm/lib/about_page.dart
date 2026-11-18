@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'core/config/brand_config.dart';
 import 'theme/app_theme.dart';
 import 'widgets/legal_dialog.dart';
-import 'widgets/waypoint_logo.dart';
+import 'widgets/waycord_logo.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
 
-  static const String updatesUrl = 'https://github.com/zedrock-coding/Waypoint-App';
+  static const String updatesUrl = 'https://waycord.org';
 
   Future<void> _launchUpdatesUrl(BuildContext context) async {
     final uri = Uri.parse(updatesUrl);
@@ -41,7 +42,7 @@ class AboutScreen extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          'About Waypoint',
+          'About ${BrandConfig.appName}',
           style: GoogleFonts.geist(
             fontSize: 15,
             fontWeight: FontWeight.w600,
@@ -72,10 +73,10 @@ class AboutScreen extends StatelessWidget {
                   Center(
                     child: Column(
                       children: [
-                        const WaypointLogo(size: 72),
+                        const WaycordLogo(size: 72),
                         const SizedBox(height: 16),
                         Text(
-                          'Waypoint',
+                          BrandConfig.appName,
                           style: GoogleFonts.geist(
                             fontSize: 24,
                             fontWeight: FontWeight.w700,
@@ -164,7 +165,7 @@ class AboutScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         Text(
-                          'Made with ♥ by',
+                          'Operated by',
                           style: AppTheme.monoStyle(
                             fontSize: 11,
                             color: AppTheme.onSurfaceVariant.withValues(alpha: 0.6),
@@ -172,11 +173,19 @@ class AboutScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'Lakshya Jadhav',
+                          BrandConfig.organizationName,
                           style: GoogleFonts.geist(
-                            fontSize: 14,
+                            fontSize: 13,
                             fontWeight: FontWeight.w600,
                             color: AppTheme.onSurface,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          'Crafted with ♥ by Lakshya Jadhav',
+                          style: AppTheme.monoStyle(
+                            fontSize: 11,
+                            color: AppTheme.onSurfaceVariant.withValues(alpha: 0.6),
                           ),
                         ),
                       ],

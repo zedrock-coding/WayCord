@@ -22,6 +22,7 @@ class AiException implements Exception {
 
 class AiService {
   final NeedleEngine _needleEngine;
+  static final ValueNotifier<bool> monthlyQuotaReached = ValueNotifier<bool>(false);
 
   NeedleEngine get needleEngine => _needleEngine;
 
@@ -238,8 +239,9 @@ class AiService {
     }
 
     if (e.status == 429) {
+      monthlyQuotaReached.value = true;
       return AiException(
-        serverMessage ?? 'Daily AI limit reached. Try again tomorrow.',
+        serverMessage ?? 'Monthly cloud AI limit reached (20 calls). Local heuristic parser remains active. Upgrade to Waycord Pro for unlimited cloud AI.',
         rateLimited: true,
       );
     }

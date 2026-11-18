@@ -18,7 +18,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final List<OnboardingSlide> _slides = [
     const OnboardingSlide(
       icon: Icons.space_dashboard_outlined,
-      title: "Welcome to Waypoint",
+      title: "Welcome to Waycord",
       subtitle: "Navigate your tasks seamlessly.",
     ),
     const OnboardingSlide(

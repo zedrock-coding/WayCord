@@ -1,68 +1,75 @@
-# Waypoint Privacy Policy
+# Waycord Privacy Policy
 
 **Effective Date:** August 15, 2026  
-**Last Updated:** November 15, 2026
+**Last Updated:** November 18, 2026
 
 ---
 
 ## 1. Identity & Scope
 
-This Privacy Policy describes how **Waypoint** ("the Application", "the Service"), operated by **[INSERT_LEGAL_ENTITY_NAME_HERE]** ("the Organization", "We", "Us", or "Our"), collects, uses, and safeguards information when you use our software across mobile, desktop, and web platforms.
+This Privacy Policy describes how **Waycord** (https://waycord.org, "the Application", "the Service"), operated by **[INSERT_LEGAL_ENTITY_NAME_HERE]** ("the Organization", "We", "Us", or "Our"), collects, uses, and safeguards information when you use our software across mobile, desktop, and web platforms.
 
-For privacy-related questions or data subject access requests, contact our privacy officer at **privacy@waypoint.internal**. For technical support, reach us at **support@waypoint.internal**.
+For privacy-related questions, data subject access requests, or grievance redressal under applicable law, contact our data protection officer at **privacy@waycord.org**. For legal notices, contact **legal@waycord.org**. For general technical support, reach us at **support@waycord.org**.
 
 ---
 
-## 2. Local-First Architectural Principles
+## 2. Local-First Architecture & Data Residency Transparency
 
-Waypoint is engineered as a **local-first** productivity and task orchestration system.
+Waycord is engineered around strict **local-first** and **privacy-by-design** principles:
 
-1. **On-Device Storage:** Your tasks, subtasks, categories, and settings are written immediately to local, sandboxed Hive storage on your physical device. 
+1. **On-Device Sandboxed Storage:** Core personal task data—including tasks, subtasks, categories, routine cadences, and user preferences—resides locally on-device in encrypted Hive storage.
 2. **Offline-First Functionality:** You can create, organize, edit, and complete tasks without an active internet connection. Offline mutations are buffered securely in a local `sync_queue` and coalesced until connectivity is restored.
-3. **Zero-RAM Audio Pipeline:** Spoken voice inputs and audio snippets captured for natural-language task creation are written to temporary system storage (`Directory.systemTemp`), processed strictly for transcription and semantic slot extraction, and cleared from storage upon processing completion. Raw audio streams are never permanently retained on our servers.
+3. **Data Residency & Compliance:** Cloud-synced data is hosted in Supabase data centers in **ap-south-1 (Mumbai)**, fully complying with India's **Digital Personal Data Protection (DPDP) Act** and applicable data sovereignty mandates.
+4. **Zero-RAM Audio Pipeline:** Spoken voice dictation and natural-language audio snippets captured for task creation are buffered only in temporary system storage (`Directory.systemTemp`), processed strictly for transcription and semantic slot extraction, and immediately purged upon completion. Raw audio streams are never permanently retained or stored on server infrastructure.
 
 ---
 
-## 3. Cloud Synchronization & Third-Party Sub-Processors
+## 3. Sub-Processors & Service Providers
 
-When cloud synchronization, collaboration, or AI-assisted task extraction features are activated, Waypoint engages the following audited infrastructure sub-processors:
+When cloud synchronization, collaboration, AI-assisted task extraction, or subscription features are activated, Waycord engages the following audited third-party sub-processors:
 
 ### A. Supabase Inc. (Backend, Database & Storage)
-- **Role:** Cloud database (PostgreSQL), user authentication, encrypted file attachments, and Realtime WebSocket replication.
-- **Security:** Protected by PostgreSQL Row-Level Security (RLS) policies enforcing multi-tenant isolation and strict user-level authorization. Data in transit is encrypted using TLS 1.3; data at rest is encrypted with AES-256.
+- **Role:** Cloud database (PostgreSQL), user authentication, encrypted file attachments, and Realtime WebSocket state synchronization.
+- **Data Residency:** Hosted in Mumbai, India (**ap-south-1 (Mumbai)**).
+- **Security:** Protected by PostgreSQL Row-Level Security (RLS) policies enforcing multi-tenant workspace isolation. Data in transit is encrypted using TLS 1.3; data at rest is encrypted with AES-256.
 
 ### B. Vercel Inc. (Edge CDN & Web Hosting)
-- **Role:** Global Edge Content Delivery Network (CDN) hosting the Waypoint Web client application and static assets.
+- **Role:** Global Edge Content Delivery Network (CDN) hosting the Waycord Web client application (https://waycord.org) and static assets.
 - **Data Handled:** Standard web request metadata (IP address, browser user-agent, cache headers) for security, DDoS protection, and low-latency asset delivery.
 
-### C. Google LLC / Gemini API (Generative AI Task Extraction)
-- **Role:** Generative AI task breakdown, natural language deadline parsing, and subtask synthesis.
-- **Model Mandate:** Waypoint routes all AI extraction requests through the dedicated `gemini-3.5-flash-lite` model.
-- **Data Minimization:** Only the text or audio prompt required for task parsing is transmitted via an authenticated server-side Edge Function. Prompts are processed statelessly and are not used to train global generative AI foundation models.
+### C. Google LLC / Gemini API (Transient AI Task Extraction)
+- **Role:** Natural language task parsing, milestone decomposition, and temporal deadline anchoring.
+- **Model Mandate:** Waycord routes extraction requests through dedicated `gemini-3.5-flash-lite` endpoints via authenticated server-side Edge Functions.
+- **Data Minimization & Privacy:** Only the prompt text necessary for task synthesis is transmitted. Requests are processed statelessly and transiently; user inputs are never utilized to train foundation models.
+
+### D. Payment Gateways & Membership Platforms (Upcoming / Integrations)
+- **PhonePe Payment Gateway (PhonePe Private Limited):** For authorized billing, recurring subscriptions, and INR payment processing within India, processed in accordance with Reserve Bank of India (RBI) regulations and the DPDP Act.
+- **Patreon (Patreon, Inc.):** For voluntary patron memberships, supporter tier verification, and community sponsorship perks.
 
 ---
 
 ## 4. Data Retention, Soft Deletion & Right to Erasure
 
-1. **30-Day Soft Deletion Lifecycle:** When a task or community item is deleted, it is flagged with a `deleted_at` timestamp and moved to the Trash bin. Items remain restorable for **30 calendar days**, after which automated database purge triggers permanently erase the records.
-2. **Account Deletion:** Users may delete their account at any time through **Settings > Account > Delete Account**. Initiating deletion executes a secure server-side procedure (`delete_user_account()`) that immediately purges user authentication credentials, owned workspaces, personal task records, and uploaded avatars.
-3. **Local Cache Purge:** Uninstalling the application or selecting "Clear Local Cache" immediately wipes all local Hive boxes (`tasks`, `categories`, `sync_queue`) from the device.
+1. **30-Day Soft Deletion Lifecycle:** Deleted tasks and workspace items are flagged with a `deleted_at` timestamp and retained in the Trash bin for **30 calendar days** for recovery, after which automated purge jobs permanently erase them.
+2. **Account Deletion:** Users may delete their account at any time through **Settings > Account > Delete Account**. Initiating deletion triggers a secure server-side procedure (`delete_user_account()`) that immediately purges authentication credentials, owned workspaces, personal task records, and uploaded avatars.
+3. **Local Cache Purge:** Uninstalling the application or selecting "Clear Local Cache" immediately wipes all local Hive boxes (`tasks`, `categories`, `sync_queue`) from physical device storage.
 
 ---
 
 ## 5. Security & Governance
 
-We implement industry-standard cryptographic practices:
-- **Authentication:** Secure email OTP and passkey passwordless authentication. Private session tokens are stored in platform secure storage (Keychain on macOS/iOS, Keystore on Android, and secure browser cookies).
-- **Access Control:** Multi-tenant Weighted Role-Based Access Control (RBAC) ensures organization and workspace data cannot be accessed, modified, or exported by unauthorized members.
+- **Authentication:** Passwordless email OTP and passkey authentication. Session tokens are preserved in platform secure storage (Keychain on macOS/iOS, Keystore on Android, and secure browser cookies).
+- **Access Control:** Multi-tenant Weighted Role-Based Access Control (RBAC: Owner = 3, Admin = 2, Member = 1) prevents unauthorized workspace modification or extraction.
 
 ---
 
 ## 6. Jurisdiction & Legal Compliance
 
-This policy shall be governed by and construed in accordance with the laws of **Applicable Local Jurisdiction**, without giving effect to any principles of conflicts of law.
+This policy is governed by and construed in accordance with the laws of **India**, in alignment with the Digital Personal Data Protection (DPDP) Act.
 
 For inquiries, notices, or formal data requests, contact:
 - **Organization:** [INSERT_LEGAL_ENTITY_NAME_HERE]
-- **Privacy Contact:** privacy@waypoint.internal
-- **General Inquiries:** support@waypoint.internal
+- **Website:** https://waycord.org
+- **Privacy Contact:** privacy@waycord.org
+- **Legal Contact:** legal@waycord.org
+- **General Inquiries:** support@waycord.org

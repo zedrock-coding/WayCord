@@ -100,7 +100,7 @@ android {
             val output = this as? com.android.build.gradle.internal.api.BaseVariantOutputImpl
             val vName = versionName ?: "0.4.1"
             val abi = output?.filters?.find { it.filterType == com.android.build.OutputFile.ABI }?.identifier
-            output?.outputFileName = if (abi != null) "waypoint-v${vName}-${abi}.apk" else "waypoint-v${vName}.apk"
+            output?.outputFileName = if (abi != null) "waycord-v${vName}-${abi}.apk" else "waycord-v${vName}.apk"
         }
     }
 }
@@ -112,13 +112,13 @@ tasks.configureEach {
             val vName = android.defaultConfig.versionName ?: "0.4.1"
             val defaultApk = File(flutterApkDir, "app-release.apk")
             if (defaultApk.exists()) {
-                val versionedApk = File(flutterApkDir, "waypoint-v$vName.apk")
+                val versionedApk = File(flutterApkDir, "waycord-v$vName.apk")
                 defaultApk.copyTo(versionedApk, overwrite = true)
             }
             listOf("arm64-v8a", "armeabi-v7a", "x86_64").forEach { abi ->
                 val abiApk = File(flutterApkDir, "app-$abi-release.apk")
                 if (abiApk.exists()) {
-                    val versionedAbiApk = File(flutterApkDir, "waypoint-v$vName-$abi.apk")
+                    val versionedAbiApk = File(flutterApkDir, "waycord-v$vName-$abi.apk")
                     abiApk.copyTo(versionedAbiApk, overwrite = true)
                 }
             }

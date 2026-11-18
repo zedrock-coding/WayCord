@@ -44,8 +44,8 @@ if(DEFINED FLUTTER_VERSION AND NOT "${FLUTTER_VERSION}" STREQUAL "")
   add_custom_command(TARGET ${BINARY_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
       "$<TARGET_FILE:${BINARY_NAME}>"
-      "$<TARGET_FILE_DIR:${BINARY_NAME}>/waypoint-v${FLUTTER_VERSION}.exe"
-    COMMENT "Copying binary to waypoint-v${FLUTTER_VERSION}.exe"
+      "$<TARGET_FILE_DIR:${BINARY_NAME}>/waycord-v${FLUTTER_VERSION}.exe"
+    COMMENT "Copying binary to waycord-v${FLUTTER_VERSION}.exe"
   )
 
   # Automatically trigger Inno Setup installer compilation if compiler exists
@@ -58,7 +58,7 @@ if(DEFINED FLUTTER_VERSION AND NOT "${FLUTTER_VERSION}" STREQUAL "")
 
   if(INNO_SETUP_COMPILER)
     add_custom_command(TARGET ${BINARY_NAME} POST_BUILD
-      COMMAND "${INNO_SETUP_COMPILER}" "/DMyAppVersion=${FLUTTER_VERSION}" "${CMAKE_CURRENT_SOURCE_DIR}/../installer/waypoint_setup.iss"
+      COMMAND "${INNO_SETUP_COMPILER}" "/DMyAppVersion=${FLUTTER_VERSION}" "${CMAKE_CURRENT_SOURCE_DIR}/../installer/waycord_setup.iss"
       WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../installer"
       COMMENT "Compiling single-file Windows setup installer with Inno Setup..."
     )

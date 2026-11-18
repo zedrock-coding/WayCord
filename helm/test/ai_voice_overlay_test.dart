@@ -108,7 +108,8 @@ void main() {
 
     expect(find.byType(AIVoiceOverlay), findsOneWidget);
 
-    final hasListeningText = find.text('Waypoint is listening...').evaluate().isNotEmpty;
+    final hasListeningText = (find.text('Waycord is listening...').evaluate().isNotEmpty ||
+        find.text('Waypoint is listening...').evaluate().isNotEmpty);
     final hasMicPermissionText = find.textContaining('Microphone permission').evaluate().isNotEmpty;
     expect(hasListeningText || hasMicPermissionText, isTrue);
 

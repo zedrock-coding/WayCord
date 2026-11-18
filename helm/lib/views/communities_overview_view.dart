@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../core/entitlements/entitlement_service.dart';
+import '../core/entitlements/waycord_upgrade_sheet.dart';
 import '../services/supabase_service.dart';
 import '../services/navigation_provider.dart';
 import '../theme/app_theme.dart';
@@ -16,6 +18,7 @@ class CommunitiesOverviewView extends StatefulWidget {
 class _CommunitiesOverviewViewState extends State<CommunitiesOverviewView> {
   final _supabaseService = SupabaseService();
   bool _isLoading = false;
+  int _cachedWorkspaceCount = 0;
 
   void _showCreateDialog() {
     final controller = TextEditingController();
@@ -58,6 +61,17 @@ class _CommunitiesOverviewViewState extends State<CommunitiesOverviewView> {
             onPressed: () async {
               final name = controller.text.trim();
               if (name.isNotEmpty) {
+                final entitlements = EntitlementService();
+                if (entitlements.capabilities.maxWorkspaces != -1 &&
+                    _cachedWorkspaceCount >= entitlements.capabilities.maxWorkspaces) {
+                  Navigator.pop(ctx);
+                  WaycordUpgradeSheet.show(
+                    context,
+                    featureName: 'Unlimited Shared Workspaces',
+                    description: 'Free tier includes up to 2 shared workspaces. Upgrade to Waycord Pro for unlimited workspaces.',
+                  );
+                  return;
+                }
                 Navigator.pop(ctx);
                 setState(() => _isLoading = true);
                 try {
@@ -66,7 +80,15 @@ class _CommunitiesOverviewViewState extends State<CommunitiesOverviewView> {
                 } catch (e) {
                   if (mounted) {
                     setState(() => _isLoading = false);
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+                    if (e.toString().contains('free_tier_workspace_limit_reached')) {
+                      WaycordUpgradeSheet.show(
+                        context,
+                        featureName: 'Unlimited Shared Workspaces',
+                        description: 'Free tier allows a maximum of 2 shared workspaces. Upgrade to Waycord Pro for unlimited workspaces.',
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+                    }
                   }
                 }
               }
@@ -245,6 +267,7 @@ class _CommunitiesOverviewViewState extends State<CommunitiesOverviewView> {
                   }
 
                   final communities = snapshot.data ?? [];
+                  _cachedWorkspaceCount = communities.length;
                   if (communities.isEmpty) {
                     return Padding(
                       padding: const EdgeInsets.all(32),

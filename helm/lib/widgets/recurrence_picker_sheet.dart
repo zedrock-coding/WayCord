@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../core/entitlements/entitlement_service.dart';
+import '../core/entitlements/waycord_upgrade_sheet.dart';
 import '../models/recurrence_rule.dart';
 
 /// Bottom sheet dialog for choosing recurrence presets or custom recurrence rules.
@@ -70,6 +72,15 @@ class _RecurrencePickerSheetState extends State<RecurrencePickerSheet> {
 
   void _selectPreset(String? preset) {
     if (preset == 'custom') {
+      final canCustom = EntitlementService().capabilities.canUseCustomRecurrence;
+      if (!canCustom) {
+        WaycordUpgradeSheet.show(
+          context,
+          featureName: 'Custom Recurrence & Schedules',
+          description: 'Daily and weekly presets are free. Custom intervals, weekday grids, and end dates require Waycord Pro.',
+        );
+        return;
+      }
       setState(() {
         _isCustom = true;
         _selectedPreset = 'custom';
@@ -201,7 +212,25 @@ class _RecurrencePickerSheetState extends State<RecurrencePickerSheet> {
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
         ),
-        trailing: isSelected ? Icon(Icons.check_rounded, color: colorScheme.primary) : null,
+        trailing: isSelected
+            ? Icon(Icons.check_rounded, color: colorScheme.primary)
+            : (p['id'] == 'custom' && !EntitlementService().capabilities.canUseCustomRecurrence)
+                ? Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: colorScheme.primary.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      'PRO',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        color: colorScheme.primary,
+                      ),
+                    ),
+                  )
+                : null,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         onTap: () => _selectPreset(p['id'] as String?),
       );

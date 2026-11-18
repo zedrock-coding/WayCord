@@ -1,5 +1,6 @@
 name: waypoint
-description: "AI-orchestrated task management workspace"
+description: "Waycord — AI-orchestrated task management workspace"
+homepage: https://waycord.org
 publish_to: 'none'
 
 version: 0.6.4+27

@@ -13,7 +13,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
 
     <application
-        android:label="Waypoint"
+        android:label="Waycord"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon"
         android:enableOnBackInvokedCallback="true">
@@ -35,21 +35,24 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
-            <!-- Deep Link Filter for waypoint:// and helm:// -->
+            <!-- Deep Link Filter for waycord://, waypoint:// and helm:// -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="waycord" />
                 <data android:scheme="waypoint" />
                 <data android:scheme="helm" />
             </intent-filter>
 
-            <!-- Specific Auth Callback Filter for Waypoint Auth -->
+            <!-- Specific Auth Callback Filter for Waycord Auth -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="waycord" android:host="auth-callback" />
                 <data android:scheme="waypoint" android:host="auth-callback" />
+                <data android:scheme="https" android:host="auth.waycord.org" android:pathPrefix="/callback" />
                 <data android:scheme="https" android:host="auth.waypoint.internal" android:pathPrefix="/callback" />
             </intent-filter>
 

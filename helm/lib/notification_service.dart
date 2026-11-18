@@ -214,8 +214,8 @@ class NotificationService {
     }
     try {
       const androidDetails = AndroidNotificationDetails(
-        'waypoint_notifications',
-        'Waypoint Notifications',
+        'waycord_notifications',
+        'Waycord Notifications',
         channelDescription: 'Real-time task and community updates',
         importance: Importance.max,
         priority: Priority.high,

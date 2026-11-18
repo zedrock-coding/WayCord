@@ -11,8 +11,10 @@ verify_jwt = true
 
 [auth]
 additional_redirect_urls = [
+  "waycord://login-callback",
   "waypoint://login-callback",
   "helm://login-callback",
+  "https://waycord.org/**",
   "https://helm-omega-blue.vercel.app/**",
   "http://localhost:3000/**",
   "http://127.0.0.1:3000/**"

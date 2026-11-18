@@ -3,6 +3,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../core/entitlements/entitlement_service.dart';
 import '../models/sync_model.dart';
 import '../features/sync/domain/sync_queue_manager.dart';
 
@@ -184,6 +185,12 @@ class SyncService {
 
     final currentUser = _supabase.auth.currentUser;
     if (currentUser == null) return 0;
+
+    // Check if sync is paused due to Free tier device limit
+    if (EntitlementService().isDeviceSyncPaused) {
+      debugPrint('SyncService: Sync paused due to Free tier device limit.');
+      return 0;
+    }
 
     if (force) {
       _attempts.clear();

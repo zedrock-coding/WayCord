@@ -72,7 +72,7 @@ class _FeedbackDialogState extends State<FeedbackDialog> {
       final client = Supabase.instance.client;
       await client.from('feedback').insert({
         'name': name.isNotEmpty ? name : 'Anonymous',
-        'email': email.isNotEmpty ? email : 'no-reply@waypoint.app',
+        'email': email.isNotEmpty ? email : 'no-reply@waycord.org',
         'message': message,
       });
 
@@ -105,7 +105,7 @@ class _FeedbackDialogState extends State<FeedbackDialog> {
   }
 
   Future<void> _openWhatsApp() async {
-    final uri = Uri.parse('https://wa.me/9584333692?text=Hi,%20I%20need%20help%20with%20Waypoint');
+    final uri = Uri.parse('https://wa.me/9584333692?text=Hi,%20I%20need%20help%20with%20Waycord');
     try {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } catch (_) {}
@@ -163,7 +163,7 @@ class _FeedbackDialogState extends State<FeedbackDialog> {
                               ),
                             ),
                             Text(
-                              'Help shape the future of Waypoint',
+                              'Help shape the future of Waycord',
                               style: AppTheme.monoStyle(
                                 fontSize: 10.5,
                                 color: AppTheme.onSurfaceVariant,

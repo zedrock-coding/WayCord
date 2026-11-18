@@ -188,7 +188,7 @@ class _SettingPageState extends State<SettingPage> {
             subtitle: const Text('Check latest releases on GitHub'),
             trailing: const Icon(Icons.open_in_new_rounded),
             onTap: () async {
-              final uri = Uri.parse('https://github.com/zedrock-coding/Waypoint-App');
+              final uri = Uri.parse('https://waycord.org');
               try {
                 final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
                 if (!launched && context.mounted) {
@@ -214,7 +214,7 @@ class _SettingPageState extends State<SettingPage> {
           ),
           ListTile(
             leading: const Icon(Icons.info_outline_rounded),
-            title: const Text('About Waypoint'),
+            title: const Text('About Waycord'),
             subtitle: const Text('Version, Licenses, and Legal'),
             trailing: const Icon(Icons.chevron_right_rounded),
             onTap: () => Navigator.pushNamed(context, '/about'),

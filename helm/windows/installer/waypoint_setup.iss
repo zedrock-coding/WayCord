@@ -1,13 +1,13 @@
-; Script generated for Waypoint Windows Installer
+; Script generated for Waycord Windows Installer
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
-#define MyAppName "Waypoint"
+#define MyAppName "Waycord"
 #ifndef MyAppVersion
-#define MyAppVersion "0.4.8"
+#define MyAppVersion "0.6.4"
 #endif
-#define MyAppPublisher "Waypoint Workspace"
-#define MyAppURL "https://helm-omega-blue.vercel.app"
-#define MyAppExeName "waypoint.exe"
+#define MyAppPublisher "Waycord Workspace"
+#define MyAppURL "https://waycord.org"
+#define MyAppExeName "waycord.exe"
 #define MyAppSourceDir "..\..\build\windows\x64\runner\Release"
 
 [Setup]
@@ -22,7 +22,7 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
 ; Output setup file name with version
-OutputBaseFilename=Waypoint-v{#MyAppVersion}-Setup
+OutputBaseFilename=Waycord-v{#MyAppVersion}-Setup
 OutputDir=..\..\build\windows\installer
 Compression=lzma2/ultra64
 SolidCompression=yes
@@ -48,4 +48,3 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
-

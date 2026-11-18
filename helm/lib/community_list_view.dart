@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'core/entitlements/waycord_upgrade_sheet.dart';
 import 'services/supabase_service.dart';
 import 'services/navigation_provider.dart';
 
@@ -53,7 +54,19 @@ class _CommunityListViewState extends State<CommunityListView> {
           setState(() {});
         }
       } catch (e) {
-        if (ctx.mounted) ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(content: Text('Error: $e')));
+        if (!mounted) return;
+        if (ctx.mounted) {
+          if (e.toString().contains('free_tier_workspace_limit_reached')) {
+            Navigator.pop(ctx);
+            WaycordUpgradeSheet.show(
+              context,
+              featureName: 'Unlimited Shared Workspaces',
+              description: 'Free tier allows a maximum of 2 shared workspaces. Upgrade to Waycord Pro for unlimited workspaces.',
+            );
+          } else {
+            ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(content: Text('Error: $e')));
+          }
+        }
       }
     }
   }
@@ -70,7 +83,7 @@ class _CommunityListViewState extends State<CommunityListView> {
           title: const Text('Join Community'),
           content: TextField(
             controller: controller, 
-            decoration: const InputDecoration(labelText: 'Invite Link or ID', hintText: 'Paste waypoint://invite... or ID'), 
+            decoration: const InputDecoration(labelText: 'Invite Link or ID', hintText: 'Paste waycord://invite... or ID'), 
             autofocus: true,
             onSubmitted: (_) => _submitJoin(ctx, controller.text.trim()),
           ),

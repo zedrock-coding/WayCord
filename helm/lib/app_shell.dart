@@ -3,13 +3,15 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'core/entitlements/entitlement_service.dart';
+import 'core/entitlements/waycord_upgrade_sheet.dart';
 import 'ai_voice_overlay.dart';
 import 'widgets/task_search_delegate.dart';
 import 'widgets/app_intents.dart';
 import 'widgets/task_form_utils.dart';
 import 'widgets/notification_feed.dart';
 import 'widgets/user_avatar.dart';
-import 'widgets/waypoint_logo.dart';
+import 'widgets/waycord_logo.dart';
 import 'widgets/feedback_dialog.dart';
 import 'services/navigation_provider.dart';
 import 'services/sync_service.dart';
@@ -187,8 +189,8 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
           ),
           EscapeIntent: CallbackAction<EscapeIntent>(
             onInvoke: (_) {
-              if (navProvider.currentView != WaypointNavView.today || navProvider.selectedCommunityId != null) {
-                navProvider.setView(WaypointNavView.today);
+              if (navProvider.currentView != WaycordNavView.today || navProvider.selectedCommunityId != null) {
+                navProvider.setView(WaycordNavView.today);
               }
               return null;
             },
@@ -318,13 +320,13 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
                   borderRadius: BorderRadius.circular(4),
                   child: Row(
                     children: [
-                      const WaypointLogo(size: 32),
+                      const WaycordLogo(size: 32),
                       const SizedBox(width: 10),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Waypoint',
+                            'Waycord',
                             style: GoogleFonts.geist(
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
@@ -333,7 +335,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
                             ),
                           ),
                           Text(
-                            (navProvider.selectedCommunityId != null && navProvider.currentView == WaypointNavView.today) ? 'Team Workspace' : 'Personal Workspace',
+                            (navProvider.selectedCommunityId != null && navProvider.currentView == WaycordNavView.today) ? 'Team Workspace' : 'Personal Workspace',
                             style: AppTheme.monoStyle(
                               fontSize: 10,
                               color: AppTheme.textMuted(context),
@@ -419,39 +421,39 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
                   icon: Icons.calendar_today_rounded,
                   label: 'Today',
                   count: '$activeCount',
-                  isActive: navProvider.currentView == WaypointNavView.today && navProvider.selectedCommunityId == null,
-                  onTap: () => navProvider.setView(WaypointNavView.today),
+                  isActive: navProvider.currentView == WaycordNavView.today && navProvider.selectedCommunityId == null,
+                  onTap: () => navProvider.setView(WaycordNavView.today),
                 ),
 
                 _buildSidebarNavItem(
                   icon: Icons.inbox_rounded,
                   label: 'Inbox',
                   count: '$inboxCount',
-                  isActive: navProvider.currentView == WaypointNavView.inbox,
-                  onTap: () => navProvider.setView(WaypointNavView.inbox),
+                  isActive: navProvider.currentView == WaycordNavView.inbox,
+                  onTap: () => navProvider.setView(WaycordNavView.inbox),
                 ),
 
                 _buildSidebarNavItem(
                   icon: Icons.repeat_rounded,
                   label: 'Recurring',
                   count: '$recurringCount',
-                  isActive: navProvider.currentView == WaypointNavView.recurring,
-                  onTap: () => navProvider.setView(WaypointNavView.recurring),
+                  isActive: navProvider.currentView == WaycordNavView.recurring,
+                  onTap: () => navProvider.setView(WaycordNavView.recurring),
                 ),
 
                 _buildSidebarNavItem(
                   icon: Icons.event_rounded,
                   label: 'Schedule',
                   count: 'Today',
-                  isActive: navProvider.currentView == WaypointNavView.schedule,
-                  onTap: () => navProvider.setView(WaypointNavView.schedule),
+                  isActive: navProvider.currentView == WaycordNavView.schedule,
+                  onTap: () => navProvider.setView(WaycordNavView.schedule),
                 ),
 
                 const SizedBox(height: 16),
 
                 // Groups & Workspaces Section Header (Clickable to open Communities Overview!)
                 InkWell(
-                  onTap: () => navProvider.setView(WaypointNavView.communities),
+                  onTap: () => navProvider.setView(WaycordNavView.communities),
                   borderRadius: BorderRadius.circular(4),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -477,7 +479,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
                   ListTile(
                     dense: true,
                     visualDensity: const VisualDensity(horizontal: -2, vertical: -3),
-                    onTap: () => navProvider.setView(WaypointNavView.communities),
+                    onTap: () => navProvider.setView(WaycordNavView.communities),
                     leading: const Icon(Icons.add_circle_outline_rounded, size: 16, color: AppTheme.mint),
                     title: const Text(
                       '+ Add or Join Workspace',
@@ -530,6 +532,14 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
               children: [
                 InkWell(
                   onTap: () {
+                    if (EntitlementService().isDeviceSyncPaused) {
+                      WaycordUpgradeSheet.show(
+                        context,
+                        featureName: 'Cloud Sync Device Limit Reached',
+                        description: 'Free tier allows up to 2 active devices. Upgrade to Waycord Pro for unlimited synced devices or unlink an older device.',
+                      );
+                      return;
+                    }
                     _triggerManualSync(context, taskProvider);
                     _showSyncDiagnosticsModal(context, taskProvider);
                   },
@@ -537,11 +547,16 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
                   child: ValueListenableBuilder<int>(
                     valueListenable: SyncService().pendingChanges,
                     builder: (context, pendingCount, _) {
+                      final isDeviceLimit = context.watch<EntitlementService>().isDeviceSyncPaused;
                       final hasPending = pendingCount > 0;
-                      final statusColor = hasPending ? AppTheme.priorityMedium : AppTheme.mint;
-                      final statusText = _isSyncing
-                          ? 'SYNCING...'
-                          : (hasPending ? '$pendingCount PENDING' : 'ALL CHANGES SAVED');
+                      final statusColor = isDeviceLimit
+                          ? AppTheme.priorityHigh
+                          : (hasPending ? AppTheme.priorityMedium : AppTheme.mint);
+                      final statusText = isDeviceLimit
+                          ? 'SYNC PAUSED (DEVICE LIMIT)'
+                          : (_isSyncing
+                              ? 'SYNCING...'
+                              : (hasPending ? '$pendingCount PENDING' : 'ALL CHANGES SAVED'));
 
                       return Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -592,7 +607,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     InkWell(
-                      onTap: () => navProvider.setView(WaypointNavView.settings),
+                      onTap: () => navProvider.setView(WaycordNavView.settings),
                       borderRadius: BorderRadius.circular(4),
                       child: Row(
                         children: const [
@@ -833,7 +848,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
     TaskProvider taskProvider,
     bool isDesktop,
   ) {
-    final inCommunity = navProvider.selectedCommunityId != null && navProvider.currentView == WaypointNavView.today;
+    final inCommunity = navProvider.selectedCommunityId != null && navProvider.currentView == WaycordNavView.today;
     final commName = navProvider.selectedCommunityName ?? 'Workspace';
 
     return Container(
@@ -905,14 +920,14 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
             ] else ...[
               Flexible(
                 child: InkWell(
-                  onTap: () => navProvider.setView(WaypointNavView.today),
+                  onTap: () => navProvider.setView(WaycordNavView.today),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const WaypointLogo(size: 28),
+                      const WaycordLogo(size: 28),
                       const SizedBox(width: 8),
                       Text(
-                        'Waypoint',
+                        'Waycord',
                         style: GoogleFonts.geist(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -1223,7 +1238,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
 
               // Dynamic User Profile Avatar (Desktop and Mobile)
               InkWell(
-                onTap: () => navProvider.setView(WaypointNavView.account),
+                onTap: () => navProvider.setView(WaycordNavView.account),
                 borderRadius: BorderRadius.circular(16),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
@@ -1258,14 +1273,14 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
           _buildMobileDockItem(
             icon: Icons.calendar_today_rounded,
             label: 'Today',
-            isActive: navProvider.currentView == WaypointNavView.today && navProvider.selectedCommunityId == null,
-            onTap: () => navProvider.setView(WaypointNavView.today),
+            isActive: navProvider.currentView == WaycordNavView.today && navProvider.selectedCommunityId == null,
+            onTap: () => navProvider.setView(WaycordNavView.today),
           ),
           _buildMobileDockItem(
             icon: Icons.inbox_rounded,
             label: 'Inbox',
-            isActive: navProvider.currentView == WaypointNavView.inbox,
-            onTap: () => navProvider.setView(WaypointNavView.inbox),
+            isActive: navProvider.currentView == WaycordNavView.inbox,
+            onTap: () => navProvider.setView(WaycordNavView.inbox),
           ),
 
           // Central FAB Add button
@@ -1292,20 +1307,20 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
           _buildMobileDockItem(
             icon: Icons.repeat_rounded,
             label: 'Repeat',
-            isActive: navProvider.currentView == WaypointNavView.recurring,
-            onTap: () => navProvider.setView(WaypointNavView.recurring),
+            isActive: navProvider.currentView == WaycordNavView.recurring,
+            onTap: () => navProvider.setView(WaycordNavView.recurring),
           ),
           _buildMobileDockItem(
             icon: Icons.event_rounded,
             label: 'Schedule',
-            isActive: navProvider.currentView == WaypointNavView.schedule,
-            onTap: () => navProvider.setView(WaypointNavView.schedule),
+            isActive: navProvider.currentView == WaycordNavView.schedule,
+            onTap: () => navProvider.setView(WaycordNavView.schedule),
           ),
           _buildMobileDockItem(
             icon: Icons.tune_rounded,
             label: 'Settings',
-            isActive: navProvider.currentView == WaypointNavView.settings,
-            onTap: () => navProvider.setView(WaypointNavView.settings),
+            isActive: navProvider.currentView == WaycordNavView.settings,
+            onTap: () => navProvider.setView(WaycordNavView.settings),
           ),
         ],
       ),
@@ -1346,21 +1361,21 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
     );
   }
 
-  String _getViewTitle(WaypointNavView view) {
+  String _getViewTitle(WaycordNavView view) {
     switch (view) {
-      case WaypointNavView.today:
+      case WaycordNavView.today:
         return 'Today';
-      case WaypointNavView.inbox:
+      case WaycordNavView.inbox:
         return 'Inbox';
-      case WaypointNavView.recurring:
+      case WaycordNavView.recurring:
         return 'Recurring';
-      case WaypointNavView.schedule:
+      case WaycordNavView.schedule:
         return 'Schedule';
-      case WaypointNavView.settings:
+      case WaycordNavView.settings:
         return 'Settings';
-      case WaypointNavView.communities:
+      case WaycordNavView.communities:
         return 'Workspaces';
-      case WaypointNavView.account:
+      case WaycordNavView.account:
         return 'Account';
     }
   }

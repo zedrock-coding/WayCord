@@ -1,4 +1,4 @@
-# Waypoint Robots.txt
+# Waycord Robots.txt
 User-agent: *
 Allow: /
 Disallow: /auth/callback

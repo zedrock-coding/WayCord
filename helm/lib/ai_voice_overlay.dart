@@ -1125,7 +1125,7 @@ class AIVoiceOverlayState extends State<AIVoiceOverlay>
             ),
           Text(
             _isAiSpeaking
-                ? 'Waypoint is asking...'
+                ? 'Waycord is asking...'
                 : 'Speak your answer, then tap to process',
             textAlign: TextAlign.center,
             style: const TextStyle(color: Colors.white54, fontSize: 13),
@@ -1249,7 +1249,7 @@ class AIVoiceOverlayState extends State<AIVoiceOverlay>
     switch (_currentState) {
       case AIState.listening:
         return const Text(
-          'Waypoint is listening...',
+          'Waycord is listening...',
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,

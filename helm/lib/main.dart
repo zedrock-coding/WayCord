@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'core/entitlements/entitlement_service.dart';
 
 import 'models/unified_task.dart';
 
@@ -72,6 +73,11 @@ void main() async {
   await HiveDatabase.init();
   debugPrint('INIT: Hive Started.');
 
+  debugPrint('INIT: Starting EntitlementService...');
+  await EntitlementService().initialize();
+  EntitlementService().syncRemoteSubscription(Supabase.instance.client);
+  debugPrint('INIT: EntitlementService Started.');
+
   debugPrint('INIT: Starting SyncService...');
   SyncService().init();
 
@@ -90,6 +96,7 @@ void main() async {
           ChangeNotifierProvider<ThemeProvider>(create: (context) => ThemeProvider()),
           ChangeNotifierProvider<NavigationProvider>(create: (context) => NavigationProvider()),
           ChangeNotifierProvider<TaskProvider>.value(value: taskProvider),
+          ChangeNotifierProvider<EntitlementService>.value(value: EntitlementService()),
         ],
         child: const MyApp(),
       ),
@@ -108,7 +115,7 @@ class _MisconfiguredApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Waypoint',
+      title: 'Waycord',
       theme: AppTheme.darkTheme,
       home: Scaffold(
         body: Center(
@@ -226,8 +233,8 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       navigatorKey: _navigatorKey,
       scaffoldMessengerKey: _scaffoldMessengerKey,
-      key: const ValueKey('waypoint_app_root'),
-      title: 'Waypoint',
+      key: const ValueKey('waycord_app_root'),
+      title: 'Waycord',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeProvider.themeMode,
@@ -256,7 +263,7 @@ class _MyAppState extends State<MyApp> {
         return null;
       },
       routes: {
-        '/': (context) => const MyHomePage(title: 'Waypoint'),
+        '/': (context) => const MyHomePage(title: 'Waycord'),
         '/auth': (context) => const AuthScreen(),
         '/settings': (context) => const SettingPage(),
         '/calendar': (context) => const CalendarPage(),
@@ -311,7 +318,7 @@ class _MyHomePageState extends State<MyHomePage> {
       builder: (context) => AlertDialog(
         title: const Text('Enable task reminders?'),
         content: const Text(
-          'Waypoint can notify you before a task is due. Reminders are scheduled on '
+          'Waycord can notify you before a task is due. Reminders are scheduled on '
           'this device only, and you can turn them off later in Settings.',
         ),
         actions: [
@@ -352,10 +359,10 @@ class _MyHomePageState extends State<MyHomePage> {
     final bool isDesktop = width >= 768;
 
     Widget body;
-    String title = 'Waypoint';
+    String title = 'Waycord';
     List<Widget> appBarActions = [];
 
-    if (navProvider.selectedCommunityId != null && navProvider.currentView == WaypointNavView.today) {
+    if (navProvider.selectedCommunityId != null && navProvider.currentView == WaycordNavView.today) {
       title = navProvider.selectedCommunityName ?? 'Community Workspace';
       appBarActions = [
         IconButton(
@@ -380,7 +387,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body = _buildSupabaseTaskStream(navProvider.selectedCommunityId!, taskProvider, isDesktop);
     } else {
       switch (navProvider.currentView) {
-        case WaypointNavView.today:
+        case WaycordNavView.today:
           title = 'Today';
           body = TodayView(
             onTaskTap: (task) {
@@ -395,7 +402,7 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           );
           break;
-        case WaypointNavView.inbox:
+        case WaycordNavView.inbox:
           title = 'Inbox';
           body = InboxView(
             onTaskTap: (task) {
@@ -410,7 +417,7 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           );
           break;
-        case WaypointNavView.recurring:
+        case WaycordNavView.recurring:
           title = 'Recurring';
           body = RecurringView(
             onTaskTap: (task) {
@@ -425,7 +432,7 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           );
           break;
-        case WaypointNavView.schedule:
+        case WaycordNavView.schedule:
           title = 'Schedule';
           body = ScheduleView(
             onTaskTap: (task) {
@@ -440,28 +447,28 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           );
           break;
-        case WaypointNavView.settings:
+        case WaycordNavView.settings:
           title = 'Settings';
           body = const SettingsView();
           break;
-        case WaypointNavView.communities:
+        case WaycordNavView.communities:
           title = 'Workspaces';
           body = CommunitiesOverviewView(
-            onBackToToday: () => navProvider.setView(WaypointNavView.today),
+            onBackToToday: () => navProvider.setView(WaycordNavView.today),
           );
           break;
-        case WaypointNavView.account:
+        case WaycordNavView.account:
           title = 'Account';
           body = AccountView(
-            onBackToToday: () => navProvider.setView(WaypointNavView.today),
+            onBackToToday: () => navProvider.setView(WaycordNavView.today),
           );
           break;
       }
     }
 
     final showCommandBar = _selectedTaskId == null &&
-        (navProvider.currentView == WaypointNavView.today ||
-            navProvider.currentView == WaypointNavView.inbox);
+        (navProvider.currentView == WaycordNavView.today ||
+            navProvider.currentView == WaycordNavView.inbox);
 
     return AppShell(
       title: title,

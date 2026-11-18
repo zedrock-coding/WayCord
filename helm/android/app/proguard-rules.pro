@@ -6,7 +6,7 @@
 -keep class io.flutter.** { *; }
 -keep class io.flutter.plugins.**  { *; }
 
-# Waypoint App & AppWidgets
+# Waycord App & AppWidgets
 -keep class com.waypoint.app.** { *; }
 
 # HomeWidget Plugin

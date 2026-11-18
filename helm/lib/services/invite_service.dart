@@ -42,14 +42,14 @@ class InviteService {
   Stream<String> get onInviteReceived => _inviteController.stream;
   Stream<InviteEvent> get onInviteEvent => _eventController.stream;
 
-  /// Extracts communityId from custom schemes (waypoint://, helm://) or web URLs
+  /// Extracts communityId from custom schemes (waycord://, waypoint://, helm://) or web URLs
   static String? extractCommunityId(Uri uri) {
     if (uri.queryParameters.containsKey('communityId')) {
       final id = uri.queryParameters['communityId']?.trim();
       if (id != null && id.isNotEmpty) return id;
     }
 
-    if ((uri.scheme == 'waypoint' || uri.scheme == 'helm') && uri.host == 'invite') {
+    if ((uri.scheme == 'waycord' || uri.scheme == 'waypoint' || uri.scheme == 'helm') && uri.host == 'invite') {
       final id = uri.queryParameters['communityId']?.trim();
       if (id != null && id.isNotEmpty) return id;
     }

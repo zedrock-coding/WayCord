@@ -10,6 +10,7 @@ import '../services/sync_service.dart';
 import '../services/widget_sync_service.dart';
 import '../services/task_merge.dart';
 import '../services/recurrence_calculator.dart';
+import '../core/entitlements/entitlement_service.dart';
 import '../notification_service.dart';
 import 'package:uuid/uuid.dart';
 
@@ -1204,6 +1205,35 @@ class TaskProvider with ChangeNotifier {
     _lastDeletedHiveTask = null;
     _lastDeletedUnifiedTask = null;
     notifyListeners();
+  }
+
+  /// Restores a soft-deleted task from the 30-day trash archive.
+  /// Enforces `canRecoverTrash` entitlement (Waycord Pro & Team).
+  Future<bool> restoreTaskFromTrash(String taskId, {Map<String, dynamic>? restoredData}) async {
+    final canRecover = EntitlementService().capabilities.canRecoverTrash;
+    if (!canRecover) {
+      debugPrint('TaskProvider: 30-day trash recovery requires Waycord Pro or Team.');
+      return false;
+    }
+
+    try {
+      await _mutate(
+        table: 'tasks',
+        id: taskId,
+        action: SyncActionType.update,
+        payload: {
+          'id': taskId,
+          'deleted_at': null,
+          if (restoredData != null) ...restoredData,
+        },
+      );
+      await _refreshPersonalTasks();
+      notifyListeners();
+      return true;
+    } catch (e) {
+      debugPrint('TaskProvider: Error restoring task from trash: $e');
+      rethrow;
+    }
   }
 
   String _statusToString(Status s) {

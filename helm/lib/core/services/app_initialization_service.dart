@@ -25,8 +25,8 @@ class RealNotificationPermissionHandler implements NotificationPermissionHandler
 }
 
 class AppInitializationService {
-  static const String dispatchChannelId = 'waypoint_dispatch';
-  static const String dispatchChannelName = 'Waypoint Daily Dispatch';
+  static const String dispatchChannelId = 'waycord_dispatch';
+  static const String dispatchChannelName = 'Waycord Daily Dispatch';
   static const String dispatchChannelDescription =
       'Audio and briefing alerts for daily task dispatches';
 

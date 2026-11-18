@@ -1,8 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../core/entitlements/entitlement_capabilities.dart';
+import '../core/entitlements/entitlement_service.dart';
+import '../core/entitlements/waycord_upgrade_sheet.dart';
 import '../features/voice/data/sherpa_tts_service.dart';
 import '../models/hive_models.dart';
 import '../notification_service.dart';
@@ -59,7 +63,7 @@ class _SettingsViewState extends State<SettingsView> {
     setState(() => _isTestingVoice = true);
     try {
       final tts = SherpaTtsService(speed: _voiceSpeed);
-      await tts.speak('Waypoint voice assistant active.');
+      await tts.speak('Waycord voice assistant active.');
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -183,7 +187,7 @@ class _SettingsViewState extends State<SettingsView> {
   }
 
   Future<void> _openUpdatesPage() async {
-    final uri = Uri.parse('https://github.com/zedrock-coding/Waypoint-App');
+    final uri = Uri.parse('https://waycord.org');
     try {
       final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
       if (!launched && mounted) {
@@ -200,13 +204,66 @@ class _SettingsViewState extends State<SettingsView> {
     }
   }
 
+  Widget _buildCapabilityRow(String label, String value, bool isHighlight) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(fontSize: 12, color: AppTheme.onSurface),
+        ),
+        Text(
+          value,
+          style: AppTheme.monoStyle(
+            fontSize: 10.5,
+            fontWeight: FontWeight.bold,
+            color: isHighlight ? AppTheme.mint : AppTheme.onSurfaceVariant,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDevTierChip({
+    required BuildContext context,
+    required String label,
+    required bool isSelected,
+    required VoidCallback onSelected,
+  }) {
+    return InkWell(
+      onTap: onSelected,
+      borderRadius: BorderRadius.circular(4),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        decoration: BoxDecoration(
+          color: isSelected ? AppTheme.mint.withValues(alpha: 0.2) : AppTheme.surfaceContainerHigh,
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(
+            color: isSelected ? AppTheme.mint : AppTheme.surfaceVariant,
+          ),
+        ),
+        child: Text(
+          label,
+          style: AppTheme.monoStyle(
+            fontSize: 11,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+            color: isSelected ? AppTheme.mint : AppTheme.onSurfaceVariant,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeProvider = context.watch<ThemeProvider>();
     final navProvider = context.read<NavigationProvider>();
+    final entitlement = context.watch<EntitlementService>();
+    final activeTier = entitlement.activeTier;
+    final capabilities = entitlement.capabilities;
     final settings = themeProvider.settings;
     final user = Supabase.instance.client.auth.currentUser;
-    final email = user?.email ?? 'user@waypoint.app';
+    final email = user?.email ?? 'user@waycord.org';
     final metadata = user?.userMetadata;
     final displayName = metadata?['full_name'] as String? ?? '';
     final isDark = (settings.themeMode ?? 1) == 1;
@@ -240,7 +297,7 @@ class _SettingsViewState extends State<SettingsView> {
                         child: Text('•', style: TextStyle(color: AppTheme.surfaceVariant)),
                       ),
                       Text(
-                        'Waypoint Settings',
+                        'Waycord Settings',
                         style: AppTheme.monoStyle(
                           fontSize: 11,
                           color: AppTheme.onSurfaceVariant,
@@ -569,7 +626,7 @@ class _SettingsViewState extends State<SettingsView> {
                     ),
                     const SizedBox(height: 4),
                     const Text(
-                      'Waypoint synthesizes speech confirmations and extracts tasks from spoken dictation.',
+                      'Waycord synthesizes speech confirmations and extracts tasks from spoken dictation.',
                       style: TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant),
                     ),
                     const SizedBox(height: 14),
@@ -953,7 +1010,7 @@ class _SettingsViewState extends State<SettingsView> {
                       width: double.infinity,
                       child: OutlinedButton.icon(
                         onPressed: () {
-                          navProvider.setView(WaypointNavView.account);
+                          navProvider.setView(WaycordNavView.account);
                         },
                         icon: const Icon(Icons.person_outline_rounded, size: 16, color: AppTheme.mint),
                         label: Text(
@@ -972,6 +1029,209 @@ class _SettingsViewState extends State<SettingsView> {
                         ),
                       ),
                     ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 14),
+
+            // 6. Subscription & Capabilities Box
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: AppTheme.surfaceContainerHigh,
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(color: AppTheme.surfaceVariant),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.workspace_premium_outlined, size: 18, color: AppTheme.mint),
+                        const SizedBox(width: 8),
+                        const Text(
+                          'Subscription & Capabilities',
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppTheme.onSurface),
+                        ),
+                        const Spacer(),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: activeTier == WaycordTier.free
+                                ? AppTheme.surfaceVariant
+                                : AppTheme.mint.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(2),
+                            border: Border.all(
+                              color: activeTier == WaycordTier.free
+                                  ? AppTheme.surfaceVariant
+                                  : AppTheme.mint.withValues(alpha: 0.35),
+                            ),
+                          ),
+                          child: Text(
+                            activeTier.displayName.toUpperCase(),
+                            style: AppTheme.monoStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: activeTier == WaycordTier.free
+                                  ? AppTheme.onSurfaceVariant
+                                  : AppTheme.mint,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    const Text(
+                      'Capability-based tier access rules and limits for this account.',
+                      style: TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant),
+                    ),
+                    const SizedBox(height: 14),
+                    // Capability badges / rows
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: AppTheme.surfaceContainer,
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(color: AppTheme.surfaceVariant),
+                      ),
+                      child: Column(
+                        children: [
+                          _buildCapabilityRow(
+                            'Custom Recurrence',
+                            capabilities.canUseCustomRecurrence ? 'UNLOCKED' : 'LOCKED (DAILY/WEEKLY ONLY)',
+                            capabilities.canUseCustomRecurrence,
+                          ),
+                          const Divider(color: AppTheme.surfaceVariant, height: 16),
+                          _buildCapabilityRow(
+                            'Needle AI Voice Calls',
+                            capabilities.monthlyCloudAiLimit == -1 ? 'UNLIMITED' : '${capabilities.monthlyCloudAiLimit} / MONTH',
+                            capabilities.monthlyCloudAiLimit == -1,
+                          ),
+                          const Divider(color: AppTheme.surfaceVariant, height: 16),
+                          _buildCapabilityRow(
+                            'Active Workspaces',
+                            capabilities.maxWorkspaces == -1 ? 'UNLIMITED' : 'MAX ${capabilities.maxWorkspaces}',
+                            capabilities.maxWorkspaces == -1,
+                          ),
+                          const Divider(color: AppTheme.surfaceVariant, height: 16),
+                          _buildCapabilityRow(
+                            'Members Per Workspace',
+                            capabilities.maxMembersPerWorkspace == -1 ? 'UNLIMITED' : 'MAX ${capabilities.maxMembersPerWorkspace}',
+                            capabilities.maxMembersPerWorkspace > 5,
+                          ),
+                          const Divider(color: AppTheme.surfaceVariant, height: 16),
+                          _buildCapabilityRow(
+                            '30-Day Trash Recovery',
+                            capabilities.canRecoverTrash ? 'ENABLED' : 'LOCKED',
+                            capabilities.canRecoverTrash,
+                          ),
+                          const Divider(color: AppTheme.surfaceVariant, height: 16),
+                          _buildCapabilityRow(
+                            '3-Tier Weighted RBAC',
+                            capabilities.canUseWeightedRbac ? 'ENABLED' : 'LOCKED',
+                            capabilities.canUseWeightedRbac,
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (activeTier == WaycordTier.free) ...[
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        width: double.infinity,
+                        child: OutlinedButton.icon(
+                          onPressed: () => WaycordUpgradeSheet.show(
+                            context,
+                            featureName: 'Waycord Pro Tier',
+                            description: 'Unlock custom recurrence, unlimited cloud AI runs, unlimited workspaces, and 30-day trash recovery.',
+                          ),
+                          icon: const Icon(Icons.star_rounded, size: 16, color: AppTheme.mint),
+                          label: Text(
+                            'UPGRADE TO PRO',
+                            style: AppTheme.monoStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              color: AppTheme.mint,
+                            ),
+                          ),
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(color: AppTheme.mint),
+                            backgroundColor: AppTheme.mint.withValues(alpha: 0.1),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                          ),
+                        ),
+                      ),
+                    ],
+                    if (kDebugMode) ...[
+                      const SizedBox(height: 14),
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: AppTheme.surfaceContainer,
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(color: AppTheme.priorityHigh.withValues(alpha: 0.3)),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                const Icon(Icons.bug_report_outlined, size: 15, color: AppTheme.priorityHigh),
+                                const SizedBox(width: 6),
+                                Text(
+                                  'DEVELOPER TIER OVERRIDE (DEBUG)',
+                                  style: AppTheme.monoStyle(
+                                    fontSize: 10.5,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppTheme.priorityHigh,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              'Test tier gating and capabilities immediately with a single tap.',
+                              style: AppTheme.monoStyle(fontSize: 10, color: AppTheme.onSurfaceVariant),
+                            ),
+                            const SizedBox(height: 10),
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 6,
+                              children: [
+                                _buildDevTierChip(
+                                  context: context,
+                                  label: 'Default',
+                                  isSelected: entitlement.devOverrideTier == null,
+                                  onSelected: () => entitlement.setDevOverrideTier(null),
+                                ),
+                                _buildDevTierChip(
+                                  context: context,
+                                  label: 'Free',
+                                  isSelected: entitlement.devOverrideTier == WaycordTier.free,
+                                  onSelected: () => entitlement.setDevOverrideTier(WaycordTier.free),
+                                ),
+                                _buildDevTierChip(
+                                  context: context,
+                                  label: 'Pro',
+                                  isSelected: entitlement.devOverrideTier == WaycordTier.pro,
+                                  onSelected: () => entitlement.setDevOverrideTier(WaycordTier.pro),
+                                ),
+                                _buildDevTierChip(
+                                  context: context,
+                                  label: 'Team',
+                                  isSelected: entitlement.devOverrideTier == WaycordTier.team,
+                                  onSelected: () => entitlement.setDevOverrideTier(WaycordTier.team),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),
@@ -1027,7 +1287,7 @@ class _SettingsViewState extends State<SettingsView> {
                       dense: true,
                       contentPadding: EdgeInsets.zero,
                       leading: const Icon(Icons.info_outline_rounded, color: AppTheme.mint, size: 20),
-                      title: const Text('About Waypoint', style: TextStyle(fontSize: 13, color: AppTheme.onSurface)),
+                      title: const Text('About Waycord', style: TextStyle(fontSize: 13, color: AppTheme.onSurface)),
                       subtitle: Text('Version details, architecture, and legal licenses', style: AppTheme.monoStyle(fontSize: 10)),
                       trailing: const Icon(Icons.chevron_right_rounded, color: AppTheme.onSurfaceVariant),
                       onTap: () => Navigator.pushNamed(context, '/about'),

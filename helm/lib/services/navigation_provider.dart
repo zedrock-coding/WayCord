@@ -1,39 +1,42 @@
 import 'package:flutter/material.dart';
 
-enum WaypointNavView { today, inbox, recurring, schedule, settings, communities, account }
+enum WaycordNavView { today, inbox, recurring, schedule, settings, communities, account }
+
+/// Backwards compatibility alias
+typedef WaypointNavView = WaycordNavView;
 
 class NavigationProvider with ChangeNotifier {
   String? _selectedCommunityId;
   String? _selectedCommunityName;
   String _currentRoute = '/';
   int _selectedIndex = 0; // 0: Personal, 1: Communities
-  WaypointNavView _currentView = WaypointNavView.today;
+  WaycordNavView _currentView = WaycordNavView.today;
 
   String? get selectedCommunityId => _selectedCommunityId;
   String? get selectedCommunityName => _selectedCommunityName;
   String get currentRoute => _currentRoute;
   int get selectedIndex => _selectedIndex;
-  WaypointNavView get currentView => _currentView;
+  WaycordNavView get currentView => _currentView;
 
-  void setView(WaypointNavView view) {
+  void setView(WaycordNavView view) {
     _currentView = view;
     _selectedCommunityId = null;
     _selectedCommunityName = null;
-    _selectedIndex = view == WaypointNavView.communities ? 1 : 0;
+    _selectedIndex = view == WaycordNavView.communities ? 1 : 0;
 
-    if (view == WaypointNavView.today) {
+    if (view == WaycordNavView.today) {
       _currentRoute = '/';
-    } else if (view == WaypointNavView.inbox) {
+    } else if (view == WaycordNavView.inbox) {
       _currentRoute = '/inbox';
-    } else if (view == WaypointNavView.recurring) {
+    } else if (view == WaycordNavView.recurring) {
       _currentRoute = '/recurring';
-    } else if (view == WaypointNavView.schedule) {
+    } else if (view == WaycordNavView.schedule) {
       _currentRoute = '/calendar';
-    } else if (view == WaypointNavView.settings) {
+    } else if (view == WaycordNavView.settings) {
       _currentRoute = '/settings';
-    } else if (view == WaypointNavView.communities) {
+    } else if (view == WaycordNavView.communities) {
       _currentRoute = '/communities';
-    } else if (view == WaypointNavView.account) {
+    } else if (view == WaycordNavView.account) {
       _currentRoute = '/account';
     }
     notifyListeners();
@@ -44,7 +47,7 @@ class NavigationProvider with ChangeNotifier {
     _selectedCommunityName = name;
     _currentRoute = '/';
     _selectedIndex = id != null ? 1 : 0;
-    _currentView = WaypointNavView.today;
+    _currentView = WaycordNavView.today;
     notifyListeners();
   }
 
@@ -52,7 +55,7 @@ class NavigationProvider with ChangeNotifier {
     _selectedCommunityId = null;
     _selectedCommunityName = null;
     _selectedIndex = 0;
-    _currentView = WaypointNavView.today;
+    _currentView = WaycordNavView.today;
     _currentRoute = '/';
     notifyListeners();
   }
@@ -61,7 +64,7 @@ class NavigationProvider with ChangeNotifier {
     _selectedIndex = index;
     _currentRoute = '/';
     _selectedCommunityId = null;
-    _currentView = index == 0 ? WaypointNavView.today : WaypointNavView.communities;
+    _currentView = index == 0 ? WaycordNavView.today : WaycordNavView.communities;
     notifyListeners();
   }
 
@@ -70,15 +73,15 @@ class NavigationProvider with ChangeNotifier {
     if (route == '/') {
       _selectedIndex = 0;
       _selectedCommunityId = null;
-      _currentView = WaypointNavView.today;
+      _currentView = WaycordNavView.today;
     } else if (route == '/calendar') {
-      _currentView = WaypointNavView.schedule;
+      _currentView = WaycordNavView.schedule;
     } else if (route == '/settings') {
-      _currentView = WaypointNavView.settings;
+      _currentView = WaycordNavView.settings;
     } else if (route == '/categories' || route == '/communities') {
-      _currentView = WaypointNavView.communities;
+      _currentView = WaycordNavView.communities;
     } else if (route == '/account') {
-      _currentView = WaypointNavView.account;
+      _currentView = WaycordNavView.account;
     }
     notifyListeners();
   }
