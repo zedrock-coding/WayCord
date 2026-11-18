@@ -1,6 +1,39 @@
 # Changelog - Helm Workspace 🚀
 
-All notable changes to the **Helm** / **Waypoint** project will be documented in this file.
+All notable changes to the **Helm** / **Waypoint** / **Waycord** project will be documented in this file.
+
+---
+
+## [0.7.0] - 2026-11-18
+
+### 🚀 Waycord Rebranding & Centralized Legal Configuration
+- **Deterministic Rebrand**:
+  - Rebranded application from Waypoint to **Waycord** (`waycord.org`).
+  - Created single source-of-truth configuration `config/organization.json` cascading into `lib/core/config/brand_config.dart`.
+  - Added automated legal documentation synchronizer `tools/sync_brand_docs.py` keeping `PRIVACY_POLICY.md` and `EULA.md` consistently populated.
+  - Updated Android manifest, iOS Info.plist, and Web metadata with Waycord branding.
+
+### 💎 Capability-Based Entitlement Architecture
+- **Tier Matrix Enforcement**:
+  - Implemented `EntitlementCapabilities` resolving exact feature flags and quotas for `free`, `pro`, and `team` tiers.
+  - Centralized rules inside `EntitlementService` with zero raw tier checks in UI components.
+  - Gated Custom Recurrence (intervals, weekday grids, end dates) behind Waycord Pro while preserving daily/weekly presets for Free.
+  - Enforced Free tier boundaries: max 2 synced devices, 20 monthly cloud Needle AI runs, 2 workspaces, and 5 members per workspace.
+  - Integrated `WaycordUpgradeSheet` for non-intrusive upgrade discovery.
+
+### 🛡️ Offline License Verification & Cryptographic Hardening
+- **Anti-Bypass & Anti-Tamper Security**:
+  - Validates offline entitlement state with RS256/EdDSA asymmetric public key fingerprint.
+  - Explicitly blocks HS256/HS384/HS512 algorithm confusion attacks and `none` algorithm exploits.
+  - 72-hour offline grace window with renewal notification flags.
+  - Developer Tier Override strictly compiled out in `--release` builds (`kDebugMode && !kReleaseMode` and `assert`).
+
+### 💳 Webhook Receiver Readiness (PhonePe PG & Patreon)
+- **Hardened Webhook Edge Function**:
+  - Created `supabase/functions/billing-webhook/index.ts` with constant-time byte comparisons.
+  - Enforces PhonePe `X-VERIFY` SHA-256 checksum verification.
+  - Enforces Patreon `X-Patreon-Signature` HMAC verification on raw payload.
+  - Added `billing_events_log` table with unique constraint on `(provider, event_id)` for replay defense.
 
 ---
 
