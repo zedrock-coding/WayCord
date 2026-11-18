@@ -47,7 +47,7 @@ jobs:
         working-directory: ./helm
         run: |
           flutter pub get
-          flutter build web --release --base-href "/" --pwa-strategy=none --source-maps
+          flutter build web --release -O4 --base-href "/" --pwa-strategy=none --source-maps
           # Clean dangling source map references from vendor JS for Lighthouse compliance
           sed -i 's|//# sourceMappingURL=flutter.js.map||g' build/web/*.js || true
           # Ensure vercel.json is in the build directory for routing rules
