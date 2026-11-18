@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../config/app_config.dart';
 import 'entitlement_capabilities.dart';
 
 /// Centralized Entitlement Engine resolving capabilities and quotas.
@@ -115,6 +116,10 @@ class EntitlementService with ChangeNotifier {
 
   /// Synchronizes subscription state from Supabase when online.
   Future<void> syncRemoteSubscription(SupabaseClient client) async {
+    if (!AppConfig.isRemoteEntitlementsEnabled) {
+      // Remote migration pending: maintain local tier without throwing network 404
+      return;
+    }
     try {
       final user = client.auth.currentUser;
       if (user == null) {

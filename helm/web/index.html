@@ -40,8 +40,26 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#1E2124">
 
-  <!-- Viewport Zoom / WCAG Accessibility Guard: prevents runtime injection of user-scalable=no -->
+  <!-- Performance Preconnect & Preload -->
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://eknzdxexfcfdmqvbyvxt.supabase.co" crossorigin>
+  <link rel="preload" href="main.dart.js" as="script">
+
+  <!-- Viewport Zoom / WCAG Accessibility Guard & V8 Deprecation Guard -->
   <script>
+    // Silence V8 deprecation warning for Intl.v8BreakIterator
+    try {
+      if (typeof window !== 'undefined' && window.Intl && 'v8BreakIterator' in window.Intl) {
+        Object.defineProperty(window.Intl, 'v8BreakIterator', {
+          value: undefined,
+          writable: true,
+          configurable: true,
+          enumerable: false
+        });
+      }
+    } catch (_) {}
+
     (function() {
       const observer = new MutationObserver(function(mutations) {
         for (const m of mutations) {

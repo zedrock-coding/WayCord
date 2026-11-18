@@ -31,6 +31,13 @@ class AppConfig {
     defaultValue: 'ai',
   );
 
+  /// Whether to sync entitlements against remote Supabase `user_subscriptions` table.
+  /// Defaults to false until the database migration is applied remotely to avoid console 404s.
+  static const bool isRemoteEntitlementsEnabled = bool.fromEnvironment(
+    'ENABLE_REMOTE_ENTITLEMENTS',
+    defaultValue: false,
+  );
+
   /// A `GEMINI_API_KEY` define is deliberately **not** wired to anything. If an
   /// old build script still passes it, it has no effect — there is no
   /// client-side path to Google's API anymore.

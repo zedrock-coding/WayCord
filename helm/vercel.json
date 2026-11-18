@@ -3,7 +3,32 @@
   "cleanUrls": true,
   "headers": [
     {
-      "source": "/(.*)\\.(js|css|wasm|png|jpg|jpeg|gif|webp|svg|woff2|woff|ttf)",
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin-allow-popups"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://www.gstatic.com https://fonts.gstatic.com; img-src 'self' data: blob: https://*.supabase.co https://waycord.org; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)\\.(js|css|wasm|png|jpg|jpeg|gif|webp|svg|woff2|woff|ttf|map)",
       "headers": [
         {
           "key": "Cache-Control",
