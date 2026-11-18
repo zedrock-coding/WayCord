@@ -29,6 +29,8 @@ class EntitlementService with ChangeNotifier {
   String? _signedJwt;
   DateTime? _currentPeriodEnd;
   bool _deviceSyncPaused = false;
+  DateTime? _lastSyncAttempt;
+  bool _remoteTableUnavailable = false;
 
   bool get isDeviceSyncPaused => _deviceSyncPaused;
 
@@ -121,11 +123,21 @@ class EntitlementService with ChangeNotifier {
         return;
       }
 
+      // If remote table was 404/unavailable, back off for 5 minutes to avoid console noise
+      if (_remoteTableUnavailable && _lastSyncAttempt != null) {
+        if (DateTime.now().difference(_lastSyncAttempt!) < const Duration(minutes: 5)) {
+          return;
+        }
+      }
+      _lastSyncAttempt = DateTime.now();
+
       final response = await client
           .from('user_subscriptions')
           .select('tier, status, current_period_end, signed_entitlement_jwt')
           .eq('user_id', user.id)
           .maybeSingle();
+
+      _remoteTableUnavailable = false;
 
       if (response != null) {
         final tierStr = response['tier']?.toString();
@@ -149,6 +161,10 @@ class EntitlementService with ChangeNotifier {
       } else {
         _resolvedTier = WaycordTier.free;
       }
+    } on PostgrestException catch (e) {
+      _remoteTableUnavailable = true;
+      _resolvedTier = WaycordTier.free;
+      debugPrint('EntitlementService: user_subscriptions table pending migration: $e');
     } catch (e) {
       debugPrint('EntitlementService: Error syncing subscription: $e');
     }

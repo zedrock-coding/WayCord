@@ -1,0 +1,15 @@
+# Waycord
+
+> Waycord is an AI-orchestrated, offline-first task management workspace built for speed, focus, and collaboration.
+
+## Overview
+Waycord turns natural language into structured milestones, tracks execution velocity, and enables seamless team collaboration with zero operational noise — even offline.
+
+## Core Capabilities
+- [Task Management](https://waycord.org/): Offline-first task management with instant local persistence.
+- [AI Orchestration](https://waycord.org/): Natural language task breakdown powered by Gemini.
+- [Team Workspaces](https://waycord.org/): Real-time collaborative workspace with role-based access control.
+
+## Documentation & Policies
+- [Privacy Policy](https://waycord.org/privacy): Waycord privacy and data protection terms.
+- [Terms of Service](https://waycord.org/terms): Waycord software license and user agreement.

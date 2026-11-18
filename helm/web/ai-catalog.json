@@ -1,0 +1,17 @@
+{
+  "$schema": "https://agenticresourcediscovery.org/schemas/v1/ai-catalog.json",
+  "name": "Waycord",
+  "description": "AI-orchestrated task management workspace featuring natural language task breakdown and offline-first synchronization.",
+  "version": "1.0.0",
+  "url": "https://waycord.org",
+  "capabilities": [
+    {
+      "name": "task-management",
+      "description": "Manage tasks, recurring routines, and team milestones."
+    },
+    {
+      "name": "natural-language-planning",
+      "description": "AI natural language task decomposition into structured subtasks."
+    }
+  ]
+}

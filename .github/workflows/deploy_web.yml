@@ -48,6 +48,8 @@ jobs:
         run: |
           flutter pub get
           flutter build web --release --base-href "/" --pwa-strategy=none
+          # Clean dangling source map references from vendor JS for Lighthouse compliance
+          sed -i 's|//# sourceMappingURL=.*||g' build/web/*.js || true
           # Ensure vercel.json is in the build directory for routing rules
           cp vercel.json build/web/
 

@@ -35,10 +35,29 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Waycord">
-  <link rel="apple-touch-icon" href="favicon.png">
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png"/>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#1E2124">
+
+  <!-- Viewport Zoom / WCAG Accessibility Guard: prevents runtime injection of user-scalable=no -->
+  <script>
+    (function() {
+      const observer = new MutationObserver(function(mutations) {
+        for (const m of mutations) {
+          for (const node of m.addedNodes) {
+            if (node.nodeName === 'META' && node.getAttribute('name') === 'viewport') {
+              const c = node.getAttribute('content') || '';
+              if (c.includes('user-scalable=no') || c.includes('maximum-scale=1.0')) {
+                node.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes');
+              }
+            }
+          }
+        }
+      });
+      observer.observe(document.head, { childList: true });
+    })();
+  </script>
 
   <!-- Schema.org JSON-LD Structured Data -->
   <script type="application/ld+json">
