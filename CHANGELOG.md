@@ -6,6 +6,12 @@ All notable changes to the **Helm** / **Waypoint** / **Waycord** project will be
 
 ## [0.8.0-beta] - 2026-11-21
 
+### ⚡ Client Performance & Startup Time Optimization
+- **Non-Critical Service Deferral**:
+  - Gated Android HomeWidget sync to mobile platforms (`!kIsWeb && Android`), eliminating 18+ failing method-channel bridge calls and main thread blocking on web/desktop.
+  - Deferred Sherpa ONNX TTS and speech asset staging until after first user voice interaction.
+  - Moved web notification and non-essential background service initializations to `WidgetsBinding.addPostFrameCallback`, lowering First Contentful Paint (FCP) and Total Blocking Time (TBT).
+
 ### 📐 Proportional REM Spacing & Layout Scaling Engine
 - **CSS-Style REM Spacing Engine**:
   - Implemented `lib/core/ui/rem.dart` with proportional scaling derived from ambient `TextScaler`.

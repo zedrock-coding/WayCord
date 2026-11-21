@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'dart:typed_data';
 import 'dart:ui';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
@@ -53,7 +53,9 @@ class _CommandBarWidgetState extends State<CommandBarWidget>
   @override
   void initState() {
     super.initState();
-    unawaited(_ttsService.initialize());
+    if (!kIsWeb) {
+      unawaited(_ttsService.initialize());
+    }
 
     _glowController = AnimationController(
       vsync: this,

@@ -280,16 +280,18 @@ class WidgetSyncService {
       // Ignored in environments without path_provider
     }
 
-    try {
-      await HomeWidget.saveWidgetData<String>('waypoint_month_payload', monthJson);
-      await HomeWidget.saveWidgetData<String>('waypoint_week_payload', weekJson);
-      await HomeWidget.saveWidgetData<String>('waypoint_day_payload', dayJson);
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+      try {
+        await HomeWidget.saveWidgetData<String>('waypoint_month_payload', monthJson);
+        await HomeWidget.saveWidgetData<String>('waypoint_week_payload', weekJson);
+        await HomeWidget.saveWidgetData<String>('waypoint_day_payload', dayJson);
 
-      await HomeWidget.updateWidget(androidName: 'WaypointMonthWidgetProvider');
-      await HomeWidget.updateWidget(androidName: 'WaypointWeekWidgetProvider');
-      await HomeWidget.updateWidget(androidName: 'WaypointDayWidgetProvider');
-    } catch (e) {
-      debugPrint('HomeWidget invocation failed: $e');
+        await HomeWidget.updateWidget(androidName: 'WaypointMonthWidgetProvider');
+        await HomeWidget.updateWidget(androidName: 'WaypointWeekWidgetProvider');
+        await HomeWidget.updateWidget(androidName: 'WaypointDayWidgetProvider');
+      } catch (e) {
+        debugPrint('HomeWidget invocation failed: $e');
+      }
     }
   }
 }

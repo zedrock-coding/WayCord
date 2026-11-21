@@ -83,9 +83,17 @@ void main() async {
 
   try {
     debugPrint('INIT: Starting Notifications...');
-    await NotificationService().init();
-    await AppInitializationService.init();
-    debugPrint('INIT: Notifications Started.');
+    if (!kIsWeb) {
+      await NotificationService().init();
+      await AppInitializationService.init();
+      debugPrint('INIT: Notifications Started.');
+    } else {
+      // Defer non-critical background services until after first frame paint
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        NotificationService().init();
+      });
+      debugPrint('INIT: Web mode - Deferred notifications.');
+    }
     
     final TaskProvider taskProvider = TaskProvider();
 
