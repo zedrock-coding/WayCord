@@ -558,45 +558,59 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
                               ? 'SYNCING...'
                               : (hasPending ? '$pendingCount PENDING' : 'ALL CHANGES SAVED'));
 
-                      return Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: AppTheme.surfaceContainer,
-                          borderRadius: BorderRadius.circular(4),
-                          border: Border.all(color: AppTheme.surfaceVariant),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  width: 6,
-                                  height: 6,
-                                  decoration: BoxDecoration(
-                                    color: statusColor,
-                                    shape: BoxShape.circle,
-                                  ),
+                      return Tooltip(
+                        message: '$statusText — Tap for sync diagnostics',
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: AppTheme.surfaceContainer,
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(color: AppTheme.surfaceVariant),
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 6,
+                                height: 6,
+                                decoration: BoxDecoration(
+                                  color: statusColor,
+                                  shape: BoxShape.circle,
                                 ),
-                                const SizedBox(width: 6),
-                                Text(
+                              ),
+                              const SizedBox(width: 6),
+                              Expanded(
+                                child: Text(
                                   statusText,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                   style: AppTheme.monoStyle(
                                     fontSize: 9.5,
                                     fontWeight: FontWeight.w600,
                                     color: statusColor,
                                   ),
                                 ),
-                              ],
-                            ),
-                            Text(
-                              'Cloud Active',
-                              style: AppTheme.monoStyle(
-                                fontSize: 9,
-                                color: AppTheme.onSurfaceVariant,
                               ),
-                            ),
-                          ],
+                              const SizedBox(width: 8),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    Icons.cloud_done_outlined,
+                                    size: 11,
+                                    color: AppTheme.onSurfaceVariant,
+                                  ),
+                                  const SizedBox(width: 3),
+                                  Text(
+                                    'Active',
+                                    style: AppTheme.monoStyle(
+                                      fontSize: 9,
+                                      color: AppTheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     },
