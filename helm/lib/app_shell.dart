@@ -862,232 +862,244 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // Left: Brand/Workspace (Mobile) / Search or Workspace Context (Desktop)
-          if (!isDesktop) ...[
-            if (inCommunity) ...[
-              Flexible(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back_rounded, size: 20),
-                      color: AppTheme.text(context),
-                      tooltip: 'Exit Workspace',
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
-                      onPressed: () => navProvider.exitCommunity(),
-                    ),
-                    const SizedBox(width: 4),
-                    Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: AppTheme.mint.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: const Icon(Icons.hub_outlined, size: 14, color: AppTheme.mint),
-                    ),
-                    const SizedBox(width: 6),
-                    Flexible(
-                      child: Text(
-                        commName,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.geist(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: AppTheme.text(context),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    IconButton(
-                      icon: const Icon(Icons.group_outlined, size: 18, color: AppTheme.mint),
-                      tooltip: 'Members & Roles',
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
-                      onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          '/manage-community',
-                          arguments: {
-                            'id': navProvider.selectedCommunityId,
-                            'name': commName,
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ] else ...[
-              Flexible(
-                child: InkWell(
-                  onTap: () => navProvider.setView(WaycordNavView.today),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const WaycordLogo(size: 28),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Waycord',
-                        style: GoogleFonts.geist(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: AppTheme.text(context),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Container(
-                        width: 1,
-                        height: 14,
-                        color: AppTheme.borderColor(context),
-                      ),
-                      const SizedBox(width: 8),
-                      Container(
-                        width: 6,
-                        height: 6,
-                        decoration: const BoxDecoration(
-                          color: AppTheme.mint,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      Flexible(
-                        child: Text(
-                          _getViewTitle(navProvider.currentView),
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.geist(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            color: AppTheme.text(context),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ] else ...[
-            // Desktop Left Cluster: Workspace Switcher / Back + Omni Search Bar
-            Row(
+          Expanded(
+            child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (inCommunity) ...[
-                  InkWell(
-                    onTap: () => navProvider.exitCommunity(),
-                    borderRadius: BorderRadius.circular(4),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                      decoration: BoxDecoration(
-                        color: AppTheme.surfaceContainerColor(context),
-                        borderRadius: BorderRadius.circular(4),
-                        border: Border.all(color: AppTheme.borderColor(context)),
-                      ),
+                if (!isDesktop) ...[
+                  if (inCommunity) ...[
+                    Flexible(
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.arrow_back_rounded, size: 13, color: AppTheme.mint),
+                          IconButton(
+                            icon: const Icon(Icons.arrow_back_rounded, size: 20),
+                            color: AppTheme.text(context),
+                            tooltip: 'Exit Workspace',
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                            onPressed: () => navProvider.exitCommunity(),
+                          ),
                           const SizedBox(width: 4),
-                          Text(
-                            'Personal',
-                            style: AppTheme.monoStyle(fontSize: 11, color: AppTheme.mint),
+                          Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: AppTheme.mint.withValues(alpha: 0.15),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: const Icon(Icons.hub_outlined, size: 14, color: AppTheme.mint),
+                          ),
+                          const SizedBox(width: 6),
+                          Flexible(
+                            child: Text(
+                              commName,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.geist(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: AppTheme.text(context),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          IconButton(
+                            icon: const Icon(Icons.group_outlined, size: 18, color: AppTheme.mint),
+                            tooltip: 'Members & Roles',
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                context,
+                                '/manage-community',
+                                arguments: {
+                                  'id': navProvider.selectedCommunityId,
+                                  'name': commName,
+                                },
+                              );
+                            },
                           ),
                         ],
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: AppTheme.mint.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: AppTheme.mint.withValues(alpha: 0.3)),
+                  ] else ...[
+                    Flexible(
+                      child: InkWell(
+                        onTap: () => navProvider.setView(WaycordNavView.today),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const WaycordLogo(size: 28),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Waycord',
+                              style: GoogleFonts.geist(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: AppTheme.text(context),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Container(
+                              width: 1,
+                              height: 14,
+                              color: AppTheme.borderColor(context),
+                            ),
+                            const SizedBox(width: 8),
+                            Container(
+                              width: 6,
+                              height: 6,
+                              decoration: const BoxDecoration(
+                                color: AppTheme.mint,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            Flexible(
+                              child: Text(
+                                _getViewTitle(navProvider.currentView),
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.geist(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppTheme.text(context),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
+                  ],
+                ] else ...[
+                  // Desktop Left Cluster: Workspace Switcher / Back + Omni Search Bar
+                  Flexible(
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.hub_outlined, size: 15, color: AppTheme.mint),
-                        const SizedBox(width: 6),
-                        Text(
-                          commName,
-                          style: GoogleFonts.geist(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: AppTheme.text(context),
+                        if (inCommunity) ...[
+                          InkWell(
+                            onTap: () => navProvider.exitCommunity(),
+                            borderRadius: BorderRadius.circular(4),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                              decoration: BoxDecoration(
+                                color: AppTheme.surfaceContainerColor(context),
+                                borderRadius: BorderRadius.circular(4),
+                                border: Border.all(color: AppTheme.borderColor(context)),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(Icons.arrow_back_rounded, size: 13, color: AppTheme.mint),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    'Personal',
+                                    style: AppTheme.monoStyle(fontSize: 11, color: AppTheme.mint),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                              color: AppTheme.mint.withValues(alpha: 0.12),
+                              borderRadius: BorderRadius.circular(4),
+                              border: Border.all(color: AppTheme.mint.withValues(alpha: 0.3)),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.hub_outlined, size: 15, color: AppTheme.mint),
+                                const SizedBox(width: 6),
+                                Text(
+                                  commName,
+                                  style: GoogleFonts.geist(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppTheme.text(context),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          OutlinedButton.icon(
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                context,
+                                '/manage-community',
+                                arguments: {
+                                  'id': navProvider.selectedCommunityId,
+                                  'name': commName,
+                                },
+                              );
+                            },
+                            icon: const Icon(Icons.group_outlined, size: 14, color: AppTheme.mint),
+                            label: const Text('Members & Roles', style: TextStyle(fontSize: 11, color: AppTheme.mint)),
+                            style: OutlinedButton.styleFrom(
+                              side: const BorderSide(color: AppTheme.mint),
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                            ),
+                          ),
+                          const SizedBox(width: 14),
+                        ],
+                        // Desktop Omni Search Bar
+                        Flexible(
+                          child: InkWell(
+                            onTap: () => showSearch(context: context, delegate: CustomTaskSearchDelegate()),
+                            borderRadius: BorderRadius.circular(4),
+                            child: Container(
+                              constraints: BoxConstraints(maxWidth: inCommunity ? 220 : 280),
+                              height: 34,
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              decoration: BoxDecoration(
+                                color: AppTheme.surfaceContainerHighColor(context),
+                                borderRadius: BorderRadius.circular(4),
+                                border: Border.all(color: AppTheme.borderColor(context)),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.search, size: 16, color: AppTheme.onSurfaceVariant),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      'Search tasks, notes...',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: AppTheme.textMuted(context).withValues(alpha: 0.6),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                                    decoration: BoxDecoration(
+                                      color: AppTheme.surfaceContainerColor(context),
+                                      borderRadius: BorderRadius.circular(2),
+                                    ),
+                                    child: Text(
+                                      '⌘K',
+                                      style: AppTheme.monoStyle(
+                                        fontSize: 9.5,
+                                        color: AppTheme.textMuted(context),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  OutlinedButton.icon(
-                    onPressed: () {
-                      Navigator.pushNamed(
-                        context,
-                        '/manage-community',
-                        arguments: {
-                          'id': navProvider.selectedCommunityId,
-                          'name': commName,
-                        },
-                      );
-                    },
-                    icon: const Icon(Icons.group_outlined, size: 14, color: AppTheme.mint),
-                    label: const Text('Members & Roles', style: TextStyle(fontSize: 11, color: AppTheme.mint)),
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: AppTheme.mint),
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                    ),
-                  ),
-                  const SizedBox(width: 14),
                 ],
-                // Desktop Omni Search Bar
-                InkWell(
-                  onTap: () => showSearch(context: context, delegate: CustomTaskSearchDelegate()),
-                  borderRadius: BorderRadius.circular(4),
-                  child: Container(
-                    width: inCommunity ? 220 : 280,
-                    height: 34,
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                      color: AppTheme.surfaceContainerHighColor(context),
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: AppTheme.borderColor(context)),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.search, size: 16, color: AppTheme.onSurfaceVariant),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            'Search tasks, notes...',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: AppTheme.textMuted(context).withValues(alpha: 0.6),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-                          decoration: BoxDecoration(
-                            color: AppTheme.surfaceContainerColor(context),
-                            borderRadius: BorderRadius.circular(2),
-                          ),
-                          child: Text(
-                            '⌘K',
-                            style: AppTheme.monoStyle(
-                              fontSize: 9.5,
-                              color: AppTheme.textMuted(context),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
               ],
             ),
-          ],
+          ),
 
           // Right Controls Cluster
           Row(

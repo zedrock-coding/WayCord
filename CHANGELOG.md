@@ -4,6 +4,27 @@ All notable changes to the **Helm** / **Waypoint** / **Waycord** project will be
 
 ---
 
+## [0.8.0-beta] - 2026-11-21
+
+### 📐 Proportional REM Spacing & Layout Scaling Engine
+- **CSS-Style REM Spacing Engine**:
+  - Implemented `lib/core/ui/rem.dart` with proportional scaling derived from ambient `TextScaler`.
+  - Replaced hardcoded pixel paddings and margins across `TaskItemCard`, `TodayView`, and `TaskDetailPage` with `remInsets`, `remGapH`, and `remGapW`.
+  - Added safety bounds clamping (0.8x - 1.35x) preventing distortion on extreme accessibility font multipliers.
+  - Comprehensive unit test coverage in `test/core/rem_test.dart`.
+
+### 🧩 Architectural Remodeling & Clean Controller Decoupling
+- **Separation of Presentation & Business Logic**:
+  - Extracted `TaskDetailController` (`features/task/domain/controllers/task_detail_controller.dart`) isolating RBAC checks, AI subtask generation, and task mutations out of `TaskDetailPage`.
+  - Extracted `TodayViewController` (`features/task/domain/controllers/today_view_controller.dart`) isolating worklist filtering, status toggling, and completion collapse logic from `TodayView`.
+  - Converted views to clean, passive presentation surfaces consuming state streams and delegating intents.
+
+### 🛡️ Responsive Header Layout Fix
+- **Header Overflow Prevention**:
+  - Refactored `AppShell` header bar with flexible constraints and responsive search bar width to eliminate RenderFlex horizontal overflow on compact viewports.
+
+---
+
 ## [0.7.0] - 2026-11-18
 
 ### 🚀 Waycord Rebranding & Centralized Legal Configuration

@@ -3,13 +3,14 @@ import 'package:intl/intl.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'core/ui/rem.dart';
 import 'models/unified_task.dart';
 import 'models/hive_models.dart' as hive_model;
 import 'widgets/task_form_utils.dart';
 import 'providers/task_provider.dart';
-import 'services/supabase_service.dart';
 import 'services/ai_service.dart';
 import 'services/task_rules.dart';
+import 'features/task/domain/controllers/task_detail_controller.dart';
 
 class TaskDetailScreen extends StatelessWidget {
   final UnifiedTask task;
@@ -47,123 +48,39 @@ class TaskDetailContent extends StatefulWidget {
 }
 
 class _TaskDetailContentState extends State<TaskDetailContent> {
-  bool _isReadOnly = false;
-  bool _loadingPerms = true;
-  bool _generatingSubtasks = false;
+  TaskDetailController? _controller;
 
   @override
-  void initState() {
-    super.initState();
-    _checkPermissions();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _controller ??= TaskDetailController(
+      task: widget.task,
+      taskProvider: context.read<TaskProvider>(),
+      aiService: context.read<AiService>(),
+    )..addListener(_onControllerUpdate);
   }
 
-  Future<void> _checkPermissions() async {
-    if (widget.task.communityId == null) {
-      if (mounted) setState(() => _loadingPerms = false);
-      return;
-    }
-
-    try {
-      final members = await SupabaseService().getCommunityMembers(widget.task.communityId!);
-      final myId = Supabase.instance.client.auth.currentUser?.id;
-      final creatorId = widget.task.userId;
-
-      // The creator always owns their task, even if the roster fetch has not
-      // caught up with a recent membership change.
-      if (myId != null && creatorId == myId) {
-        if (mounted) {
-          setState(() {
-            _isReadOnly = false;
-            _loadingPerms = false;
-          });
-        }
-        return;
-      }
-
-      final me = members.firstWhere((m) => m['user_id'] == myId, orElse: () => {});
-      final creator = members.firstWhere((m) => m['user_id'] == creatorId, orElse: () => {});
-
-      int getWeight(String? r) {
-        if (r == 'owner') return 3;
-        if (r == 'admin') return 2;
-        return 1;
-      }
-
-      // Fail closed. Previously an unknown creator fell through to weight 1,
-      // which let any member edit an Owner's task whenever the roster lookup
-      // missed — exactly the bypass the client lock is meant to hint at.
-      final isMember = me.isNotEmpty;
-      final myWeight = isMember ? getWeight(me['role']?.toString()) : 0;
-      final creatorWeight = creator.isEmpty ? 3 : getWeight(creator['role']?.toString());
-
-      if (mounted) {
-        setState(() {
-          _isReadOnly = !isMember || myWeight < creatorWeight;
-          _loadingPerms = false;
-        });
-      }
-    } catch (e) {
-      // Could not prove permission: stay read-only rather than exposing writes.
-      debugPrint('RBAC check failed, defaulting to read-only: $e');
-      if (mounted) {
-        setState(() {
-          _isReadOnly = true;
-          _loadingPerms = false;
-        });
-      }
-    }
+  void _onControllerUpdate() {
+    if (mounted) setState(() {});
   }
 
-  Future<void> _autoGenerateSubtasks() async {
-    if (_generatingSubtasks || _isReadOnly) return;
-    
-    setState(() => _generatingSubtasks = true);
-    try {
-      final aiService = context.read<AiService>();
-      final newSubtasks = await aiService.generateSubtasks(
-        title: widget.task.title,
-        description: widget.task.description,
+  @override
+  void dispose() {
+    _controller?.removeListener(_onControllerUpdate);
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleAutoGenerateSubtasks() async {
+    final ctrl = _controller;
+    if (ctrl == null) return;
+    final ok = await ctrl.generateSubtasks();
+    if (!mounted) return;
+    final msg = ok ? ctrl.state.successMessage : ctrl.state.errorMessage;
+    if (msg != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(msg), behavior: SnackBarBehavior.floating),
       );
-      
-      if (newSubtasks.isNotEmpty) {
-        final currentSubtasks = List<Map<String, dynamic>>.from(widget.task.subtasks);
-        for (final st in newSubtasks) {
-          currentSubtasks.add({'title': st, 'is_completed': false});
-        }
-        
-        if (mounted) {
-          await context.read<TaskProvider>().updateTask(
-            id: widget.task.id,
-            title: widget.task.title,
-            description: widget.task.description,
-            subtasks: currentSubtasks,
-            categoryIds: widget.task.categoryIds,
-            assignees: widget.task.assignees,
-            priority: widget.task.priority,
-            status: widget.task.status,
-          );
-        }
-        
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('AI Subtasks Generated!'), behavior: SnackBarBehavior.floating),
-          );
-        }
-      } else {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Could not generate subtasks from this description.'), behavior: SnackBarBehavior.floating),
-          );
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error generating subtasks: $e'), backgroundColor: Colors.redAccent),
-        );
-      }
-    } finally {
-      if (mounted) setState(() => _generatingSubtasks = false);
     }
   }
 
@@ -171,6 +88,10 @@ class _TaskDetailContentState extends State<TaskDetailContent> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+    final state = _controller?.state ?? const TaskDetailState();
+    final isReadOnly = state.isReadOnly;
+    final loadingPerms = state.isLoadingPerms;
+    final generatingSubtasks = state.isGeneratingSubtasks;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -183,15 +104,15 @@ class _TaskDetailContentState extends State<TaskDetailContent> {
               ListView(
                 padding: EdgeInsets.zero,
                 children: [
-                  if (!_loadingPerms && _isReadOnly)
+                  if (!loadingPerms && isReadOnly)
                     Container(
                       color: Colors.orange.withValues(alpha: 0.1),
-                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
-                      child: const Row(
+                      padding: context.remInsets.symmetric(vertical: 0.5, horizontal: 1.5),
+                      child: Row(
                         children: [
-                          Icon(Icons.lock_outline, size: 14, color: Colors.orange),
-                          SizedBox(width: 8),
-                          Expanded(
+                          Icon(Icons.lock_outline, size: context.rem(0.875), color: Colors.orange),
+                          context.remGapW(0.5),
+                          const Expanded(
                             child: Text(
                               'Read-Only: Task created by Admin/Owner',
                               overflow: TextOverflow.ellipsis,
@@ -203,11 +124,11 @@ class _TaskDetailContentState extends State<TaskDetailContent> {
                     ),
                   // 1. Header Section (Title & Tags)
                   Padding(
-                    padding: const EdgeInsets.all(24.0),
+                    padding: context.remInsets.all(1.5),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (widget.onClose != null) const SizedBox(height: 32),
+                        if (widget.onClose != null) context.remGapH(2.0),
                         Text(
                           widget.task.title,
                           style: textTheme.headlineMedium?.copyWith(
@@ -215,7 +136,7 @@ class _TaskDetailContentState extends State<TaskDetailContent> {
                             color: colorScheme.onSurface,
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        context.remGapH(0.75),
                         _buildTags(context),
                       ],
                     ),
@@ -223,9 +144,9 @@ class _TaskDetailContentState extends State<TaskDetailContent> {
                   
                   // 2. Body Section (Details & Subtasks)
                   AbsorbPointer(
-                    absorbing: _isReadOnly,
+                    absorbing: isReadOnly,
                     child: Opacity(
-                      opacity: _isReadOnly ? 0.7 : 1.0,
+                      opacity: isReadOnly ? 0.7 : 1.0,
                       child: Container(
                         width: double.infinity,
                         constraints: BoxConstraints(
@@ -236,19 +157,19 @@ class _TaskDetailContentState extends State<TaskDetailContent> {
                           borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(24, 24, 24, 120),
+                          padding: context.remInsets.only(left: 1.5, top: 1.5, right: 1.5, bottom: 7.5),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               _buildSectionTitle(context, 'Description'),
-                              const SizedBox(height: 8),
+                              context.remGapH(0.5),
                               Text(
                                 widget.task.description.isNotEmpty ? widget.task.description : 'No description provided.',
                                 style: textTheme.bodyLarge?.copyWith(
                                   color: colorScheme.onSurfaceVariant,
                                 ),
                               ),
-                              const SizedBox(height: 32),
+                              context.remGapH(2.0),
                               
                               _buildInfoRow(
                                 context, 
@@ -257,7 +178,7 @@ class _TaskDetailContentState extends State<TaskDetailContent> {
                                 value: DateFormat.yMMMMd().add_jm().format(widget.task.dateTime),
                               ),
                               if (widget.task.isRecurring && widget.task.recurrenceRule != null) ...[
-                                const SizedBox(height: 16),
+                                context.remGapH(1.0),
                                 _buildInfoRow(
                                   context,
                                   icon: Icons.repeat_rounded,
@@ -266,22 +187,22 @@ class _TaskDetailContentState extends State<TaskDetailContent> {
                                 ),
                               ],
                               
-                              const SizedBox(height: 40),
+                              context.remGapH(2.5),
                               Row(
                                 children: [
                                   _buildSectionTitle(context, 'Sub-tasks'),
                                   const Spacer(),
-                                  if (!_isReadOnly)
-                                    _generatingSubtasks 
-                                      ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                                  if (!isReadOnly)
+                                    generatingSubtasks 
+                                      ? SizedBox(width: context.rem(1.0), height: context.rem(1.0), child: const CircularProgressIndicator(strokeWidth: 2))
                                       : IconButton(
-                                          icon: Icon(Icons.auto_awesome_rounded, size: 20, color: colorScheme.primary),
+                                          icon: Icon(Icons.auto_awesome_rounded, size: context.rem(1.25), color: colorScheme.primary),
                                           tooltip: 'Auto-Generate Subtasks',
-                                          onPressed: _autoGenerateSubtasks,
+                                          onPressed: _handleAutoGenerateSubtasks,
                                         ),
                                 ],
                               ),
-                              const SizedBox(height: 16),
+                              context.remGapH(1.0),
                               if (widget.task.subtasks.isEmpty)
                                 const Center(child: Text('No sub-tasks.'))
                               else
@@ -298,7 +219,7 @@ class _TaskDetailContentState extends State<TaskDetailContent> {
                                       ),
                                     ),
                                     value: isCompleted,
-                                    onChanged: _isReadOnly ? null : (_) {
+                                    onChanged: isReadOnly ? null : (_) {
                                       context.read<TaskProvider>().toggleSubtask(widget.task.id, index);
                                     },
                                     controlAffinity: ListTileControlAffinity.leading,
@@ -313,12 +234,12 @@ class _TaskDetailContentState extends State<TaskDetailContent> {
                   ),
                   // Comments are now outside the AbsorbPointer
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 24, 24, 120),
+                    padding: context.remInsets.only(left: 1.5, top: 1.5, right: 1.5, bottom: 7.5),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildSectionTitle(context, 'Comments'),
-                        const SizedBox(height: 16),
+                        context.remGapH(1.0),
                         _TaskCommentsSection(task: widget.task),
                       ],
                     ),
@@ -332,7 +253,7 @@ class _TaskDetailContentState extends State<TaskDetailContent> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    if (!_isReadOnly)
+                    if (!isReadOnly)
                       IconButton(
                         icon: const Icon(Icons.edit_outlined),
                         onPressed: () {

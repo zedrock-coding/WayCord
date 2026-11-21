@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import '../core/ui/rem.dart';
 import '../models/unified_task.dart';
 import '../theme/app_theme.dart';
 
@@ -99,7 +100,7 @@ class _TaskItemCardState extends State<TaskItemCard> {
                   splashColor: AppTheme.mint.withValues(alpha: 0.05),
                   highlightColor: AppTheme.mint.withValues(alpha: 0.02),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                    padding: context.remInsets.symmetric(horizontal: 0.875, vertical: 0.75),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -110,9 +111,9 @@ class _TaskItemCardState extends State<TaskItemCard> {
                             widget.onToggle();
                           },
                           child: Container(
-                            margin: const EdgeInsets.only(top: 2, right: 12),
-                            width: 18,
-                            height: 18,
+                            margin: context.remInsets.only(top: 0.125, right: 0.75),
+                            width: context.rem(1.125),
+                            height: context.rem(1.125),
                             decoration: BoxDecoration(
                               color: isDone ? AppTheme.mint : AppTheme.surfaceContainerColor(context),
                               borderRadius: BorderRadius.circular(3),
@@ -122,9 +123,9 @@ class _TaskItemCardState extends State<TaskItemCard> {
                               ),
                             ),
                             child: isDone
-                                ? const Icon(
+                                ? Icon(
                                     Icons.check,
-                                    size: 13,
+                                    size: context.rem(0.8),
                                     color: AppTheme.onMint,
                                   )
                                 : null,
@@ -140,8 +141,8 @@ class _TaskItemCardState extends State<TaskItemCard> {
                               // Title & Badges Row
                               Wrap(
                                 crossAxisAlignment: WrapCrossAlignment.center,
-                                spacing: 6,
-                                runSpacing: 4,
+                                spacing: context.rem(0.375),
+                                runSpacing: context.rem(0.25),
                                 children: [
                                   Text(
                                     task.title,
@@ -157,7 +158,7 @@ class _TaskItemCardState extends State<TaskItemCard> {
 
                                   // Priority Badge
                                   Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                                    padding: context.remInsets.symmetric(horizontal: 0.3125, vertical: 0.1),
                                     decoration: BoxDecoration(
                                       color: priorityColor.withValues(alpha: 0.15),
                                       borderRadius: BorderRadius.circular(2),
@@ -179,7 +180,7 @@ class _TaskItemCardState extends State<TaskItemCard> {
                                   // Recurrence Tag
                                   if (task.isRecurring || task.recurrenceRule != null)
                                     Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                                      padding: context.remInsets.symmetric(horizontal: 0.3125, vertical: 0.1),
                                       decoration: BoxDecoration(
                                         color: AppTheme.surfaceContainerColor(context),
                                         borderRadius: BorderRadius.circular(2),
@@ -191,12 +192,12 @@ class _TaskItemCardState extends State<TaskItemCard> {
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          const Icon(
+                                          Icon(
                                             Icons.repeat_rounded,
-                                            size: 11,
+                                            size: context.rem(0.7),
                                             color: AppTheme.mint,
                                           ),
-                                          const SizedBox(width: 3),
+                                          context.remGapW(0.2),
                                           Text(
                                             task.recurrenceRule?.frequency.toUpperCase() ?? 'DAILY',
                                             style: AppTheme.monoStyle(
@@ -211,12 +212,12 @@ class _TaskItemCardState extends State<TaskItemCard> {
                                 ],
                               ),
 
-                              const SizedBox(height: 5),
+                              context.remGapH(0.3125),
 
                               // Subtasks Progress (if any)
                               if (hasSubtasks) ...[
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 2, bottom: 4),
+                                  padding: context.remInsets.only(top: 0.125, bottom: 0.25),
                                   child: Row(
                                     children: [
                                       Expanded(
@@ -226,11 +227,11 @@ class _TaskItemCardState extends State<TaskItemCard> {
                                             value: totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) : 0,
                                             backgroundColor: AppTheme.surfaceContainer,
                                             valueColor: const AlwaysStoppedAnimation<Color>(AppTheme.mint),
-                                            minHeight: 4,
+                                            minHeight: context.rem(0.25),
                                           ),
                                         ),
                                       ),
-                                      const SizedBox(width: 8),
+                                      context.remGapW(0.5),
                                       Text(
                                         '$completedSubtasks/$totalSubtasks subtasks',
                                         style: AppTheme.monoStyle(
@@ -246,18 +247,18 @@ class _TaskItemCardState extends State<TaskItemCard> {
                               // Metadata Row (Due date, workspace, ID)
                               Wrap(
                                 crossAxisAlignment: WrapCrossAlignment.center,
-                                spacing: 10,
-                                runSpacing: 4,
+                                spacing: context.rem(0.625),
+                                runSpacing: context.rem(0.25),
                                 children: [
                                   Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      const Icon(
+                                      Icon(
                                         Icons.schedule_rounded,
-                                        size: 13,
+                                        size: context.rem(0.8),
                                         color: AppTheme.outline,
                                       ),
-                                      const SizedBox(width: 3),
+                                      context.remGapW(0.2),
                                       Text(
                                         dateStr,
                                         style: AppTheme.monoStyle(
@@ -273,14 +274,14 @@ class _TaskItemCardState extends State<TaskItemCard> {
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Container(
-                                          width: 6,
-                                          height: 6,
+                                          width: context.rem(0.375),
+                                          height: context.rem(0.375),
                                           decoration: BoxDecoration(
                                             color: priorityColor,
                                             shape: BoxShape.circle,
                                           ),
                                         ),
-                                        const SizedBox(width: 4),
+                                        context.remGapW(0.25),
                                         Text(
                                           'Community',
                                           style: AppTheme.monoStyle(

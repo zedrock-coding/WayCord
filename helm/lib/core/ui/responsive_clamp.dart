@@ -111,6 +111,7 @@ class UIClamp {
       if (isOverflow) {
         // Suppress red-screen fatal crash and log concise warning
         debugPrint('UIClamp: Suppressed RenderFlex layout overflow: $summary');
+        debugPrint('UIClamp StackTrace:\n${details.stack}');
         return;
       }
 
