@@ -4,7 +4,7 @@ import { z } from 'zod'
 import { supabase } from '../lib/supabase/client'
 
 const loginSearchSchema = z.object({
-  redirect: z.string().optional().catch('/billing'),
+  redirect: z.string().optional().catch('/app'),
 })
 
 export const Route = createFileRoute('/login')({
@@ -19,11 +19,11 @@ export const Route = createFileRoute('/login')({
 })
 
 function sanitizeRedirect(url?: string): string {
-  if (!url) return '/billing'
+  if (!url) return '/app'
   if (url.startsWith('/') && !url.startsWith('//')) {
     return url
   }
-  return '/billing'
+  return '/app'
 }
 
 function LoginPage() {

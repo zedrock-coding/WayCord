@@ -120,22 +120,30 @@ function HomePage() {
 
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
           <a
-            href="https://github.com/zedrock-coding/Waypoint-App/releases"
+            href="/app"
+            className="w-full sm:w-auto px-7 py-3 rounded bg-[#88C0A4] text-[#1E2124] font-bold text-sm hover:bg-[#9ECBB5] transition active:scale-95 flex items-center justify-center space-x-2 shadow-lg shadow-[#88C0A4]/10"
+          >
+            <span>Launch Web App</span>
+            <span className="text-xs">→</span>
+          </a>
+
+          <a
+            href="https://github.com/zedrock-coding/Helm/releases"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto px-6 py-3 rounded bg-[#88C0A4] text-[#1E2124] font-bold text-sm hover:bg-[#9ECBB5] transition active:scale-95 flex items-center justify-center space-x-2"
+            className="w-full sm:w-auto px-6 py-3 rounded bg-[#272A2D] border border-[#3B3E42] text-[#F8FAFC] font-semibold text-sm hover:border-[#88C0A4] transition flex items-center justify-center space-x-2"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 text-[#88C0A4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
             </svg>
-            <span>Download Android App</span>
+            <span>Download Native App</span>
           </a>
 
           <a
             href="#pricing"
-            className="w-full sm:w-auto px-6 py-3 rounded bg-[#272A2D] border border-[#3B3E42] text-[#F8FAFC] font-semibold text-sm hover:border-[#88C0A4] transition flex items-center justify-center space-x-2"
+            className="w-full sm:w-auto px-4 py-3 text-xs font-mono text-[#94A3B8] hover:text-[#F8FAFC] transition flex items-center justify-center space-x-1"
           >
-            <span>View Plans & Pricing</span>
+            <span>Plans & Pricing</span>
             <span>↓</span>
           </a>
         </div>
@@ -264,12 +272,12 @@ function HomePage() {
                 </li>
               </ul>
             </div>
-            <Link
-              to="/login"
-              className="mt-6 w-full py-2.5 rounded bg-[#1E2124] border border-[#3B3E42] hover:border-[#88C0A4] text-[#F8FAFC] font-semibold text-xs text-center transition"
+            <a
+              href="/app"
+              className="mt-6 w-full py-2.5 rounded bg-[#1E2124] border border-[#3B3E42] hover:border-[#88C0A4] text-[#F8FAFC] font-semibold text-xs text-center transition block"
             >
               Get Started Free
-            </Link>
+            </a>
           </div>
 
           {/* Waycord Pro Card */}

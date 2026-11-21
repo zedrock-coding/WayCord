@@ -37,29 +37,39 @@ jobs:
           flutter-version: '3.41.1'
           channel: 'stable'
 
-      # 3. Build the Web App
-      # No .env asset is created and no API key is passed as a --dart-define:
-      # the Gemini credential lives in the Supabase Edge Function, and the
-      # Supabase URL/publishable key come from lib/config/app_config.dart.
-      # To target another Supabase project, add --dart-define=SUPABASE_URL=...
-      # and --dart-define=SUPABASE_ANON_KEY=... here.
-      - name: Build Web
+      # 3. Build the Flutter Workspace App (/app)
+      - name: Build Flutter Web Workspace
         working-directory: ./helm
         run: |
           flutter pub get
-          flutter build web --release -O4 --base-href "/" --pwa-strategy=none --source-maps
+          flutter build web --release -O4 --base-href "/app/" --pwa-strategy=none --source-maps
           # Clean dangling source map references from vendor JS for Lighthouse compliance
           sed -i 's|//# sourceMappingURL=flutter.js.map||g' build/web/*.js || true
-          # Ensure vercel.json is in the build directory for routing rules
-          cp vercel.json build/web/
 
-      # 4. Fail the deploy if a credential ever reaches the bundle again.
+      # 4. Setup Node.js for Marketing & Billing Portal (/)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: waycord-web/package-lock.json
+
+      # 5. Build Unified Portal Bundle
+      - name: Build Unified Web Portal
+        working-directory: ./waycord-web
+        run: |
+          npm ci
+          # Stage Flutter SPA into public/app so Vite bundler copies it into dist/client/app
+          mkdir -p public/app
+          cp -r ../helm/build/web/* public/app/
+          npm run build
+
+      # 6. Fail the deploy if a credential ever reaches the bundle
       - name: Verify no secrets in the bundle
-        working-directory: ./helm
         run: |
           set -euo pipefail
-          if [ -e build/web/assets/.env ]; then
-            echo "::error::build/web/assets/.env exists — the .env asset came back."
+          if [ -e helm/build/web/assets/.env ]; then
+            echo "::error::helm/build/web/assets/.env exists — the .env asset came back."
             exit 1
           fi
           found=0
@@ -71,22 +81,30 @@ jobs:
           while IFS= read -r file; do
             found=1
             echo "  $file"
-          done < <(grep -rIlE "$pattern" build/web || true)
+          done < <(grep -rIlE "$pattern" waycord-web/dist || true)
           if [ "$found" -eq 1 ]; then
-            echo "::error::A credential-like string was found in build/web."
+            echo "::error::A credential-like string was found in waycord-web/dist."
             exit 1
           fi
-          if [ -e build/web/admin.html ]; then
+          if [ -e helm/build/web/admin.html ]; then
             echo "::error::admin.html is being deployed again."
             exit 1
           fi
 
-      # 5. Deploy to Vercel
+      # 7. Install Vercel CLI
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
 
+      # 8. Deploy Unified Application to Vercel
       - name: Deploy to Vercel
-        run: vercel deploy helm/build/web --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: ./waycord-web
+        run: |
+          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+          # Ensure /app static directory is populated in prebuilt output
+          mkdir -p .vercel/output/static/app
+          cp -r ../helm/build/web/* .vercel/output/static/app/
+          vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}

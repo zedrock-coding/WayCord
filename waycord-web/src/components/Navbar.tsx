@@ -68,17 +68,26 @@ export function Navbar() {
           ) : (
             <Link
               to="/login"
+              search={{ redirect: '/app' }}
               className="text-xs font-medium text-[#94A3B8] hover:text-[#F8FAFC] transition-colors"
             >
               Sign In
             </Link>
           )}
 
+          <a
+            href="/app"
+            className="text-xs font-bold px-3 py-1.5 rounded bg-[#88C0A4] text-[#1E2124] hover:bg-[#9ECBB5] transition active:scale-95 flex items-center space-x-1"
+          >
+            <span>Open App</span>
+            <span className="text-[10px]">→</span>
+          </a>
+
           <Link
             to="/upgrade"
-            className="text-xs font-bold px-3.5 py-1.5 rounded bg-[#88C0A4] text-[#1E2124] hover:bg-[#9ECBB5] transition active:scale-95"
+            className="hidden sm:inline-flex text-xs font-semibold px-3 py-1.5 rounded bg-[#272A2D] border border-[#3B3E42] text-[#F8FAFC] hover:border-[#88C0A4] transition"
           >
-            Upgrade to Pro
+            Upgrade
           </Link>
         </div>
       </div>
