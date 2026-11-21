@@ -1,29 +1,49 @@
-# Waycord 0.6.4 - Production Release 🚀
+# Waycord 0.8.0-beta - Production Release 🚀
 
-**Waycord** (https://waycord.org) is an AI-orchestrated task management workspace. Optimized for **Android**, **Windows**, and **Web**, Waycord provides a professional, reactive experience for real-time team collaboration and personal productivity. Operated by **[INSERT_LEGAL_ENTITY_NAME_HERE]**.
+**Waycord** (https://waycord.org) is an AI-orchestrated task management workspace. Optimized for **Android**, **Windows**, and **Web**, Waycord provides a professional, reactive experience for real-time team collaboration and personal productivity. Operated by **Lakshya Jadhav**.
 
 ![Aesthetic](https://img.shields.io/badge/Aesthetic-Obsidian%20%26%20Mint-88C0A4)
 ![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20Windows%20%7C%20Web-blue)
-![Version](https://img.shields.io/badge/Version-0.6.4-green)
+![Version](https://img.shields.io/badge/Version-0.8.0--beta-green)
 ![License](https://img.shields.io/badge/License-Source--Available-orange)
 
 ---
 
 ## 📥 Download & Live Access
 
-Get the latest build for your platform directly from the [Waycord Releases](https://github.com/zedrock-coding/Waycord-App/releases/latest) page:
+Get the latest build for your platform directly from the [Waycord Releases](https://github.com/zedrock-coding/Helm/releases/tag/beta) page:
 
 | Platform | Type | Direct Download Link |
 | :--- | :--- | :--- |
-| **Android** | APK (`v0.6.4`) | [📲 Download Android APK](https://github.com/zedrock-coding/Waycord-App/releases/latest/download/waycord-v0.6.4.apk) |
-| **Windows** | Executable (`v0.6.4`) | [💻 Download Windows App](https://github.com/zedrock-coding/Waycord-App/releases/latest/download/Waycord-v0.6.4-Setup.exe) |
+| **Android** | APK (`beta`) | [📲 Download Android APK](https://github.com/zedrock-coding/Helm/releases/download/beta/waycord-beta.apk) |
+| **Windows** | Executable (`v0.7.0`) | [💻 Download Windows App](https://github.com/zedrock-coding/Helm/releases/latest) |
 | **Web** | Live Production PWA | [🌐 Launch Web App](https://waycord.org) |
 
-*Alternative release mirrors: [Waycord GitHub Releases](https://github.com/zedrock-coding/Waycord-App/releases/latest)*
+*Alternative release mirrors: [Waycord GitHub Releases](https://github.com/zedrock-coding/Helm/releases)*
 
 ---
 
-## 🌟 What's New in 0.6.4
+## 🌟 What's New in 0.8.0-beta
+
+### 📐 Proportional REM Spacing Engine
+*   **CSS-Style `rem` Units for Flutter**: Dynamic spacing engine tied to ambient text scaler. Gaps, paddings, margins, and icons scale proportionally to prevent UI compression or sparse layouts across mobile and desktop.
+*   **Safety Scale Bounds**: Clamped scaling bounds (0.8x to 1.35x) to eliminate screen boundary overflow on aggressive accessibility multipliers.
+
+### 🧩 Discrete Controller & Presentation Decoupling
+*   **Clean Architecture**: Isolated business logic, RBAC permissions, and AI synthesis out of UI widgets into pure ChangeNotifier controllers (`TodayViewController`, `TaskDetailController`).
+*   **Passive UI**: Widgets now act strictly as rendering surfaces receiving view-state streams and delegating user intents.
+
+### ⚡ Client Performance & Startup Time Optimization
+*   **Deferred Service Bootstrap**: Web notifications and non-critical services are deferred until after the first frame (`addPostFrameCallback`), significantly improving First Contentful Paint (FCP) and Total Blocking Time (TBT).
+*   **On-Demand Voice Staging**: Sherpa ONNX and TTS models are loaded on first voice interaction rather than during initial app launch.
+*   **Mobile-Gated HomeWidgets**: HomeWidget bridge invocations are strictly gated to Android native devices, removing 18+ failing method channel calls on web and desktop.
+
+### 🛡️ Responsive Header Layout Fix
+*   **Header Overflow Protection**: Flexible constraints and responsive search inputs in `AppShell` header eliminating layout clipping and RenderFlex horizontal overflows on compact windows.
+
+---
+
+## [0.7.0] - 2026-11-18
 
 ### 🏢 Centralized Legal & Brand Architecture
 *   **Centralized Organization Config**: Single source-of-truth metadata binding `config/organization.json` to legal agreements (EULA, Privacy Policy) and runtime brand constants (`BrandConfig`).
