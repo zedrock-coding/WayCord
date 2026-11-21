@@ -112,7 +112,7 @@
       padding: 0;
     }
 
-    /* Instant Pre-Hydration Skeleton Loader (<300ms First Paint) */
+    /* Instant Route-Aware Pre-Hydration Skeleton Loader (<300ms First Paint) */
     #app-preloader {
       position: fixed;
       top: 0;
@@ -124,148 +124,576 @@
       flex-direction: column;
       z-index: 999999;
       opacity: 1;
-      transition: opacity 0.25s ease-out;
+      transition: opacity 0.22s ease-out;
       pointer-events: none;
       box-sizing: border-box;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: #E2E8F0;
+      overflow: hidden;
     }
     #app-preloader.fade-out {
       opacity: 0;
     }
-    .pre-header {
-      height: 56px;
-      background-color: #272A2D;
-      border-bottom: 1px solid #3B3E42;
-      display: flex;
-      align-items: center;
-      padding: 0 16px;
-      flex-shrink: 0;
-    }
-    .pre-logo {
-      width: 28px;
-      height: 28px;
-      background-color: #88C0A4;
-      color: #1E2124;
-      font-weight: 900;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 6px;
-      margin-right: 12px;
-    }
-    .pre-title {
-      width: 110px;
-      height: 16px;
-      border-radius: 4px;
-    }
-    .pre-header-actions {
-      margin-left: auto;
-      display: flex;
-      gap: 10px;
-    }
-    .pre-action-btn {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-    }
-    .pre-body {
-      display: flex;
-      flex: 1;
-      height: calc(100vh - 56px);
-      overflow: hidden;
-    }
-    .pre-nav {
-      width: 68px;
-      background-color: #272A2D;
-      border-right: 1px solid #3B3E42;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-top: 20px;
-      gap: 22px;
-      flex-shrink: 0;
-    }
-    @media (max-width: 600px) {
-      .pre-nav { display: none; }
-    }
-    .pre-nav-icon {
-      width: 26px;
-      height: 26px;
-      border-radius: 6px;
-    }
-    .pre-content {
-      flex: 1;
-      padding: 28px 20px;
-      max-width: 820px;
-      margin: 0 auto;
-      box-sizing: border-box;
-      width: 100%;
-    }
-    .pre-section-title {
-      width: 180px;
-      height: 22px;
-      border-radius: 4px;
-      margin-bottom: 8px;
-    }
-    .pre-section-subtitle {
-      width: 120px;
-      height: 13px;
-      border-radius: 4px;
-      margin-bottom: 24px;
-    }
-    .pre-card {
-      background-color: #272A2D;
-      border: 1px solid #3B3E42;
-      border-radius: 8px;
-      height: 62px;
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      padding: 0 16px 0 0;
-      overflow: hidden;
-    }
-    .pre-strip {
-      width: 4px;
-      height: 100%;
-      flex-shrink: 0;
-    }
-    .pre-check {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      margin: 0 14px 0 12px;
-      flex-shrink: 0;
-    }
-    .pre-card-info {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .pre-card-title {
-      height: 14px;
-      border-radius: 4px;
-    }
-    .pre-card-meta {
-      height: 10px;
-      border-radius: 3px;
-    }
-    .pre-pill {
-      width: 52px;
-      height: 18px;
-      border-radius: 9px;
-      margin-left: 12px;
-      flex-shrink: 0;
-    }
+
+    /* Shimmer Effect */
     .shimmer {
-      background: linear-gradient(90deg, #2D3034 0%, #3B3F45 50%, #2D3034 100%);
+      background: linear-gradient(90deg, #26292D 0%, #34383E 50%, #26292D 100%);
       background-size: 200% 100%;
       animation: skeleton-pulse 1.4s ease-in-out infinite;
     }
     @keyframes skeleton-pulse {
       0% { background-position: 200% 0; }
       100% { background-position: -200% 0; }
+    }
+
+    /* SKELETON: WORKSPACE VIEW */
+    #skel-workspace {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background-color: #1E2124;
+    }
+
+    /* Desktop Sidebar (256px wide, full height) */
+    .skel-sidebar {
+      width: 256px;
+      height: 100vh;
+      background-color: #232629;
+      border-right: 1px solid #33363A;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      box-sizing: border-box;
+    }
+    @media (max-width: 768px) {
+      .skel-sidebar { display: none; }
+    }
+    .skel-sidebar-header {
+      padding: 16px;
+      border-bottom: 1px solid transparent;
+    }
+    .skel-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .skel-logo-icon {
+      width: 32px;
+      height: 32px;
+      background-color: #88C0A4;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1E2124;
+      font-weight: 900;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .skel-brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .skel-brand-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: #FFFFFF;
+      letter-spacing: -0.3px;
+    }
+    .skel-brand-sub {
+      font-size: 10px;
+      font-family: monospace;
+      color: #8A8E94;
+    }
+    .skel-btn-new-task {
+      width: 100%;
+      height: 34px;
+      background-color: #88C0A4;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      box-sizing: border-box;
+      color: #1E2124;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .skel-badge-kbd {
+      background-color: rgba(30, 33, 36, 0.15);
+      border-radius: 2px;
+      padding: 2px 5px;
+      font-size: 10px;
+      font-weight: bold;
+    }
+
+    .skel-sidebar-nav {
+      flex: 1;
+      padding: 0 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .skel-nav-section-title {
+      font-size: 10px;
+      font-family: monospace;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.38);
+      letter-spacing: 1.0px;
+      padding: 10px 10px 4px 10px;
+    }
+    .skel-nav-item {
+      height: 34px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      gap: 10px;
+      box-sizing: border-box;
+    }
+    .skel-nav-item.active {
+      background-color: #2D3034;
+      border-left: 2px solid #88C0A4;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    .skel-nav-icon {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .skel-nav-label {
+      font-size: 13px;
+      color: #9FA3A9;
+      flex: 1;
+    }
+    .skel-nav-item.active .skel-nav-label {
+      color: #88C0A4;
+      font-weight: 600;
+    }
+    .skel-nav-pill {
+      height: 16px;
+      padding: 0 5px;
+      border-radius: 2px;
+      background-color: #2D3034;
+      border: 1px solid #383C41;
+      font-size: 9.5px;
+      font-family: monospace;
+      color: #9FA3A9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .skel-nav-item.active .skel-nav-pill {
+      background-color: rgba(136, 192, 164, 0.2);
+      border-color: rgba(136, 192, 164, 0.3);
+      color: #88C0A4;
+    }
+
+    .skel-sidebar-footer {
+      padding: 12px;
+      background-color: #1E2124;
+      border-top: 1px solid #33363A;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .skel-sync-box {
+      background-color: #282B2E;
+      border: 1px solid #383C41;
+      border-radius: 4px;
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .skel-sync-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 9.5px;
+      font-family: monospace;
+      font-weight: 600;
+      color: #88C0A4;
+    }
+    .skel-sync-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: #88C0A4;
+    }
+    .skel-sync-right {
+      font-size: 9px;
+      font-family: monospace;
+      color: #7A7E85;
+    }
+    .skel-footer-links {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #8A8E94;
+      padding: 2px 4px;
+    }
+
+    /* Content Area */
+    .skel-main {
+      flex: 1;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: #1E2124;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Header Bar (56px) */
+    .skel-header {
+      height: 56px;
+      border-bottom: 1px solid #33363A;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      flex-shrink: 0;
+      background-color: #1E2124;
+      box-sizing: border-box;
+    }
+    .skel-search-box {
+      width: 260px;
+      height: 34px;
+      background-color: #272A2D;
+      border: 1px solid #383C41;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      gap: 8px;
+      box-sizing: border-box;
+    }
+    @media (max-width: 600px) {
+      .skel-search-box { width: 160px; }
+    }
+    .skel-search-placeholder {
+      font-size: 12px;
+      color: #6D7279;
+      flex: 1;
+    }
+    .skel-kbd-badge {
+      font-size: 9.5px;
+      font-family: monospace;
+      color: #7A7E85;
+      background-color: #202326;
+      padding: 1px 4px;
+      border-radius: 2px;
+    }
+    .skel-header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .skel-btn-add {
+      height: 32px;
+      background-color: #88C0A4;
+      border-radius: 4px;
+      padding: 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #1E2124;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    @media (max-width: 768px) {
+      .skel-btn-add { display: none; }
+    }
+    .skel-btn-voice {
+      height: 32px;
+      background-color: #272A2D;
+      border: 1px solid #383C41;
+      border-radius: 4px;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: #88C0A4;
+      font-size: 11px;
+      font-family: monospace;
+      font-weight: 600;
+    }
+    @media (max-width: 768px) {
+      .skel-btn-voice { display: none; }
+    }
+    .skel-circle-action {
+      width: 32px;
+      height: 32px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .skel-avatar-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+    }
+
+    /* Content Pane */
+    .skel-content-body {
+      flex: 1;
+      padding: 24px 20px 80px 20px;
+      max-width: 896px;
+      margin: 0 auto;
+      width: 100%;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+    .skel-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .skel-focus-tag {
+      font-size: 11px;
+      font-family: monospace;
+      font-weight: 600;
+      color: #88C0A4;
+      letter-spacing: 1.0px;
+    }
+    .skel-date-text {
+      font-size: 11px;
+      font-family: monospace;
+      color: #8A8E94;
+    }
+    .skel-worklist-title {
+      font-size: 22px;
+      font-weight: 600;
+      color: #FFFFFF;
+      letter-spacing: -0.5px;
+      margin-bottom: 4px;
+    }
+    .skel-worklist-subtitle {
+      font-size: 12px;
+      color: #8A8E94;
+      margin-bottom: 16px;
+    }
+    .skel-filter-pills {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+    }
+    .skel-filter-chip {
+      height: 28px;
+      padding: 0 12px;
+      border-radius: 14px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      background-color: #272A2D;
+      border: 1px solid #383C41;
+      color: #8A8E94;
+      white-space: nowrap;
+    }
+    .skel-filter-chip.active {
+      background-color: rgba(136, 192, 164, 0.12);
+      border-color: #88C0A4;
+      color: #88C0A4;
+      font-weight: 500;
+    }
+    .skel-divider {
+      height: 1px;
+      background-color: #33363A;
+      margin-bottom: 18px;
+    }
+
+    /* Task Row Skeletons */
+    .skel-task-row {
+      height: 56px;
+      background-color: #24272A;
+      border: 1px solid #33363A;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 14px;
+    }
+    .skel-checkbox {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1.5px solid #484C52;
+      flex-shrink: 0;
+    }
+    .skel-task-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .skel-task-title-bar {
+      height: 13px;
+      border-radius: 3px;
+    }
+    .skel-task-sub-bar {
+      height: 9px;
+      border-radius: 2px;
+    }
+    .skel-task-chip {
+      width: 48px;
+      height: 18px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    /* Floating Command Bar */
+    .skel-cmd-dock {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 20px;
+      display: flex;
+      justify-content: center;
+      padding: 0 16px;
+      box-sizing: border-box;
+    }
+    @media (max-width: 768px) {
+      .skel-cmd-dock { bottom: 70px; }
+    }
+    .skel-cmd-bar {
+      width: 100%;
+      max-width: 672px;
+      height: 48px;
+      background-color: rgba(39, 42, 45, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid #383C41;
+      border-radius: 32px;
+      display: flex;
+      align-items: center;
+      padding: 0 18px;
+      box-sizing: border-box;
+      justify-content: space-between;
+    }
+    .skel-cmd-placeholder {
+      font-size: 13px;
+      color: #6D7279;
+    }
+    .skel-cmd-mic {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: rgba(136, 192, 164, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #88C0A4;
+      font-size: 14px;
+    }
+
+    /* Mobile Bottom Dock (shown on <=768px) */
+    .skel-mobile-dock {
+      display: none;
+      height: 56px;
+      background-color: #232629;
+      border-top: 1px solid #33363A;
+      align-items: center;
+      justify-content: space-around;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+    }
+    @media (max-width: 768px) {
+      .skel-mobile-dock { display: flex; }
+    }
+    .skel-mob-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+    }
+
+    /* SKELETON: AUTH / LOGIN VIEW */
+    #skel-auth {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      align-items: center;
+      justify-content: center;
+      background-color: #1E2124;
+      padding: 24px;
+      box-sizing: border-box;
+    }
+    .skel-auth-card {
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .skel-auth-logo-circle {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background-color: rgba(136, 192, 164, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #88C0A4;
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+    .skel-auth-title {
+      font-size: 22px;
+      font-weight: bold;
+      color: #FFFFFF;
+      margin-bottom: 6px;
+    }
+    .skel-auth-subtitle {
+      font-size: 13px;
+      color: #8A8E94;
+      margin-bottom: 28px;
+      text-align: center;
+    }
+    .skel-auth-input {
+      width: 100%;
+      height: 50px;
+      border: 1px solid #383C41;
+      border-radius: 4px;
+      background-color: #272A2D;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+    }
+    .skel-auth-btn-primary {
+      width: 100%;
+      height: 46px;
+      background-color: #88C0A4;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1E2124;
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 8px;
+      margin-bottom: 12px;
+    }
+    .skel-auth-btn-secondary {
+      width: 100%;
+      height: 44px;
+      border: 1px solid #383C41;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #8A8E94;
+      font-size: 13px;
     }
   </style>
 </head>
@@ -296,65 +724,213 @@
     </nav>
   </header>
 
-  <!-- Pre-Hydration Skeleton Loader (<300ms First Contentful Paint) -->
+  <!-- Pre-Hydration Route-Aware Skeleton Loader (<300ms First Contentful Paint) -->
   <div id="app-preloader" aria-hidden="true">
-    <div class="pre-header">
-      <div class="pre-logo">W</div>
-      <div class="pre-title shimmer"></div>
-      <div class="pre-header-actions">
-        <div class="pre-action-btn shimmer"></div>
-        <div class="pre-action-btn shimmer"></div>
+    <!-- VIEW 1: WORKSPACE SKELETON (Default & Authenticated routes) -->
+    <div id="skel-workspace">
+      <!-- 256px Desktop Sidebar -->
+      <aside class="skel-sidebar">
+        <div class="skel-sidebar-header">
+          <div class="skel-brand">
+            <div class="skel-logo-icon">W</div>
+            <div class="skel-brand-text">
+              <span class="skel-brand-name">Waycord</span>
+              <span class="skel-brand-sub">Personal Workspace</span>
+            </div>
+          </div>
+          <div class="skel-btn-new-task">
+            <span>+ New Task</span>
+            <span class="skel-badge-kbd">⌘N</span>
+          </div>
+        </div>
+
+        <nav class="skel-sidebar-nav">
+          <div class="skel-nav-section-title">VIEWS</div>
+          <div class="skel-nav-item active">
+            <div class="skel-nav-icon shimmer"></div>
+            <span class="skel-nav-label">Today</span>
+            <span class="skel-nav-pill">0</span>
+          </div>
+          <div class="skel-nav-item">
+            <div class="skel-nav-icon shimmer"></div>
+            <span class="skel-nav-label">Inbox</span>
+            <span class="skel-nav-pill">0</span>
+          </div>
+          <div class="skel-nav-item">
+            <div class="skel-nav-icon shimmer"></div>
+            <span class="skel-nav-label">Recurring</span>
+            <span class="skel-nav-pill">0</span>
+          </div>
+          <div class="skel-nav-item">
+            <div class="skel-nav-icon shimmer"></div>
+            <span class="skel-nav-label">Schedule</span>
+            <span class="skel-nav-pill">Today</span>
+          </div>
+
+          <div class="skel-nav-section-title" style="margin-top: 12px;">GROUPS & WORKSPACES</div>
+          <div class="skel-nav-item">
+            <div class="skel-nav-icon shimmer" style="border-radius: 50%;"></div>
+            <span class="skel-nav-label shimmer" style="height: 12px; border-radius: 3px; max-width: 90px;"></span>
+          </div>
+        </nav>
+
+        <div class="skel-sidebar-footer">
+          <div class="skel-sync-box">
+            <div class="skel-sync-left">
+              <div class="skel-sync-dot"></div>
+              <span>ALL CHANGES SAVED</span>
+            </div>
+            <span class="skel-sync-right">Cloud Active</span>
+          </div>
+          <div class="skel-footer-links">
+            <span>⚙ Settings</span>
+            <span style="color: #88C0A4;">💬 Feedback</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content Column -->
+      <div class="skel-main">
+        <!-- Top Header Bar -->
+        <header class="skel-header">
+          <div class="skel-search-box">
+            <span style="color: #7A7E85; font-size: 13px;">🔍</span>
+            <span class="skel-search-placeholder">Search tasks, notes...</span>
+            <span class="skel-kbd-badge">⌘K</span>
+          </div>
+
+          <div class="skel-header-right">
+            <div class="skel-btn-add">
+              <span>+ Add Task</span>
+              <span style="font-size: 10px; background: rgba(30,33,36,0.18); padding: 1px 4px; border-radius: 2px;">⌘N</span>
+            </div>
+            <div class="skel-btn-voice">
+              <span>🎤 Voice</span>
+            </div>
+            <div class="skel-circle-action shimmer"></div>
+            <div class="skel-circle-action shimmer"></div>
+            <div class="skel-avatar-icon shimmer"></div>
+          </div>
+        </header>
+
+        <!-- Content Body (Today Focus View) -->
+        <main class="skel-content-body">
+          <div class="skel-meta-row">
+            <span class="skel-focus-tag">TODAY'S FOCUS</span>
+            <span style="color: #383C41;">•</span>
+            <span id="skel-live-date" class="skel-date-text">Saturday, Nov 21</span>
+          </div>
+          <h1 class="skel-worklist-title">Active Worklist</h1>
+          <div class="skel-worklist-subtitle">0 active tasks</div>
+
+          <!-- Filter Pills -->
+          <div class="skel-filter-pills">
+            <div class="skel-filter-chip active">All Active 0</div>
+            <div class="skel-filter-chip">Recurring 0</div>
+            <div class="skel-filter-chip">High Priority 0</div>
+            <div class="skel-filter-chip">Completed 0</div>
+          </div>
+          <div class="skel-divider"></div>
+
+          <!-- Task Cards Placeholders -->
+          <div class="skel-task-row">
+            <div class="skel-checkbox"></div>
+            <div class="skel-task-main">
+              <div class="skel-task-title-bar shimmer" style="width: 58%;"></div>
+              <div class="skel-task-sub-bar shimmer" style="width: 28%;"></div>
+            </div>
+            <div class="skel-task-chip shimmer"></div>
+          </div>
+          <div class="skel-task-row">
+            <div class="skel-checkbox"></div>
+            <div class="skel-task-main">
+              <div class="skel-task-title-bar shimmer" style="width: 72%;"></div>
+              <div class="skel-task-sub-bar shimmer" style="width: 34%;"></div>
+            </div>
+            <div class="skel-task-chip shimmer"></div>
+          </div>
+          <div class="skel-task-row">
+            <div class="skel-checkbox"></div>
+            <div class="skel-task-main">
+              <div class="skel-task-title-bar shimmer" style="width: 44%;"></div>
+              <div class="skel-task-sub-bar shimmer" style="width: 22%;"></div>
+            </div>
+            <div class="skel-task-chip shimmer"></div>
+          </div>
+        </main>
+
+        <!-- Floating Command Bar -->
+        <div class="skel-cmd-dock">
+          <div class="skel-cmd-bar">
+            <span class="skel-cmd-placeholder">Type a command or tap mic...</span>
+            <div class="skel-cmd-mic">🎤</div>
+          </div>
+        </div>
+
+        <!-- Mobile Bottom Nav Dock -->
+        <div class="skel-mobile-dock">
+          <div class="skel-mob-icon shimmer"></div>
+          <div class="skel-mob-icon shimmer"></div>
+          <div class="skel-mob-icon shimmer" style="background-color: #88C0A4; border-radius: 50%;"></div>
+          <div class="skel-mob-icon shimmer"></div>
+          <div class="skel-mob-icon shimmer"></div>
+        </div>
       </div>
     </div>
-    <div class="pre-body">
-      <aside class="pre-nav">
-        <div class="pre-nav-icon shimmer"></div>
-        <div class="pre-nav-icon shimmer"></div>
-        <div class="pre-nav-icon shimmer"></div>
-        <div class="pre-nav-icon shimmer"></div>
-      </aside>
-      <main class="pre-content">
-        <div class="pre-section-title shimmer"></div>
-        <div class="pre-section-subtitle shimmer"></div>
-        <div class="pre-card">
-          <div class="pre-strip" style="background-color: #FF5252;"></div>
-          <div class="pre-check shimmer"></div>
-          <div class="pre-card-info">
-            <div class="pre-card-title shimmer" style="width: 72%;"></div>
-            <div class="pre-card-meta shimmer" style="width: 38%;"></div>
-          </div>
-          <div class="pre-pill shimmer"></div>
-        </div>
-        <div class="pre-card">
-          <div class="pre-strip" style="background-color: #FFBF00;"></div>
-          <div class="pre-check shimmer"></div>
-          <div class="pre-card-info">
-            <div class="pre-card-title shimmer" style="width: 58%;"></div>
-            <div class="pre-card-meta shimmer" style="width: 44%;"></div>
-          </div>
-          <div class="pre-pill shimmer"></div>
-        </div>
-        <div class="pre-card">
-          <div class="pre-strip" style="background-color: #88C0A4;"></div>
-          <div class="pre-check shimmer"></div>
-          <div class="pre-card-info">
-            <div class="pre-card-title shimmer" style="width: 82%;"></div>
-            <div class="pre-card-meta shimmer" style="width: 28%;"></div>
-          </div>
-          <div class="pre-pill shimmer"></div>
-        </div>
-        <div class="pre-card">
-          <div class="pre-strip" style="background-color: #78909C;"></div>
-          <div class="pre-check shimmer"></div>
-          <div class="pre-card-info">
-            <div class="pre-card-title shimmer" style="width: 64%;"></div>
-            <div class="pre-card-meta shimmer" style="width: 36%;"></div>
-          </div>
-          <div class="pre-pill shimmer"></div>
-        </div>
-      </main>
+
+    <!-- VIEW 2: AUTH / LOGIN SKELETON -->
+    <div id="skel-auth">
+      <div class="skel-auth-card">
+        <div class="skel-auth-logo-circle">▲</div>
+        <div class="skel-auth-title">Welcome Back</div>
+        <div class="skel-auth-subtitle">Sign in to access your Waycord workspace.</div>
+        <div class="skel-auth-input shimmer"></div>
+        <div class="skel-auth-input shimmer"></div>
+        <div class="skel-auth-btn-primary">Sign In with Password</div>
+        <div class="skel-auth-btn-secondary">Send One-Click Login Link</div>
+      </div>
     </div>
   </div>
+
+  <script>
+    // Route & Session Detection: Switch to Auth skeleton if unauthenticated or on /auth
+    (function() {
+      try {
+        var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var now = new Date();
+        var dateEl = document.getElementById('skel-live-date');
+        if (dateEl) {
+          dateEl.textContent = days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate();
+        }
+
+        var path = (window.location.pathname || '').toLowerCase();
+        var hash = (window.location.hash || '').toLowerCase();
+        var isAuthPath = path.includes('/auth') || path.includes('/login') || hash.includes('/auth') || hash.includes('/login');
+
+        var hasSession = false;
+        for (var i = 0; i < localStorage.length; i++) {
+          var k = localStorage.key(i);
+          if (k && (k.indexOf('auth-token') !== -1 || k.indexOf('sb-') !== -1)) {
+            var v = localStorage.getItem(k);
+            if (v && v.indexOf('access_token') !== -1) {
+              hasSession = true;
+              break;
+            }
+          }
+        }
+
+        if (isAuthPath || (!hasSession && (path === '/' || path === '' || path.endsWith('/index.html')))) {
+          var ws = document.getElementById('skel-workspace');
+          var au = document.getElementById('skel-auth');
+          if (ws && au) {
+            ws.style.display = 'none';
+            au.style.display = 'flex';
+          }
+        }
+      } catch (_) {}
+    })();
+  </script>
 
   <script>
     (function() {
