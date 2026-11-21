@@ -47,6 +47,11 @@ export function Navbar() {
           <Link to="/billing" className="hover:text-[#88C0A4] transition-colors">
             Billing
           </Link>
+          {user && (user.email === 'kirajain2001@gmail.com' || user.email === 'zedrock@waycord.org') && (
+            <Link to="/admin" className="text-[#88C0A4] font-semibold hover:underline transition-colors">
+              Admin
+            </Link>
+          )}
         </nav>
 
         <div className="flex items-center space-x-3">

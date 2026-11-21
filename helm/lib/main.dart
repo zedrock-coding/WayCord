@@ -36,6 +36,8 @@ import 'views/schedule_view.dart';
 import 'views/settings_view.dart';
 import 'views/communities_overview_view.dart';
 import 'views/account_view.dart';
+import 'views/not_found_page.dart';
+import 'widgets/app_error_boundary.dart';
 
 import 'auth_screen.dart';
 import 'settings_page.dart';
@@ -54,6 +56,9 @@ import 'theme/app_theme.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   UIClamp.enableOverflowProtection();
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    return AppErrorWidget(details: details);
+  };
   // Eliminate runtime HTTP requests to fonts.gstatic.com for instant rendering
   GoogleFonts.config.allowRuntimeFetching = false;
 
@@ -272,6 +277,12 @@ class _MyAppState extends State<MyApp> {
           );
         }
         return null;
+      },
+      onUnknownRoute: (settings) {
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) => NotFoundPage(routeName: settings.name),
+        );
       },
       routes: {
         '/': (context) => const MyHomePage(title: 'Waycord'),

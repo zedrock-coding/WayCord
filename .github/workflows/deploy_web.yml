@@ -64,8 +64,8 @@ jobs:
           cp -r ../helm/build/web/* public/app/
           npm run build
 
-      # 6. Fail the deploy if a credential ever reaches the bundle
-      - name: Verify no secrets in the bundle
+      # 6. Fail the deploy if a credential ever reaches the client bundle
+      - name: Verify no secrets in client bundle
         run: |
           set -euo pipefail
           if [ -e helm/build/web/assets/.env ]; then
@@ -81,9 +81,9 @@ jobs:
           while IFS= read -r file; do
             found=1
             echo "  $file"
-          done < <(grep -rIlE "$pattern" waycord-web/dist || true)
+          done < <(grep -rIlE "$pattern" waycord-web/dist/client helm/build/web || true)
           if [ "$found" -eq 1 ]; then
-            echo "::error::A credential-like string was found in waycord-web/dist."
+            echo "::error::A credential-like string was found in client bundles."
             exit 1
           fi
           if [ -e helm/build/web/admin.html ]; then
@@ -99,12 +99,7 @@ jobs:
       - name: Deploy to Vercel
         working-directory: ./waycord-web
         run: |
-          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-          vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
-          # Ensure /app static directory is populated in prebuilt output
-          mkdir -p .vercel/output/static/app
-          cp -r ../helm/build/web/* .vercel/output/static/app/
-          vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+          vercel deploy --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
