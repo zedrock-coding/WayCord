@@ -11,7 +11,7 @@ export interface PhonePePaymentRequest {
 export function getPhonePeConfig() {
   return {
     merchantId: process.env.PHONEPE_MERCHANT_ID || 'MOCK_MERCHANT',
-    saltKey: process.env.PHONEPE_SALT_KEY || 'mock_salt_key_12345',
+    saltKey: process.env.PHONEPE_SALT_KEY || '',
     saltIndex: process.env.PHONEPE_SALT_INDEX || '1',
     env: process.env.PHONEPE_ENV || 'SANDBOX',
     apiBase:
@@ -52,10 +52,18 @@ export function createPhonePePayload(req: PhonePePaymentRequest) {
 export function verifyPhonePeChecksum(base64Payload: string, xVerifyHeader: string): boolean {
   try {
     const { saltKey, saltIndex } = getPhonePeConfig()
+    if (!saltKey || !xVerifyHeader) {
+      return false
+    }
     const stringToSign = `${base64Payload}${saltKey}`
     const sha256 = crypto.createHash('sha256').update(stringToSign).digest('hex')
     const expectedChecksum = `${sha256}###${saltIndex}`
-    return xVerifyHeader === expectedChecksum
+    const verifyBuf = Buffer.from(xVerifyHeader)
+    const expectedBuf = Buffer.from(expectedChecksum)
+    if (verifyBuf.length !== expectedBuf.length) {
+      return false
+    }
+    return crypto.timingSafeEqual(verifyBuf, expectedBuf)
   } catch {
     return false
   }

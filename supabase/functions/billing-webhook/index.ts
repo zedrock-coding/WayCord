@@ -105,7 +105,11 @@ Deno.serve(async (req: Request) => {
   // 1. PhonePe Webhook Processing
   // =========================================================================
   if (phonePeVerify) {
-    const saltKey = Deno.env.get("PHONEPE_SALT_KEY") ?? "mock_phonepe_salt";
+    const saltKey = Deno.env.get("PHONEPE_SALT_KEY");
+    if (!saltKey) {
+      console.error("Missing PHONEPE_SALT_KEY");
+      return jsonResponse({ error: "Server misconfigured" }, 500);
+    }
     const saltIndex = Deno.env.get("PHONEPE_SALT_INDEX") ?? "1";
 
     let payloadJson: Record<string, unknown>;
@@ -186,7 +190,11 @@ Deno.serve(async (req: Request) => {
   // 2. Patreon Webhook Processing
   // =========================================================================
   if (patreonSignature && patreonEvent) {
-    const patreonSecret = Deno.env.get("PATREON_WEBHOOK_SECRET") ?? "mock_patreon_secret";
+    const patreonSecret = Deno.env.get("PATREON_WEBHOOK_SECRET");
+    if (!patreonSecret) {
+      console.error("Missing PATREON_WEBHOOK_SECRET");
+      return jsonResponse({ error: "Server misconfigured" }, 500);
+    }
     const isValid = await verifyPatreonSignature(rawBody, patreonSignature, patreonSecret);
 
     if (!isValid) {

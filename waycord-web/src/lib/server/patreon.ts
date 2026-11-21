@@ -3,9 +3,17 @@ import { createServerServiceClient } from './supabase'
 
 export function verifyPatreonSignature(rawBody: string, signature: string): boolean {
   try {
-    const secret = process.env.PATREON_WEBHOOK_SECRET || 'mock_patreon_webhook_secret'
+    const secret = process.env.PATREON_WEBHOOK_SECRET
+    if (!secret || !signature) {
+      return false
+    }
     const hmac = crypto.createHmac('md5', secret).update(rawBody).digest('hex')
-    return signature === hmac
+    const sigBuf = Buffer.from(signature)
+    const hmacBuf = Buffer.from(hmac)
+    if (sigBuf.length !== hmacBuf.length) {
+      return false
+    }
+    return crypto.timingSafeEqual(sigBuf, hmacBuf)
   } catch {
     return false
   }

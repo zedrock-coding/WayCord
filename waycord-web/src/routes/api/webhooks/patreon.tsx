@@ -10,7 +10,7 @@ export const handlePatreonWebhook = createServerFn({ method: 'POST' })
 
     try {
       const isValid = verifyPatreonSignature(data.rawBody, data.signature)
-      if (!isValid && process.env.NODE_ENV === 'production') {
+      if (!isValid) {
         return { success: false, error: 'Invalid Patreon webhook signature' }
       }
 

@@ -26,7 +26,11 @@ export function createServerSupabaseClient() {
 
 export function createServerServiceClient() {
   const supabaseUrl = process.env.VITE_SUPABASE_URL || 'https://eknzdxexfcfdmqvbyvxt.supabase.co'
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'mock_service_role_key_for_testing'
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+  if (!serviceRoleKey) {
+    throw new Error('SUPABASE_SERVICE_ROLE_KEY is required')
+  }
 
   return createSupabaseClient(supabaseUrl, serviceRoleKey, {
     auth: {

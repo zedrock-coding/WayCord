@@ -17,7 +17,7 @@ export const handlePhonePeWebhook = createServerFn({ method: 'POST' })
       }
 
       const isValid = verifyPhonePeChecksum(base64Response, xVerify)
-      if (!isValid && process.env.NODE_ENV === 'production') {
+      if (!isValid) {
         return { success: false, error: 'Invalid X-VERIFY signature' }
       }
 

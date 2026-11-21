@@ -90,12 +90,12 @@ export const fetchAdminSubscriptions = createServerFn({ method: 'GET' }).handler
 )
 
 export const updateUserTier = createServerFn({ method: 'POST' })
-  .validator((data: { userId: string; plan: 'free' | 'pro'; status?: string }) =>
+  .validator((data: { userId: string; plan: 'free' | 'pro'; status?: 'active' | 'canceled' | 'past_due' }) =>
     z
       .object({
         userId: z.string().uuid(),
         plan: z.enum(['free', 'pro']),
-        status: z.string().optional(),
+        status: z.enum(['active', 'canceled', 'past_due']).optional(),
       })
       .parse(data)
   )
