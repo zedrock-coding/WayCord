@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-canvas: #1E2124;
+    --bg-surface: #272A2D;
+    --bg-surface-hover: #2F3236;
+    --border-subtle: #3B3E42;
+    --color-mint: #88C0A4;
+    --color-mint-hover: #9ECBB5;
+    --text-primary: #F8FAFC;
+    --text-secondary: #94A3B8;
+  }
+
+  body {
+    background-color: #1E2124;
+    color: #F8FAFC;
+    font-family: 'Geist', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  code, pre, .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}

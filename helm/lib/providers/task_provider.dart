@@ -28,6 +28,7 @@ class TaskProvider with ChangeNotifier {
   StreamSubscription? _supabaseSub;
   StreamSubscription? _categorySub;
   StreamSubscription? _hiveSub;
+  String? _syncedUserId;
 
   TaskProvider() {
     _init();
@@ -51,24 +52,29 @@ class TaskProvider with ChangeNotifier {
     _refreshPersonalTasks();
     _hiveSub = _taskBox.watch().listen((_) => _refreshPersonalTasks());
 
-    loadRemoteTasks();
     _setupSupabaseSync();
     _setupCategorySync();
 
     _supabase.auth.onAuthStateChange.listen((data) {
-      if (data.event == AuthChangeEvent.signedIn ||
-          data.event == AuthChangeEvent.tokenRefreshed ||
-          data.event == AuthChangeEvent.initialSession) {
-        // A new session means the old realtime subscriptions are dead; cached
-        // streams would never emit again.
-        _communityTaskStreams.clear();
-        _commentStreams.clear();
-        _setupSupabaseSync();
-        _setupCategorySync();
-        loadRemoteTasks();
+      final currentUserId = data.session?.user.id;
+      if (data.event == AuthChangeEvent.signedIn) {
+        if (_syncedUserId != currentUserId) {
+          _communityTaskStreams.clear();
+          _commentStreams.clear();
+          _setupSupabaseSync();
+          _setupCategorySync();
+        }
+      } else if (data.event == AuthChangeEvent.initialSession) {
+        if (_syncedUserId == null && currentUserId != null) {
+          _setupSupabaseSync();
+          _setupCategorySync();
+        }
       } else if (data.event == AuthChangeEvent.signedOut) {
+        _syncedUserId = null;
         _supabaseSub?.cancel();
+        _supabaseSub = null;
         _categorySub?.cancel();
+        _categorySub = null;
         _communityTaskStreams.clear();
         _commentStreams.clear();
         _refreshPersonalTasks();
@@ -140,6 +146,8 @@ class TaskProvider with ChangeNotifier {
   void _setupSupabaseSync() {
     final userId = _supabase.auth.currentUser?.id;
     if (userId == null) return;
+    if (_supabaseSub != null && _syncedUserId == userId) return;
+    _syncedUserId = userId;
 
     _supabaseSub?.cancel();
     _supabaseSub = _supabase.from('tasks').stream(primaryKey: ['id']).listen((
@@ -305,6 +313,7 @@ class TaskProvider with ChangeNotifier {
   void _setupCategorySync() {
     final userId = _supabase.auth.currentUser?.id;
     if (userId == null) return;
+    if (_categorySub != null && _syncedUserId == userId) return;
 
     _categorySub?.cancel();
     _categorySub = _supabase

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -53,6 +54,8 @@ import 'theme/app_theme.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   UIClamp.enableOverflowProtection();
+  // Eliminate runtime HTTP requests to fonts.gstatic.com for instant rendering
+  GoogleFonts.config.allowRuntimeFetching = false;
 
   if (!AppConfig.isSupabaseConfigured) {
     debugPrint('INIT: Supabase configuration missing.');
