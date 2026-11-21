@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "outputDirectory": "dist/client",
   "cleanUrls": true,
   "rewrites": [
     {
@@ -13,6 +14,10 @@
     {
       "source": "/app/:path*",
       "destination": "/app/index.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/api/index"
     }
   ],
   "headers": [

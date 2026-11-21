@@ -41,8 +41,9 @@ contributors must follow, see `AGENTS.md`; for the schema see
 └───────────────────────────────────────────────────────────────┘
 ```
 
-There is no server of our own. The Vercel deployment is static hosting for the
-Flutter web build plus `web/config.js`.
+The Vercel deployment unifies the TanStack Start marketing/billing/admin portal
+at `/` with the Flutter Web workspace SPA at `/app/`. Server functions and webhooks
+run via Vercel Serverless Functions (`waycord-web/api/index.js`).
 
 ---
 

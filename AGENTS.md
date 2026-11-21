@@ -81,9 +81,13 @@ All commands run from `helm/` unless stated otherwise.
   ```bash
   dart run build_runner build --delete-conflicting-outputs
   ```
-- **Deploy prebuilt web output to Vercel**:
+- **Deploy unified web portal to Vercel**:
   ```bash
-  cd build/web && vercel deploy . --prod --yes
+  cd waycord-web && vercel deploy --prod --yes
+  ```
+- **Deploy prebuilt web output to Vercel (legacy)**:
+  ```bash
+  cd helm/build/web && vercel deploy . --prod --yes
   ```
 - **Deploy the AI Edge Function** (repo root):
   ```bash
