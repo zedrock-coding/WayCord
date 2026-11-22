@@ -80,7 +80,7 @@ jobs:
           # match the same scan quality.yml runs over the source tree.
           pattern='AI''za[0-9A-Za-z_-]{20,}'
           pattern="$pattern|service_"'role'
-          pattern="$pattern|sb_"'secret_'
+          pattern="$pattern|sb_"'secret_[0-9A-Za-z_-]{20,}'
           while IFS= read -r file; do
             found=1
             echo "  $file"

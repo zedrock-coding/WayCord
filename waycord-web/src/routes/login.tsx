@@ -33,8 +33,9 @@ function LoginPage() {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [otpCode, setOtpCode] = useState('')
+  const [showOtpInput, setShowOtpInput] = useState(false)
   const [isSignUp, setIsSignUp] = useState(false)
-  const [magicLinkSent, setMagicLinkSent] = useState(false)
   const [loading, setLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
   const [successMsg, setSuccessMsg] = useState<string | null>(null)
@@ -80,7 +81,7 @@ function LoginPage() {
     }
   }
 
-  const handleMagicLink = async () => {
+  const handleSendOtp = async () => {
     if (!email) {
       setErrorMsg('Please enter your email address first.')
       return
@@ -98,10 +99,37 @@ function LoginPage() {
         },
       })
       if (error) throw error
-      setMagicLinkSent(true)
-      setSuccessMsg(`Secure login link sent to ${email}. Check your inbox to sign in instantly.`)
+      setShowOtpInput(true)
+      setSuccessMsg(`Verification code sent to ${email}. Check your inbox for the 6-digit code or sign-in link.`)
     } catch (err: any) {
-      setErrorMsg(err.message || 'Failed to dispatch login link.')
+      setErrorMsg(err.message || 'Failed to dispatch verification code.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleVerifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!otpCode || otpCode.trim().length < 6) {
+      setErrorMsg('Please enter the 6-digit code from your email.')
+      return
+    }
+    setLoading(true)
+    setErrorMsg(null)
+    setSuccessMsg(null)
+
+    try {
+      const { data, error } = await supabase.auth.verifyOtp({
+        email,
+        token: otpCode.trim(),
+        type: 'email',
+      })
+      if (error) throw error
+      if (data.session) {
+        navigate({ to: redirectTarget as any })
+      }
+    } catch (err: any) {
+      setErrorMsg(err.message || 'Invalid or expired code. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -134,61 +162,112 @@ function LoginPage() {
           </div>
         )}
 
-        <form onSubmit={handlePasswordAuth} className="space-y-3.5">
-          <div>
-            <label className="block text-xs font-semibold text-[#F8FAFC] mb-1">
-              Email Address
-            </label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@domain.com"
-              className="w-full px-3 py-2 rounded bg-[#1E2124] border border-[#3B3E42] text-[#F8FAFC] placeholder-[#94A3B8]/60 text-xs focus:outline-none focus:border-[#88C0A4] transition font-mono"
-            />
-          </div>
+        {showOtpInput ? (
+          <form onSubmit={handleVerifyOtp} className="space-y-3.5">
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-semibold text-[#F8FAFC]">
+                  6-Digit Verification Code
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setShowOtpInput(false)}
+                  className="text-[10px] text-[#88C0A4] hover:underline"
+                >
+                  Change Email
+                </button>
+              </div>
+              <input
+                type="text"
+                required
+                maxLength={6}
+                value={otpCode}
+                onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
+                placeholder="123456"
+                autoFocus
+                className="w-full px-3 py-2.5 rounded bg-[#1E2124] border border-[#3B3E42] text-[#F8FAFC] placeholder-[#94A3B8]/40 text-center tracking-[0.5em] text-lg font-mono focus:outline-none focus:border-[#88C0A4] transition"
+              />
+              <p className="text-[10px] text-[#94A3B8] mt-1.5 text-center">
+                Enter the code sent to <span className="text-[#F8FAFC] font-mono">{email}</span> or click the magic link in your email.
+              </p>
+            </div>
 
-          <div>
-            <label className="block text-xs font-semibold text-[#F8FAFC] mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••••••"
-              className="w-full px-3 py-2 rounded bg-[#1E2124] border border-[#3B3E42] text-[#F8FAFC] placeholder-[#94A3B8]/60 text-xs focus:outline-none focus:border-[#88C0A4] transition"
-            />
-          </div>
+            <button
+              type="submit"
+              disabled={loading || otpCode.length < 6}
+              className="w-full py-2.5 rounded bg-[#88C0A4] hover:bg-[#9ECBB5] disabled:opacity-50 text-[#1E2124] font-bold text-xs transition active:scale-95"
+            >
+              {loading ? 'Verifying...' : 'Verify Code & Sign In'}
+            </button>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-2.5 rounded bg-[#88C0A4] hover:bg-[#9ECBB5] disabled:opacity-50 text-[#1E2124] font-bold text-xs transition active:scale-95"
-          >
-            {loading ? 'Processing...' : isSignUp ? 'Create Account' : 'Sign In with Password'}
-          </button>
-        </form>
+            <button
+              type="button"
+              onClick={handleSendOtp}
+              disabled={loading}
+              className="w-full py-1.5 text-center text-xs text-[#94A3B8] hover:text-[#F8FAFC] transition"
+            >
+              Resend Code
+            </button>
+          </form>
+        ) : (
+          <>
+            <form onSubmit={handlePasswordAuth} className="space-y-3.5">
+              <div>
+                <label className="block text-xs font-semibold text-[#F8FAFC] mb-1">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@domain.com"
+                  className="w-full px-3 py-2 rounded bg-[#1E2124] border border-[#3B3E42] text-[#F8FAFC] placeholder-[#94A3B8]/60 text-xs focus:outline-none focus:border-[#88C0A4] transition font-mono"
+                />
+              </div>
 
-        <div className="relative my-5 text-center">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-[#3B3E42]"></div>
-          </div>
-          <span className="relative bg-[#272A2D] px-2 font-mono text-[10px] uppercase text-[#94A3B8]">
-            or passwordless
-          </span>
-        </div>
+              <div>
+                <label className="block text-xs font-semibold text-[#F8FAFC] mb-1">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••••••"
+                  className="w-full px-3 py-2 rounded bg-[#1E2124] border border-[#3B3E42] text-[#F8FAFC] placeholder-[#94A3B8]/60 text-xs focus:outline-none focus:border-[#88C0A4] transition"
+                />
+              </div>
 
-        <button
-          type="button"
-          onClick={handleMagicLink}
-          disabled={loading || magicLinkSent}
-          className="w-full py-2 rounded bg-transparent border border-[#3B3E42] hover:border-[#94A3B8] text-[#94A3B8] hover:text-[#F8FAFC] text-xs font-medium transition"
-        >
-          {magicLinkSent ? 'Login Link Sent' : 'Send One-Click Login Link'}
-        </button>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-2.5 rounded bg-[#88C0A4] hover:bg-[#9ECBB5] disabled:opacity-50 text-[#1E2124] font-bold text-xs transition active:scale-95"
+              >
+                {loading ? 'Processing...' : isSignUp ? 'Create Account' : 'Sign In with Password'}
+              </button>
+            </form>
+
+            <div className="relative my-5 text-center">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-[#3B3E42]"></div>
+              </div>
+              <span className="relative bg-[#272A2D] px-2 font-mono text-[10px] uppercase text-[#94A3B8]">
+                or passwordless
+              </span>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleSendOtp}
+              disabled={loading}
+              className="w-full py-2 rounded bg-transparent border border-[#3B3E42] hover:border-[#94A3B8] text-[#94A3B8] hover:text-[#F8FAFC] text-xs font-medium transition"
+            >
+              Send 6-Digit OTP / Login Link
+            </button>
+          </>
+        )}
 
         <div className="mt-6 pt-4 border-t border-[#3B3E42] text-center">
           <button
