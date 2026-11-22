@@ -4,7 +4,7 @@
 
 ![Aesthetic](https://img.shields.io/badge/Aesthetic-Slate%20%26%20Mint-88C0A4)
 ![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20Windows%20%7C%20Web-blue)
-![Version](https://img.shields.io/badge/Version-v0.7.0-green)
+![Version](https://img.shields.io/badge/Version-v0.7.1-green)
 ![License](https://img.shields.io/badge/License-Source--Available-orange)
 
 ---
@@ -87,12 +87,10 @@ Get the latest production build for your platform directly from the [Waypoint Re
 ## 🔐 Security & Integrity
 Waypoint utilizes PostgreSQL Security Definer functions and strict Row Level Security (RLS) to ensure workspace isolation and tamper-proof multi-tenant security.
 
-## 📥 Downloads (v0.7.0)
+## 📥 Downloads (v0.7.1)
 
-* 🪟 **Windows**: [`Waycord-v0.7.0-Setup.exe`](releases/Waycord-v0.7.0-Setup.exe)
-* 📱 **Android**: [`waycord-v0.7.0.apk`](releases/waycord-v0.7.0.apk)
-
----
+* 🪟 **Windows**: [`waycord.exe`](releases/waycord.exe)
+* 📱 **Android**: [`waycord-v0.7.1.apk`](releases/waycord-v0.7.1.apk)
 
 ## 📄 License
 
