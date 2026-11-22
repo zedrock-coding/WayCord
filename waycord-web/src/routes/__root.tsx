@@ -8,6 +8,7 @@ import {
 import type { ReactNode } from 'react'
 import { Navbar } from '../components/Navbar'
 import { Footer } from '../components/Footer'
+import appCss from '../styles/app.css?url'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -23,7 +24,7 @@ export const Route = createRootRoute({
         rel: 'stylesheet',
         href: 'https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap',
       },
-      { rel: 'stylesheet', href: '/src/styles/app.css' },
+      { rel: 'stylesheet', href: appCss },
     ],
   }),
   component: RootComponent,
