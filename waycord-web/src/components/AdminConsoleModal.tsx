@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import {
   fetchAdminDashboardStats,
   fetchFeedbackItems,
@@ -13,6 +14,7 @@ interface AdminConsoleModalProps {
 }
 
 export function AdminConsoleModal({ isOpen, onClose }: AdminConsoleModalProps) {
+  const [mounted, setMounted] = useState(false)
   const [activeTab, setActiveTab] = useState<'overview' | 'feedback' | 'subscriptions' | 'transactions'>('overview')
   const [stats, setStats] = useState<any>(null)
   const [feedback, setFeedback] = useState<any[]>([])
@@ -21,6 +23,10 @@ export function AdminConsoleModal({ isOpen, onClose }: AdminConsoleModalProps) {
   const [loading, setLoading] = useState(true)
   const [adminEmail, setAdminEmail] = useState('')
   const [actionMsg, setActionMsg] = useState<string | null>(null)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     if (!isOpen) return
@@ -67,21 +73,23 @@ export function AdminConsoleModal({ isOpen, onClose }: AdminConsoleModalProps) {
     }
   }
 
-  if (!isOpen) return null
+  if (!isOpen || !mounted) return null
 
-  return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-[#1A1C1E] text-[#F8FAFC]">
+  return createPortal(
+    <div className="fixed inset-0 z-[99999] overflow-y-auto bg-[#1A1C1E] text-[#F8FAFC]">
       {/* Operator Safety Header */}
-      <div className="bg-red-950/90 border-b border-red-800/40 px-4 py-2 text-center text-xs text-red-200 font-mono flex items-center justify-between sticky top-0 z-10 backdrop-blur-sm">
+      <div className="bg-red-950/95 border-b border-red-800/40 px-4 py-2.5 text-center text-xs text-red-200 font-mono flex items-center justify-between sticky top-0 z-50 backdrop-blur-md">
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-          <span>WAYCORD IN-MEMORY OPERATOR CONSOLE • AUTHENTICATED: {adminEmail}</span>
+          <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" />
+          <span className="font-bold tracking-wide">WAYCORD PRODUCTION OPERATOR CONSOLE</span>
+          <span className="hidden sm:inline text-red-300">• AUTHENTICATED: {adminEmail}</span>
         </div>
         <button
           onClick={onClose}
-          className="px-2.5 py-0.5 rounded bg-red-900/60 hover:bg-red-800 text-white font-mono text-[11px] transition"
+          className="px-3 py-1 rounded bg-red-900 hover:bg-red-800 text-white font-mono text-xs transition cursor-pointer flex items-center gap-1.5"
         >
-          Close Console (Esc) ✕
+          <span>Close Console</span>
+          <span className="text-[10px] bg-black/40 px-1 rounded">Esc</span>
         </button>
       </div>
 
@@ -93,14 +101,14 @@ export function AdminConsoleModal({ isOpen, onClose }: AdminConsoleModalProps) {
               <span className="text-[#88C0A4]">Waycord</span> Operator Console
             </h1>
             <p className="text-xs text-[#8A8E94] mt-1 font-mono">
-              Secure in-memory database telemetry, entitlements, and feedback triage (no public URL).
+              Live database telemetry, user entitlements, and feedback triage.
             </p>
           </div>
 
           <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0">
             <button
               onClick={() => setActiveTab('overview')}
-              className={`px-3 py-1.5 rounded text-xs font-semibold transition ${
+              className={`px-3 py-1.5 rounded text-xs font-semibold transition cursor-pointer ${
                 activeTab === 'overview'
                   ? 'bg-[#88C0A4] text-[#1E2124]'
                   : 'bg-[#272A2D] text-[#8A8E94] hover:text-white'
@@ -110,7 +118,7 @@ export function AdminConsoleModal({ isOpen, onClose }: AdminConsoleModalProps) {
             </button>
             <button
               onClick={() => setActiveTab('feedback')}
-              className={`px-3 py-1.5 rounded text-xs font-semibold transition flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded text-xs font-semibold transition cursor-pointer flex items-center gap-1.5 ${
                 activeTab === 'feedback'
                   ? 'bg-[#88C0A4] text-[#1E2124]'
                   : 'bg-[#272A2D] text-[#8A8E94] hover:text-white'
@@ -123,7 +131,7 @@ export function AdminConsoleModal({ isOpen, onClose }: AdminConsoleModalProps) {
             </button>
             <button
               onClick={() => setActiveTab('subscriptions')}
-              className={`px-3 py-1.5 rounded text-xs font-semibold transition flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded text-xs font-semibold transition cursor-pointer flex items-center gap-1.5 ${
                 activeTab === 'subscriptions'
                   ? 'bg-[#88C0A4] text-[#1E2124]'
                   : 'bg-[#272A2D] text-[#8A8E94] hover:text-white'
@@ -136,7 +144,7 @@ export function AdminConsoleModal({ isOpen, onClose }: AdminConsoleModalProps) {
             </button>
             <button
               onClick={() => setActiveTab('transactions')}
-              className={`px-3 py-1.5 rounded text-xs font-semibold transition flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded text-xs font-semibold transition cursor-pointer flex items-center gap-1.5 ${
                 activeTab === 'transactions'
                   ? 'bg-[#88C0A4] text-[#1E2124]'
                   : 'bg-[#272A2D] text-[#8A8E94] hover:text-white'
@@ -149,7 +157,7 @@ export function AdminConsoleModal({ isOpen, onClose }: AdminConsoleModalProps) {
             </button>
             <button
               onClick={loadAllData}
-              className="p-1.5 rounded bg-[#272A2D] text-[#8A8E94] hover:text-white border border-[#383C41] ml-2"
+              className="p-1.5 rounded bg-[#272A2D] text-[#8A8E94] hover:text-white border border-[#383C41] ml-2 cursor-pointer"
               title="Refresh All"
             >
               🔄
@@ -161,7 +169,7 @@ export function AdminConsoleModal({ isOpen, onClose }: AdminConsoleModalProps) {
         {actionMsg && (
           <div className="mt-4 p-3 rounded bg-[#88C0A4]/15 border border-[#88C0A4]/30 text-[#88C0A4] text-xs font-mono flex justify-between items-center">
             <span>{actionMsg}</span>
-            <button onClick={() => setActionMsg(null)} className="text-white/60 hover:text-white">✕</button>
+            <button onClick={() => setActionMsg(null)} className="text-white/60 hover:text-white cursor-pointer">✕</button>
           </div>
         )}
 
@@ -204,12 +212,12 @@ export function AdminConsoleModal({ isOpen, onClose }: AdminConsoleModalProps) {
 
             <div className="p-6 rounded-lg bg-[#232629] border border-[#33363A]">
               <h2 className="text-sm font-bold text-white uppercase tracking-wider font-mono">
-                Operator Security Guidelines
+                Operator Security & Guidelines
               </h2>
               <div className="mt-3 text-xs text-[#8A8E94] space-y-2 leading-relaxed">
-                <p>• <strong>Non-URL Access:</strong> This console has no public route and cannot be reached via direct URL. It operates strictly within your authenticated session.</p>
-                <p>• <strong>Strict Server Checks:</strong> Every RPC verifies your Supabase session token server-side against authorized admin emails.</p>
-                <p>• <strong>Shortcut:</strong> Toggle this console anytime using <kbd className="px-1.5 py-0.5 rounded bg-black text-[#88C0A4] font-mono">Ctrl+Shift+A</kbd> while logged in as admin.</p>
+                <p>• <strong>Strict Server Checks:</strong> Every telemetry and mutation request validates your Supabase session token against admin emails on the server.</p>
+                <p>• <strong>Subscriptions:</strong> Manually override customer tiers to resolve billing inquiries or grant institutional trials.</p>
+                <p>• <strong>Feedback:</strong> Triage user submissions directly from the Flutter app feedback dialog.</p>
               </div>
             </div>
           </div>
@@ -299,14 +307,14 @@ export function AdminConsoleModal({ isOpen, onClose }: AdminConsoleModalProps) {
                           {sub.plan === 'pro' ? (
                             <button
                               onClick={() => handleTierChange(sub.user_id, 'free')}
-                              className="px-2.5 py-1 rounded bg-red-950/40 text-red-300 border border-red-800/40 hover:bg-red-900/60 font-mono text-[10px]"
+                              className="px-2.5 py-1 rounded bg-red-950/40 text-red-300 border border-red-800/40 hover:bg-red-900/60 font-mono text-[10px] cursor-pointer"
                             >
                               Downgrade Free
                             </button>
                           ) : (
                             <button
                               onClick={() => handleTierChange(sub.user_id, 'pro')}
-                              className="px-2.5 py-1 rounded bg-[#88C0A4]/20 text-[#88C0A4] border border-[#88C0A4]/40 hover:bg-[#88C0A4]/30 font-mono text-[10px] font-bold"
+                              className="px-2.5 py-1 rounded bg-[#88C0A4]/20 text-[#88C0A4] border border-[#88C0A4]/40 hover:bg-[#88C0A4]/30 font-mono text-[10px] font-bold cursor-pointer"
                             >
                               Grant Pro
                             </button>
@@ -374,6 +382,7 @@ export function AdminConsoleModal({ isOpen, onClose }: AdminConsoleModalProps) {
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }

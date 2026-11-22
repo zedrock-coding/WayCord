@@ -8,6 +8,7 @@ import {
 import type { ReactNode } from 'react'
 import { Navbar } from '../components/Navbar'
 import { Footer } from '../components/Footer'
+import { WebNotFoundPage } from '../components/WebNotFoundPage'
 import appCss from '../styles/app.css?url'
 
 export const Route = createRootRoute({
@@ -29,6 +30,7 @@ export const Route = createRootRoute({
       { rel: 'stylesheet', href: appCss },
     ],
   }),
+  notFoundComponent: WebNotFoundPage,
   component: RootComponent,
 })
 
