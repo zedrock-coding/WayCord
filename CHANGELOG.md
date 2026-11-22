@@ -4,7 +4,40 @@ All notable changes to the **Helm** / **Waypoint** / **Waycord** project will be
 
 ---
 
-## [0.8.0-beta] - 2026-11-21
+## [0.8.0] - 2026-11-23
+
+### 🌐 Lapa Ninja Landing Page Redesign & Brand Synthesis
+- **Modern SaaS Landing Page Experience**:
+  - Rebuilt landing page with high-contrast obsidian styling (`#1E2124`), gradient text, and radial background glow.
+  - Interactive desktop app mockup window featuring live tab filters, interactive task checkoffs, priority chips, tag badges, and animated voice prompt input.
+  - Telemetry metrics strip showcasing sub-10ms local writes, 100% offline-first guarantees, AES-256 encryption, and multi-platform availability.
+  - Bento architecture grid detailing offline sync pipelines, Gemini 3.5 Flash-Lite decomposition, weighted RBAC hierarchy, and asymmetric JWT licensing.
+  - Transparent pricing plans with Monthly/Annual billing period toggle (20% discount badge), PhonePe instant UPI integration, and international Patreon checkout.
+  - Interactive FAQ accordion and high-conversion pre-footer CTA.
+
+### 💀 Zero-Layout-Shift Landing Skeleton Loader
+- **Layout-Aligned Skeleton**:
+  - Implemented `LandingSkeleton` in `waycord-web/src/components/LandingSkeleton.tsx` mirroring hero mockup, telemetry strip, bento grid, and pricing cards.
+  - Eliminates cumulative layout shift (CLS) during initial hydration and server fetches.
+
+### 🔒 Non-URL Operator Console & Security Hardening
+- **Protected Operator Surface**:
+  - Replaced URL-based admin navigation with an in-memory, portal-rendered modal (`AdminConsoleModal`) toggled via keyboard shortcut (`Ctrl/Cmd+Shift+A`).
+  - Added strict SSR email whitelist verification (`lakshyajadhav15@gmail.com`, `kirajain2001@gmail.com`, `zedrock@waycord.org`).
+  - Guarded `/admin` route redirecting unauthenticated or non-whitelisted visitors to root.
+
+### 🛑 Custom 404 & Service Disruption Pages
+- **Client & Web Resilience**:
+  - Created `NotFoundPage` (`helm/lib/views/not_found_page.dart`) with route badge and instant home navigation.
+  - Created `ServiceErrorPage` (`helm/lib/views/service_error_page.dart`) featuring expandable error diagnostic details and retry action callback.
+  - Created `AppErrorWidget` (`helm/lib/widgets/app_error_boundary.dart`) overriding Flutter's default red/grey crash screens via `ErrorWidget.builder`.
+  - Added `WebNotFoundPage` (`waycord-web/src/components/WebNotFoundPage.tsx`) for unmatched web routes.
+
+### 🛠️ Sidebar Layout & Branding Refinements
+- **Badge Overflow Prevention**:
+  - Fixed sync badge text clipping in `AppShell` with text truncation, compact status icons, and hover tooltips.
+- **Brand Assets**:
+  - Deployed official Waycord favicon and high-resolution logo icon across `waycord-web` navbar, footer, and HTML metadata.
 
 ### ⚡ Client Performance & Startup Time Optimization
 - **Non-Critical Service Deferral**:

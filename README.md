@@ -1,29 +1,47 @@
-# Waycord 0.8.0-beta - Production Release 🚀
+# Waycord 0.8.0 - Production Release 🚀
 
 **Waycord** (https://waycord.org) is an AI-orchestrated task management workspace. Optimized for **Android**, **Windows**, and **Web**, Waycord provides a professional, reactive experience for real-time team collaboration and personal productivity. Operated by **Lakshya Jadhav**.
 
 ![Aesthetic](https://img.shields.io/badge/Aesthetic-Obsidian%20%26%20Mint-88C0A4)
 ![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20Windows%20%7C%20Web-blue)
-![Version](https://img.shields.io/badge/Version-0.8.0--beta-green)
+![Version](https://img.shields.io/badge/Version-0.8.0-green)
 ![License](https://img.shields.io/badge/License-Source--Available-orange)
 
 ---
 
 ## 📥 Download & Live Access
 
-Get the latest build for your platform directly from the [Waycord Releases](https://github.com/zedrock-coding/Helm/releases/tag/beta) page:
+Get the latest build for your platform directly from the [Waycord Releases](https://github.com/zedrock-coding/Helm/releases/tag/release) page:
 
 | Platform | Type | Direct Download Link |
 | :--- | :--- | :--- |
-| **Android** | APK (`beta`) | [📲 Download Android APK](https://github.com/zedrock-coding/Helm/releases/download/beta/waycord-beta.apk) |
-| **Windows** | Executable (`v0.7.0`) | [💻 Download Windows App](https://github.com/zedrock-coding/Helm/releases/latest) |
+| **Android** | APK (`release`) | [📲 Download Android APK](https://github.com/zedrock-coding/Helm/releases/download/release/app-release.apk) |
+| **Windows** | Zip Bundle (`release`) | [💻 Download Windows App](https://github.com/zedrock-coding/Helm/releases/download/release/waycord-windows-x64.zip) |
 | **Web** | Live Production PWA | [🌐 Launch Web App](https://waycord.org) |
 
 *Alternative release mirrors: [Waycord GitHub Releases](https://github.com/zedrock-coding/Helm/releases)*
 
 ---
 
-## 🌟 What's New in 0.8.0-beta
+## 🌟 What's New in 0.8.0
+
+### 🌐 Modern SaaS Landing Page (Lapa Ninja Developer-Tool Pattern)
+*   **High-Fidelity Obsidian Design**: Redesigned marketing portal using deep slate obsidian backgrounds (`#1E2124`), gradient text, and atmospheric radial glow.
+*   **Interactive Desktop Mockup Window**: Realistic macOS-framed app preview with live task checkoffs, priority chips, category badges, and animated voice prompt input.
+*   **Live Telemetry Metrics**: Highlights real metrics including `< 10ms` local-first writes, `100%` offline autonomy, `AES-256` encryption, and native 4-platform support.
+*   **Bento Architecture Grid**: Visually demonstrates offline-first Hive queues, Gemini 3.5 Flash-Lite subtask decomposition, weighted RBAC hierarchy, and asymmetric offline JWT licensing.
+*   **Flexible Pricing & Payments**: Monthly/Annual pricing switch with 20% discount badge, integrated PhonePe UPI / RuPay checkout for India, and Patreon for international users.
+*   **Interactive FAQ Accordion**: Instant answers covering privacy, cloud encryption, cancellation, and the 5-day money-back guarantee.
+
+### 💀 Zero-Layout-Shift Skeleton Loader
+*   **Layout-Aligned Preload UI**: Full skeleton loader mirroring hero mockup, telemetry strip, bento cards, and pricing tables to prevent layout shift during SSR hydration.
+
+### 🔒 Non-URL Operator Console & Security Hardening
+*   **Hidden Admin Modal**: Replaced exposed URL paths with an in-memory, portal-rendered operator console triggered only via shortcut (`Ctrl/Cmd+Shift+A`).
+*   **Strict Access Control**: Server-side session verification matching the operator whitelist (`lakshyajadhav15@gmail.com`).
+
+### 🛑 Custom 404 & Service Disruption Pages
+*   **Resilience & Routing**: Added dedicated `NotFoundPage` with route pill, `ServiceErrorPage` with expandable stack diagnostics, and `AppErrorWidget` replacing Flutter's default crash views.
 
 ### 📐 Proportional REM Spacing Engine
 *   **CSS-Style `rem` Units for Flutter**: Dynamic spacing engine tied to ambient text scaler. Gaps, paddings, margins, and icons scale proportionally to prevent UI compression or sparse layouts across mobile and desktop.
