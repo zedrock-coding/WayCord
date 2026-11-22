@@ -40,10 +40,18 @@ function LoginPage() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
   const [successMsg, setSuccessMsg] = useState<string | null>(null)
 
+  const proceedToTarget = (target: string) => {
+    if (typeof window !== 'undefined' && target.startsWith('/app')) {
+      window.location.href = target
+    } else {
+      navigate({ to: target as any })
+    }
+  }
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
-        navigate({ to: redirectTarget as any })
+        proceedToTarget(redirectTarget)
       }
     })
   }, [navigate, redirectTarget])
@@ -62,7 +70,7 @@ function LoginPage() {
         })
         if (error) throw error
         if (data.session) {
-          navigate({ to: redirectTarget as any })
+          proceedToTarget(redirectTarget)
         } else {
           setSuccessMsg('Account created! Please check your email inbox to verify.')
         }
@@ -72,7 +80,7 @@ function LoginPage() {
           password,
         })
         if (error) throw error
-        navigate({ to: redirectTarget as any })
+        proceedToTarget(redirectTarget)
       }
     } catch (err: any) {
       setErrorMsg(err.message || 'Authentication failed. Please verify credentials.')
@@ -126,7 +134,7 @@ function LoginPage() {
       })
       if (error) throw error
       if (data.session) {
-        navigate({ to: redirectTarget as any })
+        proceedToTarget(redirectTarget)
       }
     } catch (err: any) {
       setErrorMsg(err.message || 'Invalid or expired code. Please try again.')

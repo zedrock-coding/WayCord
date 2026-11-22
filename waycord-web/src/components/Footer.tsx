@@ -7,6 +7,11 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
           <div className="md:col-span-1 space-y-3">
             <div className="flex items-center space-x-2">
+              <img
+                src="/icon.png"
+                alt="Waycord"
+                className="w-5 h-5 rounded object-contain bg-[#191C1F] border border-[#3B3E42]"
+              />
               <span className="font-bold text-base text-[#F8FAFC]">Waycord</span>
               <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-[#272A2D] text-[#88C0A4] border border-[#3B3E42]">
                 Local-First

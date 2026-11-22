@@ -1,4 +1,3 @@
-import { createFileRoute, redirect } from '@tanstack/react-router'
 import { useState, useEffect } from 'react'
 import {
   fetchAdminDashboardStats,
@@ -8,27 +7,12 @@ import {
   fetchAdminTransactions,
 } from '../lib/server/adminFunctions'
 
-export const Route = createFileRoute('/admin')({
-  beforeLoad: async () => {
-    try {
-      const data = await fetchAdminDashboardStats()
-      if (!data?.adminEmail) {
-        throw redirect({ to: '/login', search: { redirect: '/admin' } })
-      }
-    } catch (_) {
-      throw redirect({ to: '/login', search: { redirect: '/admin' } })
-    }
-  },
-  head: () => ({
-    meta: [
-      { title: 'Waycord — Operator Console & Admin' },
-      { name: 'robots', content: 'noindex, nofollow' },
-    ],
-  }),
-  component: AdminPage,
-})
+interface AdminConsoleModalProps {
+  isOpen: boolean
+  onClose: () => void
+}
 
-function AdminPage() {
+export function AdminConsoleModal({ isOpen, onClose }: AdminConsoleModalProps) {
   const [activeTab, setActiveTab] = useState<'overview' | 'feedback' | 'subscriptions' | 'transactions'>('overview')
   const [stats, setStats] = useState<any>(null)
   const [feedback, setFeedback] = useState<any[]>([])
@@ -39,8 +23,16 @@ function AdminPage() {
   const [actionMsg, setActionMsg] = useState<string | null>(null)
 
   useEffect(() => {
+    if (!isOpen) return
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', handleKeyDown)
     loadAllData()
-  }, [])
+
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isOpen])
 
   const loadAllData = async () => {
     setLoading(true)
@@ -75,12 +67,22 @@ function AdminPage() {
     }
   }
 
+  if (!isOpen) return null
+
   return (
-    <div className="bg-[#1A1C1E] min-h-screen text-[#F8FAFC]">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-[#1A1C1E] text-[#F8FAFC]">
       {/* Operator Safety Header */}
-      <div className="bg-red-950/80 border-b border-red-800/40 px-4 py-2 text-center text-xs text-red-200 font-mono flex items-center justify-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-        <span>WAYCORD PRODUCTION OPERATOR CONSOLE • AUTHENTICATED AS: {adminEmail}</span>
+      <div className="bg-red-950/90 border-b border-red-800/40 px-4 py-2 text-center text-xs text-red-200 font-mono flex items-center justify-between sticky top-0 z-10 backdrop-blur-sm">
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+          <span>WAYCORD IN-MEMORY OPERATOR CONSOLE • AUTHENTICATED: {adminEmail}</span>
+        </div>
+        <button
+          onClick={onClose}
+          className="px-2.5 py-0.5 rounded bg-red-900/60 hover:bg-red-800 text-white font-mono text-[11px] transition"
+        >
+          Close Console (Esc) ✕
+        </button>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -88,10 +90,10 @@ function AdminPage() {
         <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-[#33363A] gap-4">
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-              <span className="text-[#88C0A4]">Waycord</span> Console
+              <span className="text-[#88C0A4]">Waycord</span> Operator Console
             </h1>
             <p className="text-xs text-[#8A8E94] mt-1 font-mono">
-              Live database telemetry, user entitlements, and feedback triage.
+              Secure in-memory database telemetry, entitlements, and feedback triage (no public URL).
             </p>
           </div>
 
@@ -202,12 +204,12 @@ function AdminPage() {
 
             <div className="p-6 rounded-lg bg-[#232629] border border-[#33363A]">
               <h2 className="text-sm font-bold text-white uppercase tracking-wider font-mono">
-                Operator Quick Reference
+                Operator Security Guidelines
               </h2>
               <div className="mt-3 text-xs text-[#8A8E94] space-y-2 leading-relaxed">
-                <p>• <strong>Subscriptions:</strong> Manually override customer tiers to resolve billing inquiries or grant institutional trials.</p>
-                <p>• <strong>Feedback:</strong> Triage user submissions from the Flutter app feedback dialog.</p>
-                <p>• <strong>Security:</strong> All operations are executed server-side via Supabase Service Role client with verified admin credentials.</p>
+                <p>• <strong>Non-URL Access:</strong> This console has no public route and cannot be reached via direct URL. It operates strictly within your authenticated session.</p>
+                <p>• <strong>Strict Server Checks:</strong> Every RPC verifies your Supabase session token server-side against authorized admin emails.</p>
+                <p>• <strong>Shortcut:</strong> Toggle this console anytime using <kbd className="px-1.5 py-0.5 rounded bg-black text-[#88C0A4] font-mono">Ctrl+Shift+A</kbd> while logged in as admin.</p>
               </div>
             </div>
           </div>

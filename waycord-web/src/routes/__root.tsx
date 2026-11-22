@@ -18,6 +18,8 @@ export const Route = createRootRoute({
       { title: 'Waycord — Local-First Task & Workspace Coordination' },
     ],
     links: [
+      { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon.png' },
+      { rel: 'apple-touch-icon', href: '/icon.png' },
       { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
       { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
       {

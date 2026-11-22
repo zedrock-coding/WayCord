@@ -1,9 +1,11 @@
 import { Link } from '@tanstack/react-router'
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase/client'
+import { AdminConsoleModal } from './AdminConsoleModal'
 
 export function Navbar() {
   const [user, setUser] = useState<any>(null)
+  const [showAdminConsole, setShowAdminConsole] = useState(false)
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -19,13 +21,33 @@ export function Navbar() {
     return () => subscription.unsubscribe()
   }, [])
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+        const isAdmin =
+          user &&
+          (user.email === 'lakshyajadhav15@gmail.com' ||
+            user.email === 'kirajain2001@gmail.com' ||
+            user.email === 'zedrock@waycord.org')
+        if (isAdmin) {
+          e.preventDefault()
+          setShowAdminConsole((prev) => !prev)
+        }
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [user])
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-[#3B3E42] bg-[#1E2124]/95 backdrop-blur-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
         <Link to="/" className="flex items-center space-x-2.5 group">
-          <div className="w-8 h-8 rounded bg-[#88C0A4] flex items-center justify-center text-[#1E2124] font-black text-sm tracking-wider">
-            W
-          </div>
+          <img
+            src="/icon.png"
+            alt="Waycord"
+            className="w-8 h-8 rounded-lg object-contain bg-[#191C1F] border border-[#3B3E42] shadow-sm"
+          />
           <span className="font-bold text-base tracking-tight text-[#F8FAFC] group-hover:text-[#88C0A4] transition-colors">
             Waycord
           </span>
@@ -47,11 +69,20 @@ export function Navbar() {
           <Link to="/billing" className="hover:text-[#88C0A4] transition-colors">
             Billing
           </Link>
-          {user && (user.email === 'kirajain2001@gmail.com' || user.email === 'zedrock@waycord.org') && (
-            <Link to="/admin" className="text-[#88C0A4] font-semibold hover:underline transition-colors">
-              Admin
-            </Link>
-          )}
+          {user &&
+            (user.email === 'lakshyajadhav15@gmail.com' ||
+              user.email === 'kirajain2001@gmail.com' ||
+              user.email === 'zedrock@waycord.org') && (
+              <button
+                type="button"
+                onClick={() => setShowAdminConsole(true)}
+                className="text-[#88C0A4] font-semibold hover:underline transition-colors flex items-center gap-1.5 cursor-pointer bg-transparent border-none p-0"
+                title="Open Operator Console (Ctrl+Shift+A)"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
+                <span>Console</span>
+              </button>
+            )}
         </nav>
 
         <div className="flex items-center space-x-3">
@@ -96,6 +127,10 @@ export function Navbar() {
           </Link>
         </div>
       </div>
+      <AdminConsoleModal
+        isOpen={showAdminConsole}
+        onClose={() => setShowAdminConsole(false)}
+      />
     </header>
   )
 }

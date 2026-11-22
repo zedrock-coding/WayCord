@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState } from 'react'
+import { LandingSkeleton } from '../components/LandingSkeleton'
 
 const SITE_URL =
   typeof window !== 'undefined'
@@ -98,6 +99,7 @@ export const Route = createFileRoute('/')({
       },
     ],
   }),
+  pendingComponent: LandingSkeleton,
   component: HomePage,
 })
 

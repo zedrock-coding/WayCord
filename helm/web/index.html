@@ -47,6 +47,48 @@
   <link rel="preload" href="main.dart.js" as="script">
   <link rel="ai-catalog" href="/.well-known/ai-catalog.json">
 
+  <!-- Pre-Bootstrap Supabase Session Bridge: Syncs web cookie session into Flutter LocalStorage -->
+  <script>
+    (function() {
+      try {
+        const storageKey = 'sb-eknzdxexfcfdmqvbyvxt-auth-token';
+        const existing = window.localStorage.getItem(storageKey);
+        if (!existing || existing === 'null' || existing === 'undefined') {
+          const cookies = document.cookie.split(';');
+          let singleVal = null;
+          const chunks = [];
+          for (let i = 0; i < cookies.length; i++) {
+            const pair = cookies[i].trim();
+            const eqIdx = pair.indexOf('=');
+            if (eqIdx === -1) continue;
+            const name = pair.substring(0, eqIdx);
+            const val = pair.substring(eqIdx + 1);
+            if (name === storageKey) {
+              singleVal = decodeURIComponent(val);
+            } else if (name.startsWith(storageKey + '.')) {
+              const idx = parseInt(name.substring((storageKey + '.').length), 10);
+              if (!isNaN(idx)) chunks[idx] = decodeURIComponent(val);
+            }
+          }
+          let raw = singleVal || (chunks.length > 0 ? chunks.join('') : null);
+          if (raw) {
+            if (raw.startsWith('base64-')) {
+              try {
+                raw = atob(raw.substring(7));
+              } catch (_) {}
+            }
+            if (raw && (raw.startsWith('{') || raw.startsWith('['))) {
+              window.localStorage.setItem(storageKey, raw);
+              console.log('[Auth Bridge] Synchronized session from cookies to Flutter LocalStorage.');
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('[Auth Bridge] Session sync warning:', err);
+      }
+    })();
+  </script>
+
   <!-- Viewport Zoom / WCAG Accessibility Guard & V8 Deprecation Guard -->
   <script>
     // Silence V8 deprecation warning for Intl.v8BreakIterator
