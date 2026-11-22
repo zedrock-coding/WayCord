@@ -6,10 +6,12 @@ name: Deploy Helm Web to Vercel
 # expressed with `workflow_run` instead: this workflow fires when "Quality Gate"
 # finishes, and the job below refuses to run unless it concluded successfully.
 on:
+  push:
+    branches: [highest, main]
   workflow_run:
     workflows: ["Quality Gate"]
     types: [completed]
-    branches: [highest]
+    branches: [highest, main]
   workflow_dispatch:
 
 # Never deploy two builds of the same commit at once, and never cancel one that
@@ -22,6 +24,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     if: >-
+      github.event_name == 'push' ||
       github.event_name == 'workflow_dispatch' ||
       github.event.workflow_run.conclusion == 'success'
     steps:
@@ -99,6 +102,8 @@ jobs:
       - name: Deploy to Vercel
         working-directory: ./waycord-web
         run: |
+          mkdir -p .vercel
+          cp ../helm/.vercel/project.json .vercel/project.json
           vercel deploy --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
