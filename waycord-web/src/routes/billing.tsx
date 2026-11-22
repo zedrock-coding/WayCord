@@ -12,9 +12,7 @@ const billingSearchSchema = z.object({
 })
 
 export const fetchBillingData = createServerFn({ method: 'GET' }).handler(async () => {
-  const { createServerSupabaseClient, createServerServiceClient } = await import(
-    '../lib/server/supabase'
-  )
+  const { createServerSupabaseClient } = await import('../lib/server/supabase')
   const supabaseServer = createServerSupabaseClient()
   const {
     data: { user },
@@ -24,15 +22,14 @@ export const fetchBillingData = createServerFn({ method: 'GET' }).handler(async 
     return { user: null, subscription: null, transactions: [] }
   }
 
-  const supabaseService = createServerServiceClient()
-
-  const { data: subData } = await supabaseService
+  // Use supabaseServer directly (authenticated via cookies, allowed by RLS)
+  const { data: subData } = await supabaseServer
     .from('user_subscriptions')
     .select('*')
     .eq('user_id', user.id)
-    .single()
+    .maybeSingle()
 
-  const { data: txData } = await supabaseService
+  const { data: txData } = await supabaseServer
     .from('payment_transactions')
     .select('*')
     .eq('user_id', user.id)
@@ -63,33 +60,37 @@ export const confirmPaymentTransaction = createServerFn({ method: 'POST' })
       return { success: false, error: 'Unauthorized' }
     }
 
-    const supabaseService = createServerServiceClient()
-    const now = new Date()
-    const periodEnd = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000)
-    const signedLicense = generateOfflineLicense(user.id, data.plan, 'phonepe', 30)
+    try {
+      const supabaseService = createServerServiceClient()
+      const now = new Date()
+      const periodEnd = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000)
+      const signedLicense = generateOfflineLicense(user.id, data.plan, 'phonepe', 30)
 
-    await supabaseService
-      .from('payment_transactions')
-      .update({
-        status: 'completed',
-        provider_payment_id: `SIM_${Date.now()}`,
+      await supabaseService
+        .from('payment_transactions')
+        .update({
+          status: 'completed',
+          provider_payment_id: `SIM_${Date.now()}`,
+          updated_at: now.toISOString(),
+        })
+        .eq('merchant_transaction_id', data.txnId)
+
+      await supabaseService.from('user_subscriptions').upsert({
+        user_id: user.id,
+        tier: data.plan,
+        status: 'active',
+        provider: 'phonepe',
+        provider_customer_id: user.id,
+        provider_subscription_id: data.txnId,
+        current_period_end: periodEnd.toISOString(),
+        signed_entitlement_jwt: signedLicense,
         updated_at: now.toISOString(),
       })
-      .eq('merchant_transaction_id', data.txnId)
 
-    await supabaseService.from('user_subscriptions').upsert({
-      user_id: user.id,
-      tier: data.plan,
-      status: 'active',
-      provider: 'phonepe',
-      provider_customer_id: user.id,
-      provider_subscription_id: data.txnId,
-      current_period_end: periodEnd.toISOString(),
-      signed_entitlement_jwt: signedLicense,
-      updated_at: now.toISOString(),
-    })
-
-    return { success: true, license: signedLicense }
+      return { success: true, license: signedLicense }
+    } catch (err: any) {
+      return { success: false, error: err.message || 'Operation failed' }
+    }
   })
 
 export const cancelSubscription = createServerFn({ method: 'POST' }).handler(async () => {
@@ -105,17 +106,21 @@ export const cancelSubscription = createServerFn({ method: 'POST' }).handler(asy
     return { success: false, error: 'Unauthorized' }
   }
 
-  const supabaseService = createServerServiceClient()
+  try {
+    const supabaseService = createServerServiceClient()
 
-  await supabaseService
-    .from('user_subscriptions')
-    .update({
-      status: 'canceled',
-      updated_at: new Date().toISOString(),
-    })
-    .eq('user_id', user.id)
+    await supabaseService
+      .from('user_subscriptions')
+      .update({
+        status: 'canceled',
+        updated_at: new Date().toISOString(),
+      })
+      .eq('user_id', user.id)
 
-  return { success: true }
+    return { success: true }
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Operation failed' }
+  }
 })
 
 export const requestRefund = createServerFn({ method: 'POST' })
@@ -133,58 +138,61 @@ export const requestRefund = createServerFn({ method: 'POST' })
       return { success: false, error: 'Unauthorized' }
     }
 
-    const supabaseService = createServerServiceClient()
+    try {
+      const supabaseService = createServerServiceClient()
 
-    const { data: tx } = await supabaseService
-      .from('payment_transactions')
-      .select('*')
-      .eq('merchant_transaction_id', data.txnId)
-      .eq('user_id', user.id)
-      .single()
+      const { data: tx } = await supabaseService
+        .from('payment_transactions')
+        .select('*')
+        .eq('merchant_transaction_id', data.txnId)
+        .eq('user_id', user.id)
+        .single()
 
-    if (!tx) {
-      return { success: false, error: 'Transaction not found.' }
-    }
-
-    if (tx.status === 'refunded' || tx.status === 'refund_requested') {
-      return { success: false, error: 'Refund already processed for this transaction.' }
-    }
-
-    const txTime = new Date(tx.created_at).getTime()
-    const nowTime = Date.now()
-    const daysPassed = (nowTime - txTime) / (1000 * 60 * 60 * 24)
-
-    if (daysPassed > 5) {
-      return {
-        success: false,
-        error:
-          'Refund request is outside the 5-calendar-day refund window per our policy.',
+      if (!tx) {
+        return { success: false, error: 'Transaction not found.' }
       }
-    }
 
-    await supabaseService
-      .from('payment_transactions')
-      .update({
-        status: 'refunded',
-        updated_at: new Date().toISOString(),
-      })
-      .eq('merchant_transaction_id', data.txnId)
+      if (tx.status === 'refunded' || tx.status === 'refund_requested') {
+        return { success: false, error: 'Refund already processed for this transaction.' }
+      }
 
-    await supabaseService
-      .from('user_subscriptions')
-      .update({
-        tier: 'free',
-        status: 'canceled',
-        signed_entitlement_jwt: null,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('user_id', user.id)
+      const txTime = new Date(tx.created_at).getTime()
+      const nowTime = Date.now()
+      const daysPassed = (nowTime - txTime) / (1000 * 60 * 60 * 24)
 
-    return {
-      success: true,
-      message: `Full refund of ₹${(tx.amount / 100).toFixed(
-        2,
-      )} processed successfully. Funds will return to source within 3-5 business days.`,
+      if (daysPassed > 5) {
+        return {
+          success: false,
+          error: 'Refund request window (5 days) has expired for this transaction.',
+        }
+      }
+
+      await supabaseService
+        .from('payment_transactions')
+        .update({
+          status: 'refunded',
+          updated_at: new Date().toISOString(),
+        })
+        .eq('merchant_transaction_id', data.txnId)
+
+      await supabaseService
+        .from('user_subscriptions')
+        .update({
+          tier: 'free',
+          status: 'canceled',
+          signed_entitlement_jwt: null,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('user_id', user.id)
+
+      return {
+        success: true,
+        message: `Full refund of ₹${(tx.amount / 100).toFixed(
+          2,
+        )} processed successfully. Funds will return to source within 3-5 business days.`,
+      }
+    } catch (err: any) {
+      return { success: false, error: err.message || 'Operation failed' }
     }
   })
 
