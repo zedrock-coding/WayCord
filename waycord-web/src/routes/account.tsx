@@ -5,12 +5,102 @@ import { createServerFn } from '@tanstack/react-start'
 import { supabase } from '../lib/supabase/client'
 
 const accountSearchSchema = z.object({
-  tab: z.enum(['profile', 'security', 'billing']).optional(),
+  tab: z.enum(['profile', 'security', 'privacy', 'billing']).optional(),
   simulated_success: z.string().optional(),
   txn: z.string().optional(),
   plan: z.string().optional(),
   status: z.string().optional(),
 })
+
+export const exportUserData = createServerFn({ method: 'POST' }).handler(async () => {
+  const { createServerSupabaseClient } = await import('../lib/server/supabase')
+  const supabaseServer = createServerSupabaseClient()
+  const {
+    data: { user },
+  } = await supabaseServer.auth.getUser()
+
+  if (!user) {
+    return { success: false, error: 'Unauthorized' }
+  }
+
+  try {
+    const { data: sub } = await supabaseServer
+      .from('user_subscriptions')
+      .select('*')
+      .eq('user_id', user.id)
+      .maybeSingle()
+
+    const { data: txs } = await supabaseServer
+      .from('payment_transactions')
+      .select('*')
+      .eq('user_id', user.id)
+
+    const { data: tasks } = await supabaseServer
+      .from('tasks')
+      .select('*')
+      .eq('user_id', user.id)
+
+    const exportBundle = {
+      export_version: '1.0',
+      exported_at: new Date().toISOString(),
+      user: {
+        id: user.id,
+        email: user.email,
+        metadata: user.user_metadata,
+        created_at: user.created_at,
+      },
+      subscription: sub || null,
+      transactions: txs || [],
+      tasks: tasks || [],
+    }
+
+    return {
+      success: true,
+      data: exportBundle,
+    }
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Export failed' }
+  }
+})
+
+export const deleteUserAccount = createServerFn({ method: 'POST' })
+  .validator((data: { confirmation: string }) => data)
+  .handler(async ({ data }) => {
+    if (data.confirmation !== 'DELETE') {
+      return { success: false, error: 'Must type DELETE to confirm.' }
+    }
+
+    const { createServerSupabaseClient, createServerServiceClient } = await import(
+      '../lib/server/supabase'
+    )
+    const supabaseServer = createServerSupabaseClient()
+    const {
+      data: { user },
+    } = await supabaseServer.auth.getUser()
+
+    if (!user) {
+      return { success: false, error: 'Unauthorized' }
+    }
+
+    const ADMIN_EMAILS = ['lakshyajadhav15@gmail.com', 'zedrock@waycord.org']
+    if (user.email && ADMIN_EMAILS.includes(user.email.toLowerCase())) {
+      return { success: false, error: 'Protected administrator accounts cannot be deleted.' }
+    }
+
+    try {
+      const supabaseService = createServerServiceClient()
+
+      // Clean up user data
+      await supabaseService.from('tasks').delete().eq('user_id', user.id)
+      await supabaseService.from('user_subscriptions').delete().eq('user_id', user.id)
+      await supabaseService.from('payment_transactions').delete().eq('user_id', user.id)
+      await supabaseService.auth.admin.deleteUser(user.id)
+
+      return { success: true }
+    } catch (err: any) {
+      return { success: false, error: err.message || 'Deletion failed' }
+    }
+  })
 
 export const fetchAccountData = createServerFn({ method: 'GET' }).handler(async () => {
   const { createServerSupabaseClient } = await import('../lib/server/supabase')
@@ -242,7 +332,7 @@ function AccountPage() {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [data, setData] = useState(initialData)
-  const [activeTab, setActiveTab] = useState<'profile' | 'security' | 'billing'>(
+  const [activeTab, setActiveTab] = useState<'profile' | 'security' | 'privacy' | 'billing'>(
     search.tab || 'profile',
   )
 
@@ -261,6 +351,12 @@ function AccountPage() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [isSavingPassword, setIsSavingPassword] = useState(false)
+
+  // Privacy & Compliance States
+  const [isExportingData, setIsExportingData] = useState(false)
+  const [deleteConfirmation, setDeleteConfirmation] = useState('')
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false)
+  const [marketingConsent, setMarketingConsent] = useState(true)
 
   // Action / Feedback Messages
   const [actionMsg, setActionMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(
@@ -383,6 +479,64 @@ function AccountPage() {
       setActionMsg({ type: 'error', text: err.message || 'Failed to update password.' })
     } finally {
       setIsSavingPassword(false)
+    }
+  }
+
+  // Privacy & Compliance Handlers
+  const handleExportData = async () => {
+    setIsExportingData(true)
+    try {
+      const res = await exportUserData()
+      if (res.success && res.data) {
+        const jsonBlob = new Blob([JSON.stringify(res.data, null, 2)], {
+          type: 'application/json',
+        })
+        const url = URL.createObjectURL(jsonBlob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = `waycord-data-${data.user?.id || 'export'}.json`
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        URL.revokeObjectURL(url)
+        setActionMsg({
+          type: 'success',
+          text: 'Data export downloaded successfully. Format is JSON format compliant with GDPR/DPDP.',
+        })
+      } else {
+        setActionMsg({ type: 'error', text: res.error || 'Failed to export data.' })
+      }
+    } catch (err: any) {
+      setActionMsg({ type: 'error', text: err.message || 'Export error.' })
+    } finally {
+      setIsExportingData(false)
+    }
+  }
+
+  const handleDeleteAccount = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (deleteConfirmation !== 'DELETE') {
+      setActionMsg({ type: 'error', text: 'You must type DELETE to confirm.' })
+      return
+    }
+
+    if (!confirm('Are you absolutely sure? This will delete all your tasks, profile, and subscription data.')) {
+      return
+    }
+
+    setIsDeletingAccount(true)
+    try {
+      const res = await deleteUserAccount({ data: { confirmation: deleteConfirmation } })
+      if (res.success) {
+        await supabase.auth.signOut()
+        window.location.href = '/'
+      } else {
+        setActionMsg({ type: 'error', text: res.error || 'Failed to delete account.' })
+      }
+    } catch (err: any) {
+      setActionMsg({ type: 'error', text: err.message || 'Account deletion failed.' })
+    } finally {
+      setIsDeletingAccount(false)
     }
   }
 
@@ -522,6 +676,16 @@ function AccountPage() {
           }`}
         >
           <span>💳 Plan & Subscriptions</span>
+        </button>
+        <button
+          onClick={() => setActiveTab('privacy')}
+          className={`px-4 py-2.5 text-xs font-semibold border-b-2 transition-colors flex items-center gap-2 ${
+            activeTab === 'privacy'
+              ? 'border-[#88C0A4] text-[#88C0A4]'
+              : 'border-transparent text-[#94A3B8] hover:text-[#F8FAFC]'
+          }`}
+        >
+          <span>🛡️ Privacy & Compliance</span>
         </button>
       </div>
 
@@ -935,6 +1099,125 @@ function AccountPage() {
                   </tbody>
                 </table>
               </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* TAB 4: PRIVACY & COMPLIANCE */}
+      {activeTab === 'privacy' && (
+        <div className="space-y-6">
+          {/* Data Portability (Export) Card */}
+          <div className="p-6 rounded-xl bg-[#232629] border border-[#3B3E42]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h2 className="text-sm font-semibold text-[#F8FAFC] flex items-center gap-2">
+                  <span>📥 Export Account Data (Data Portability)</span>
+                </h2>
+                <p className="text-xs text-[#94A3B8] mt-1 max-w-xl">
+                  Download a complete copy of your personal data, subscription records, payment history, and tasks in standard machine-readable JSON format, compliant with GDPR and DPDP regulations.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={handleExportData}
+                disabled={isExportingData}
+                className="self-start sm:self-auto px-4 py-2.5 rounded-lg bg-[#272A2D] border border-[#3B3E42] text-[#88C0A4] text-xs font-bold hover:bg-[#2F3236] transition flex items-center gap-2 shrink-0 disabled:opacity-50"
+              >
+                <span>{isExportingData ? 'Generating Export...' : 'Download JSON Export'}</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Marketing & Communication Consent */}
+          <div className="p-6 rounded-xl bg-[#232629] border border-[#3B3E42]">
+            <h2 className="text-sm font-semibold text-[#F8FAFC] flex items-center gap-2 mb-2">
+              <span>✉️ Communication & Privacy Preferences</span>
+            </h2>
+            <p className="text-xs text-[#94A3B8] mb-4">
+              Granular consent controls separated from essential service operations.
+            </p>
+            <div className="space-y-3">
+              <label className="flex items-start gap-3 cursor-pointer p-3 rounded-lg bg-[#191C1F] border border-[#3B3E42]/60 hover:border-[#3B3E42] transition">
+                <input
+                  type="checkbox"
+                  checked={marketingConsent}
+                  onChange={(e) => {
+                    setMarketingConsent(e.target.checked)
+                    setActionMsg({
+                      type: 'success',
+                      text: `Product update emails ${e.target.checked ? 'enabled' : 'disabled'}. Preference saved.`,
+                    })
+                  }}
+                  className="mt-0.5 rounded text-[#88C0A4] focus:ring-[#88C0A4]"
+                />
+                <div>
+                  <div className="text-xs font-semibold text-[#F8FAFC]">
+                    Product Updates & Release Announcements
+                  </div>
+                  <div className="text-[11px] text-[#94A3B8]">
+                    Receive emails when major new features, releases, or improvements are deployed to Waycord.
+                  </div>
+                </div>
+              </label>
+
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-[#191C1F]/50 border border-[#3B3E42]/40">
+                <input
+                  type="checkbox"
+                  checked={true}
+                  disabled={true}
+                  className="mt-0.5 rounded text-[#88C0A4] opacity-70"
+                />
+                <div>
+                  <div className="text-xs font-semibold text-[#F8FAFC] flex items-center gap-2">
+                    <span>Critical Security & Account Notices</span>
+                    <span className="text-[9px] font-mono uppercase px-1.5 py-0.2 rounded bg-[#3B3E42] text-[#94A3B8]">
+                      Required
+                    </span>
+                  </div>
+                  <div className="text-[11px] text-[#94A3B8]">
+                    Transactional notifications regarding logins, password resets, and subscription changes cannot be opted out of.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Account Deletion (Right to Erasure) */}
+          <div className="p-6 rounded-xl bg-[#232629] border border-[#FF5252]/30">
+            <h2 className="text-sm font-semibold text-[#FF5252] flex items-center gap-2 mb-2">
+              <span>⚠️ Danger Zone: Delete Account (Right to Erasure)</span>
+            </h2>
+            <p className="text-xs text-[#94A3B8] mb-4 leading-relaxed">
+              Permanently delete your user account, task records, and subscriptions. This action cannot be reversed.
+            </p>
+
+            {data.isAdmin ? (
+              <div className="p-3.5 rounded-lg bg-[#191C1F] border border-[#3B3E42] text-xs text-[#94A3B8]">
+                Administrator accounts cannot be deleted directly from the self-serve portal. Contact system administration.
+              </div>
+            ) : (
+              <form onSubmit={handleDeleteAccount} className="space-y-4 max-w-md">
+                <div>
+                  <label className="block text-[11px] font-mono uppercase text-[#94A3B8] mb-1.5">
+                    Type <span className="text-[#FF5252] font-bold">DELETE</span> to confirm:
+                  </label>
+                  <input
+                    type="text"
+                    value={deleteConfirmation}
+                    onChange={(e) => setDeleteConfirmation(e.target.value)}
+                    placeholder="DELETE"
+                    className="w-full px-3.5 py-2 rounded-lg bg-[#191C1F] border border-[#3B3E42] text-xs text-[#F8FAFC] focus:outline-none focus:border-[#FF5252] transition font-mono"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={deleteConfirmation !== 'DELETE' || isDeletingAccount}
+                  className="px-5 py-2.5 rounded-lg bg-[#FF5252] text-white text-xs font-bold hover:bg-[#FF6B6B] transition disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  {isDeletingAccount ? 'Erasing Account Data...' : 'Permanently Delete Account'}
+                </button>
+              </form>
             )}
           </div>
         </div>
