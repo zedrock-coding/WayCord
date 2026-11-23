@@ -655,7 +655,10 @@ function AccountPage() {
               : 'border-transparent text-[#94A3B8] hover:text-[#F8FAFC]'
           }`}
         >
-          <span>👤 Profile & Identity</span>
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+          <span>Profile & Identity</span>
         </button>
         <button
           onClick={() => setActiveTab('security')}
@@ -665,7 +668,10 @@ function AccountPage() {
               : 'border-transparent text-[#94A3B8] hover:text-[#F8FAFC]'
           }`}
         >
-          <span>🔒 Security & Password</span>
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+          <span>Security & Password</span>
         </button>
         <button
           onClick={() => setActiveTab('billing')}
@@ -675,7 +681,10 @@ function AccountPage() {
               : 'border-transparent text-[#94A3B8] hover:text-[#F8FAFC]'
           }`}
         >
-          <span>💳 Plan & Subscriptions</span>
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+          </svg>
+          <span>Plan & Subscriptions</span>
         </button>
         <button
           onClick={() => setActiveTab('privacy')}
@@ -685,7 +694,10 @@ function AccountPage() {
               : 'border-transparent text-[#94A3B8] hover:text-[#F8FAFC]'
           }`}
         >
-          <span>🛡️ Privacy & Compliance</span>
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+          <span>Privacy & Compliance</span>
         </button>
       </div>
 
@@ -1112,7 +1124,10 @@ function AccountPage() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <h2 className="text-sm font-semibold text-[#F8FAFC] flex items-center gap-2">
-                  <span>📥 Export Account Data (Data Portability)</span>
+                  <svg className="w-4 h-4 text-[#88C0A4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  <span>Export Account Data (Data Portability)</span>
                 </h2>
                 <p className="text-xs text-[#94A3B8] mt-1 max-w-xl">
                   Download a complete copy of your personal data, subscription records, payment history, and tasks in standard machine-readable JSON format, compliant with GDPR and DPDP regulations.
@@ -1132,7 +1147,10 @@ function AccountPage() {
           {/* Marketing & Communication Consent */}
           <div className="p-6 rounded-xl bg-[#232629] border border-[#3B3E42]">
             <h2 className="text-sm font-semibold text-[#F8FAFC] flex items-center gap-2 mb-2">
-              <span>✉️ Communication & Privacy Preferences</span>
+              <svg className="w-4 h-4 text-[#88C0A4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              <span>Communication & Privacy Preferences</span>
             </h2>
             <p className="text-xs text-[#94A3B8] mb-4">
               Granular consent controls separated from essential service operations.
@@ -1186,7 +1204,10 @@ function AccountPage() {
           {/* Account Deletion (Right to Erasure) */}
           <div className="p-6 rounded-xl bg-[#232629] border border-[#FF5252]/30">
             <h2 className="text-sm font-semibold text-[#FF5252] flex items-center gap-2 mb-2">
-              <span>⚠️ Danger Zone: Delete Account (Right to Erasure)</span>
+              <svg className="w-4 h-4 text-[#FF5252]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <span>Danger Zone: Delete Account (Right to Erasure)</span>
             </h2>
             <p className="text-xs text-[#94A3B8] mb-4 leading-relaxed">
               Permanently delete your user account, task records, and subscriptions. This action cannot be reversed.
