@@ -4,6 +4,21 @@ All notable changes to the **Helm** / **Waypoint** / **Waycord** project will be
 
 ---
 
+## [0.8.1] - 2026-11-23
+
+### 🎨 Adaptive Light Theme Contrast & Legibility
+- **Theme-Adaptive Palette Tokens**:
+  - Restored compile-time constant base palette in `lib/theme/app_theme.dart` while introducing context-adaptive color helpers (`AppTheme.surface(context)`, `AppTheme.surfaceContainerColor(context)`, `AppTheme.borderColor(context)`, `AppTheme.text(context)`, `AppTheme.textMuted(context)`).
+  - Resolved low-contrast and invisible text issues across `AppShell` navigation sidebar, footer sync pill, quick actions, omni search bar, and settings appearance box.
+  - Full theme reactivity between dark Obsidian slate and light Material/GitHub palettes with zero compile-time analyzer diagnostics.
+
+### 📥 Direct Binary Release Downloads on Web Portal
+- **Zero-Redirect Download CTAs**:
+  - Connected direct binary download buttons for Windows installer (`.exe`) and Android package (`.apk`) directly on the `waycord-web` landing page hero and final CTA sections.
+  - Added dedicated fallback subtext: "If you want to download older versions, go here." linking directly to the release archives.
+
+---
+
 ## [0.7.0] - 2026-11-18
 
 ### 🚀 Waycord Rebranding & Centralized Legal Configuration

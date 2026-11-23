@@ -3,7 +3,7 @@ description: "Waycord — AI-orchestrated task management workspace"
 homepage: https://waycord.org
 publish_to: 'none'
 
-version: 0.8.0+30
+version: 0.8.1+31
 
 environment:
   sdk: ^3.11.0

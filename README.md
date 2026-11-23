@@ -1,25 +1,37 @@
-# Waycord 0.8.0 - Production Release 🚀
+# Waycord 0.8.1 - Production Release 🚀
 
 **Waycord** (https://waycord.org) is an AI-orchestrated task management workspace. Optimized for **Android**, **Windows**, and **Web**, Waycord provides a professional, reactive experience for real-time team collaboration and personal productivity. Operated by **Lakshya Jadhav**.
 
 ![Aesthetic](https://img.shields.io/badge/Aesthetic-Obsidian%20%26%20Mint-88C0A4)
 ![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20Windows%20%7C%20Web-blue)
-![Version](https://img.shields.io/badge/Version-0.8.0-green)
+![Version](https://img.shields.io/badge/Version-0.8.1-green)
 ![License](https://img.shields.io/badge/License-Source--Available-orange)
 
 ---
 
 ## 📥 Download & Live Access
 
-Get the latest build for your platform directly from the [Waycord Releases](https://github.com/zedrock-coding/Helm/releases/tag/release) page:
+Get the latest build for your platform directly from the [Waycord Releases](https://github.com/zedrock-coding/WayCord/releases) page:
 
 | Platform | Type | Direct Download Link |
 | :--- | :--- | :--- |
-| **Android** | APK (`release`) | [📲 Download Android APK](https://github.com/zedrock-coding/Helm/releases/download/release/app-release.apk) |
-| **Windows** | Zip Bundle (`release`) | [💻 Download Windows App](https://github.com/zedrock-coding/Helm/releases/download/release/waycord-windows-x64.zip) |
+| **Android** | APK (`release`) | [📲 Download Android APK](https://github.com/zedrock-coding/WayCord/releases/download/v0.7.1/waycord-v0.7.1.apk) |
+| **Windows** | Setup Installer (`release`) | [💻 Download Windows App](https://github.com/zedrock-coding/WayCord/releases/download/v0.7.1/Waycord-v0.7.1+29-Setup.exe) |
 | **Web** | Live Production PWA | [🌐 Launch Web App](https://waycord.org) |
 
-*Alternative release mirrors: [Waycord GitHub Releases](https://github.com/zedrock-coding/Helm/releases)*
+*Alternative release mirrors: [Waycord GitHub Releases Archive](https://github.com/zedrock-coding/WayCord/releases)*
+
+---
+
+## 🌟 What's New in 0.8.1
+
+### 🎨 Adaptive Light Theme Contrast
+*   **Context-Adaptive Colors**: Eliminated washed-out, invisible text and dark container artifacts in light theme.
+*   **Refined App Shell**: Adaptive navigation sidebar, sync pill, and appearance settings panels dynamically adapt to the active theme.
+
+### 📥 Direct Binary Downloads on Marketing Site
+*   **One-Click Installation**: Landing page now directly initiates Windows (.exe) and Android (.apk) binary downloads without detour.
+*   **Release Archive Fallback**: Added direct links to older release versions.
 
 ---
 
