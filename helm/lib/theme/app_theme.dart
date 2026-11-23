@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  // Obsidian Precision Color Palette
+  // Global theme brightness state tracker
+  static bool isLightGlobal = false;
+
+  // Obsidian Precision Color Palette (Dark Default)
   static const Color bgDark = Color(0xFF111417);
   static const Color surfaceDark = Color(0xFF111417);
   static const Color surfaceContainerLowest = Color(0xFF0B0F11);
@@ -65,7 +68,7 @@ class AppTheme {
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4),
-          side: const BorderSide(color: surfaceVariant, width: 1),
+          side: BorderSide(color: surfaceVariant, width: 1),
         ),
         color: surfaceContainerHigh,
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
@@ -86,11 +89,11 @@ class AppTheme {
         actionTextColor: mint,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(100),
-          side: const BorderSide(color: surfaceVariant, width: 1),
+          side: BorderSide(color: surfaceVariant, width: 1),
         ),
         elevation: 6,
       ),
-      dividerTheme: const DividerThemeData(
+      dividerTheme: DividerThemeData(
         color: surfaceVariant,
         thickness: 1,
         space: 1,

@@ -160,15 +160,23 @@ function HomePage() {
             </a>
 
             <a
-              href="https://github.com/zedrock-coding/Helm/releases"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-[#272A2D] border border-[#3B3E42] text-[#F8FAFC] font-semibold text-sm hover:border-[#88C0A4] transition flex items-center justify-center space-x-2.5 hover:bg-[#2F3236]"
+              href="https://github.com/zedrock-coding/WayCord/releases/download/v0.7.1/Waycord-v0.7.1+29-Setup.exe"
+              className="w-full sm:w-auto px-5 py-3.5 rounded-xl bg-[#272A2D] border border-[#3B3E42] text-[#F8FAFC] font-semibold text-sm hover:border-[#88C0A4] transition flex items-center justify-center space-x-2 hover:bg-[#2F3236]"
             >
               <svg className="w-4 h-4 text-[#88C0A4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
-              <span>Download Native App</span>
+              <span>Download Windows (.exe)</span>
+            </a>
+
+            <a
+              href="https://github.com/zedrock-coding/WayCord/releases/download/v0.7.1/waycord-v0.7.1.apk"
+              className="w-full sm:w-auto px-5 py-3.5 rounded-xl bg-[#272A2D] border border-[#3B3E42] text-[#F8FAFC] font-semibold text-sm hover:border-[#88C0A4] transition flex items-center justify-center space-x-2 hover:bg-[#2F3236]"
+            >
+              <svg className="w-4 h-4 text-[#88C0A4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              <span>Download Android (.apk)</span>
             </a>
 
             <a
@@ -179,6 +187,19 @@ function HomePage() {
               <span>↓</span>
             </a>
           </div>
+
+          <p className="mt-3 text-xs text-[#94A3B8]">
+            If you want to download older versions,{' '}
+            <a
+              href="https://github.com/zedrock-coding/WayCord/releases"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#88C0A4] hover:underline font-medium"
+            >
+              go here
+            </a>
+            .
+          </p>
 
           {/* INTERACTIVE PRODUCT WINDOW MOCKUP */}
           <div className="mt-14 max-w-5xl mx-auto rounded-2xl border border-[#3B3E42] bg-[#191C1F] shadow-2xl overflow-hidden text-left ring-1 ring-white/5">
@@ -832,14 +853,30 @@ function HomePage() {
               Get Started Free Now →
             </a>
             <a
-              href="https://github.com/zedrock-coding/Helm/releases"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-[#272A2D] border border-[#3B3E42] text-white font-semibold text-xs hover:border-[#88C0A4] transition"
+              href="https://github.com/zedrock-coding/WayCord/releases/download/v0.7.1/Waycord-v0.7.1+29-Setup.exe"
+              className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-[#272A2D] border border-[#3B3E42] text-white font-semibold text-xs hover:border-[#88C0A4] transition flex items-center justify-center space-x-2"
             >
-              Download for Android / Windows
+              <span>Download Windows (.exe)</span>
+            </a>
+            <a
+              href="https://github.com/zedrock-coding/WayCord/releases/download/v0.7.1/waycord-v0.7.1.apk"
+              className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-[#272A2D] border border-[#3B3E42] text-white font-semibold text-xs hover:border-[#88C0A4] transition flex items-center justify-center space-x-2"
+            >
+              <span>Download Android (.apk)</span>
             </a>
           </div>
+          <p className="mt-3 text-xs text-[#94A3B8]">
+            If you want to download older versions,{' '}
+            <a
+              href="https://github.com/zedrock-coding/WayCord/releases"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#88C0A4] hover:underline font-medium"
+            >
+              go here
+            </a>
+            .
+          </p>
         </div>
       </section>
     </div>

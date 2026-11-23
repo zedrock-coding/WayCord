@@ -22,18 +22,22 @@ class ThemeProvider with ChangeNotifier {
     if (s != null) {
       _settings = s;
     }
+    AppTheme.isLightGlobal = (_settings.themeMode ?? 1) == 0;
     
     // Listen for changes
     _settingsBox.watch(key: 'app_settings').listen((event) {
       if (event.value != null) {
         _settings = event.value;
+        AppTheme.isLightGlobal = (_settings.themeMode ?? 1) == 0;
         notifyListeners();
       }
     });
   }
 
   ThemeMode get themeMode {
-    return (_settings.themeMode ?? 1) == 1 ? ThemeMode.dark : ThemeMode.light;
+    final mode = (_settings.themeMode ?? 1) == 1 ? ThemeMode.dark : ThemeMode.light;
+    AppTheme.isLightGlobal = mode == ThemeMode.light;
+    return mode;
   }
 
   double get textScaleFactor {
@@ -42,6 +46,7 @@ class ThemeProvider with ChangeNotifier {
 
   Future<void> updateThemeMode(int mode) async {
     _settings.themeMode = mode;
+    AppTheme.isLightGlobal = mode == 0;
     await _settings.save();
     notifyListeners();
   }

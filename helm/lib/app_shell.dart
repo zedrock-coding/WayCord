@@ -524,9 +524,9 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
           // Sidebar Footer Status
           Container(
             padding: const EdgeInsets.all(12),
-            decoration: const BoxDecoration(
-              color: AppTheme.surfaceContainerLowest,
-              border: Border(top: BorderSide(color: AppTheme.surfaceVariant)),
+            decoration: BoxDecoration(
+              color: AppTheme.surfaceContainerLowestColor(context),
+              border: Border(top: BorderSide(color: AppTheme.borderColor(context))),
             ),
             child: Column(
               children: [
@@ -563,9 +563,9 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                           decoration: BoxDecoration(
-                            color: AppTheme.surfaceContainer,
+                            color: AppTheme.surfaceContainerColor(context),
                             borderRadius: BorderRadius.circular(4),
-                            border: Border.all(color: AppTheme.surfaceVariant),
+                            border: Border.all(color: AppTheme.borderColor(context)),
                           ),
                           child: Row(
                             children: [
@@ -594,17 +594,17 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
                               Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  const Icon(
+                                  Icon(
                                     Icons.cloud_done_outlined,
                                     size: 11,
-                                    color: AppTheme.onSurfaceVariant,
+                                    color: AppTheme.textMuted(context),
                                   ),
                                   const SizedBox(width: 3),
                                   Text(
                                     'Active',
                                     style: AppTheme.monoStyle(
                                       fontSize: 9,
-                                      color: AppTheme.onSurfaceVariant,
+                                      color: AppTheme.textMuted(context),
                                     ),
                                   ),
                                 ],
@@ -624,12 +624,12 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
                       onTap: () => navProvider.setView(WaycordNavView.settings),
                       borderRadius: BorderRadius.circular(4),
                       child: Row(
-                        children: const [
-                          Icon(Icons.tune_rounded, size: 15, color: AppTheme.onSurfaceVariant),
-                          SizedBox(width: 6),
+                        children: [
+                          Icon(Icons.tune_rounded, size: 15, color: AppTheme.textMuted(context)),
+                          const SizedBox(width: 6),
                           Text(
                             'Settings',
-                            style: TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant),
+                            style: TextStyle(fontSize: 12, color: AppTheme.textMuted(context)),
                           ),
                         ],
                       ),
@@ -672,7 +672,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 1.5),
       decoration: BoxDecoration(
-        color: isActive ? AppTheme.surfaceContainer : Colors.transparent,
+        color: isActive ? AppTheme.surfaceContainerColor(context) : Colors.transparent,
         borderRadius: const BorderRadius.horizontal(right: Radius.circular(4)),
         border: isActive
             ? const Border(left: BorderSide(color: AppTheme.mint, width: 2))
@@ -685,23 +685,23 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
         leading: Icon(
           icon,
           size: 17,
-          color: isActive ? AppTheme.mint : AppTheme.onSurfaceVariant,
+          color: isActive ? AppTheme.mint : AppTheme.textMuted(context),
         ),
         title: Text(
           label,
           style: TextStyle(
             fontSize: 13,
             fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-            color: isActive ? AppTheme.mint : AppTheme.onSurfaceVariant,
+            color: isActive ? AppTheme.mint : AppTheme.text(context),
           ),
         ),
         trailing: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
           decoration: BoxDecoration(
-            color: isActive ? AppTheme.mint.withValues(alpha: 0.2) : AppTheme.surfaceContainer,
+            color: isActive ? AppTheme.mint.withValues(alpha: 0.2) : AppTheme.surfaceContainerColor(context),
             borderRadius: BorderRadius.circular(2),
             border: Border.all(
-              color: isActive ? AppTheme.mint.withValues(alpha: 0.3) : AppTheme.surfaceVariant,
+              color: isActive ? AppTheme.mint.withValues(alpha: 0.3) : AppTheme.borderColor(context),
             ),
           ),
           child: Text(
@@ -709,7 +709,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
             style: AppTheme.monoStyle(
               fontSize: 9.5,
               fontWeight: FontWeight.w600,
-              color: isActive ? AppTheme.mint : AppTheme.onSurfaceVariant,
+              color: isActive ? AppTheme.mint : AppTheme.textMuted(context),
             ),
           ),
         ),
@@ -728,7 +728,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 1),
       decoration: BoxDecoration(
-        color: isSelected ? AppTheme.surfaceContainer : Colors.transparent,
+        color: isSelected ? AppTheme.surfaceContainerColor(context) : Colors.transparent,
         borderRadius: BorderRadius.circular(4),
         border: isSelected ? const Border(left: BorderSide(color: AppTheme.mint, width: 2)) : null,
       ),
@@ -746,7 +746,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
           style: TextStyle(
             fontSize: 12,
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-            color: isSelected ? AppTheme.mint : AppTheme.onSurfaceVariant,
+            color: isSelected ? AppTheme.mint : AppTheme.text(context),
           ),
           overflow: TextOverflow.ellipsis,
         ),
@@ -755,7 +755,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
           children: [
             if (onManage != null)
               IconButton(
-                icon: const Icon(Icons.group_outlined, size: 14, color: AppTheme.onSurfaceVariant),
+                icon: Icon(Icons.group_outlined, size: 14, color: AppTheme.textMuted(context)),
                 tooltip: 'Workspace Members & Roles',
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(minWidth: 24, minHeight: 24),
@@ -766,7 +766,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
                 count,
                 style: AppTheme.monoStyle(
                   fontSize: 10,
-                  color: AppTheme.onSurfaceVariant.withValues(alpha: 0.6),
+                  color: AppTheme.textMuted(context).withValues(alpha: 0.6),
                 ),
               ),
           ],
@@ -782,10 +782,10 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
         builder: (ctx, setModalState) {
           final pending = SyncService().pendingCount;
           return AlertDialog(
-            backgroundColor: AppTheme.surfaceContainerHigh,
+            backgroundColor: AppTheme.surface(context),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(6),
-              side: const BorderSide(color: AppTheme.surfaceVariant),
+              side: BorderSide(color: AppTheme.borderColor(context)),
             ),
             titlePadding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
             contentPadding: const EdgeInsets.symmetric(horizontal: 20),
@@ -796,7 +796,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
                 const SizedBox(width: 8),
                 Text(
                   'Sync Diagnostics',
-                  style: AppTheme.monoStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppTheme.onSurface),
+                  style: AppTheme.monoStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppTheme.text(context)),
                 ),
               ],
             ),
@@ -808,20 +808,20 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
                 const SizedBox(height: 8),
                 _buildDiagRow('Pending Changes', '$pending', pending > 0 ? AppTheme.priorityMedium : AppTheme.mint),
                 const SizedBox(height: 8),
-                _buildDiagRow('Local Tasks Mirror', '${taskProvider.allActiveTasks.length} active', AppTheme.onSurfaceVariant),
+                _buildDiagRow('Local Tasks Mirror', '${taskProvider.allActiveTasks.length} active', AppTheme.textMuted(context)),
                 const SizedBox(height: 8),
-                _buildDiagRow('Sync Strategy', 'Local-First (LWW)', AppTheme.onSurfaceVariant),
-                const Divider(color: AppTheme.surfaceVariant, height: 20),
+                _buildDiagRow('Sync Strategy', 'Local-First (LWW)', AppTheme.textMuted(context)),
+                Divider(color: AppTheme.borderColor(context), height: 20),
                 Text(
                   'Local mutations are queued in Hive and sent to Supabase automatically.',
-                  style: AppTheme.monoStyle(fontSize: 10, color: AppTheme.onSurfaceVariant.withValues(alpha: 0.7)),
+                  style: AppTheme.monoStyle(fontSize: 10, color: AppTheme.textMuted(context).withValues(alpha: 0.7)),
                 ),
               ],
             ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(ctx).pop(),
-                child: Text('Close', style: AppTheme.monoStyle(fontSize: 12, color: AppTheme.onSurfaceVariant)),
+                child: Text('Close', style: AppTheme.monoStyle(fontSize: 12, color: AppTheme.textMuted(context))),
               ),
               ElevatedButton.icon(
                 onPressed: () async {
@@ -849,7 +849,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: const TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant)),
+        Text(label, style: TextStyle(fontSize: 12, color: AppTheme.textMuted(context))),
         Text(value, style: AppTheme.monoStyle(fontSize: 12, fontWeight: FontWeight.w600, color: valueColor)),
       ],
     );
@@ -1076,7 +1076,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
                               ),
                               child: Row(
                                 children: [
-                                  const Icon(Icons.search, size: 16, color: AppTheme.onSurfaceVariant),
+                                  Icon(Icons.search, size: 16, color: AppTheme.textMuted(context)),
                                   const SizedBox(width: 8),
                                   Expanded(
                                     child: Text(
@@ -1168,8 +1168,8 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
                   icon: const Icon(Icons.mic, size: 16, color: AppTheme.mint),
                   label: Text('Voice', style: AppTheme.monoStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppTheme.mint)),
                   style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: AppTheme.surfaceVariant),
-                    backgroundColor: AppTheme.surfaceContainer,
+                    side: BorderSide(color: AppTheme.borderColor(context)),
+                    backgroundColor: AppTheme.surfaceContainerColor(context),
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
                   ),
@@ -1180,7 +1180,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
                 IconButton(
                   icon: const Icon(Icons.mic, size: 20, color: AppTheme.mint),
                   tooltip: 'AI Voice Assistant',
-                  hoverColor: AppTheme.surfaceContainer,
+                  hoverColor: AppTheme.surfaceContainerColor(context),
                   onPressed: () => _showAIVoiceOverlay(context, isDesktop),
                 ),
               ],
@@ -1203,7 +1203,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
                       child: const Icon(Icons.sync_rounded, size: 18, color: AppTheme.priorityMedium),
                     );
                   } else {
-                    iconWidget = const Icon(Icons.sync_rounded, size: 18, color: AppTheme.onSurfaceVariant);
+                    iconWidget = Icon(Icons.sync_rounded, size: 18, color: AppTheme.textMuted(context));
                   }
 
                   return IconButton(
@@ -1213,7 +1213,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
                         : (pendingCount > 0
                             ? '$pendingCount pending change${pendingCount == 1 ? '' : 's'} (click to sync)'
                             : 'Sync with cloud'),
-                    hoverColor: AppTheme.surfaceContainer,
+                    hoverColor: AppTheme.surfaceContainerColor(context),
                     onPressed: _isSyncing ? null : () => _triggerManualSync(context, taskProvider),
                   );
                 },
@@ -1226,8 +1226,8 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
                 link: _notificationLayerLink,
                 child: IconButton(
                   icon: const Icon(Icons.notifications_outlined, size: 18),
-                  color: AppTheme.onSurfaceVariant,
-                  hoverColor: AppTheme.surfaceContainer,
+                  color: AppTheme.textMuted(context),
+                  hoverColor: AppTheme.surfaceContainerColor(context),
                   tooltip: 'Notifications',
                   onPressed: () {
                     if (isDesktop) {
@@ -1237,9 +1237,9 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
                         context: context,
                         backgroundColor: Colors.transparent,
                         builder: (_) => Container(
-                          decoration: const BoxDecoration(
-                            color: AppTheme.surfaceContainerHigh,
-                            borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+                          decoration: BoxDecoration(
+                            color: AppTheme.surface(context),
+                            borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
                           ),
                           child: const NotificationFeedUI(),
                         ),
@@ -1255,7 +1255,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
               IconButton(
                 icon: const Icon(Icons.chat_bubble_outline_rounded, size: 17),
                 color: AppTheme.mint,
-                hoverColor: AppTheme.surfaceContainer,
+                hoverColor: AppTheme.surfaceContainerColor(context),
                 tooltip: 'Send Feedback',
                 onPressed: () => showFeedbackDialog(context),
               ),
@@ -1370,7 +1370,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
             Icon(
               icon,
               size: 20,
-              color: isActive ? AppTheme.mint : AppTheme.onSurfaceVariant,
+              color: isActive ? AppTheme.mint : AppTheme.textMuted(context),
             ),
             const SizedBox(height: 2),
             Text(
@@ -1378,7 +1378,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
               style: TextStyle(
                 fontSize: 10,
                 fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-                color: isActive ? AppTheme.mint : AppTheme.onSurfaceVariant,
+                color: isActive ? AppTheme.mint : AppTheme.textMuted(context),
               ),
             ),
           ],

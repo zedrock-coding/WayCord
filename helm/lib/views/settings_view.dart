@@ -334,9 +334,9 @@ class _SettingsViewState extends State<SettingsView> {
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppTheme.surfaceContainerHigh,
+                  color: AppTheme.surfaceContainerHighColor(context),
                   borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: AppTheme.surfaceVariant),
+                  border: Border.all(color: AppTheme.borderColor(context)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -345,16 +345,16 @@ class _SettingsViewState extends State<SettingsView> {
                       children: [
                         const Icon(Icons.palette_outlined, size: 18, color: AppTheme.mint),
                         const SizedBox(width: 8),
-                        const Text(
+                        Text(
                           'Appearance & Font Scaling',
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppTheme.onSurface),
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppTheme.text(context)),
                         ),
                       ],
                     ),
                     const SizedBox(height: 4),
-                    const Text(
+                    Text(
                       'Configure visual theme mode and application-wide typography scaling.',
-                      style: TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant),
+                      style: TextStyle(fontSize: 12, color: AppTheme.textMuted(context)),
                     ),
                     const SizedBox(height: 14),
                     // Theme Mode Toggles
@@ -369,10 +369,10 @@ class _SettingsViewState extends State<SettingsView> {
                               decoration: BoxDecoration(
                                 color: isDark
                                     ? AppTheme.mint.withValues(alpha: 0.15)
-                                    : AppTheme.surfaceContainer,
+                                    : AppTheme.surfaceContainerColor(context),
                                 borderRadius: BorderRadius.circular(4),
                                 border: Border.all(
-                                  color: isDark ? AppTheme.mint : AppTheme.surfaceVariant,
+                                  color: isDark ? AppTheme.mint : AppTheme.borderColor(context),
                                 ),
                               ),
                               child: Row(
@@ -380,7 +380,7 @@ class _SettingsViewState extends State<SettingsView> {
                                   Icon(
                                     Icons.dark_mode_rounded,
                                     size: 16,
-                                    color: isDark ? AppTheme.mint : AppTheme.onSurfaceVariant,
+                                    color: isDark ? AppTheme.mint : AppTheme.textMuted(context),
                                   ),
                                   const SizedBox(width: 8),
                                   Text(
@@ -388,7 +388,7 @@ class _SettingsViewState extends State<SettingsView> {
                                     style: TextStyle(
                                       fontSize: 12,
                                       fontWeight: isDark ? FontWeight.w600 : FontWeight.w400,
-                                      color: isDark ? AppTheme.mint : AppTheme.onSurface,
+                                      color: isDark ? AppTheme.mint : AppTheme.text(context),
                                     ),
                                   ),
                                 ],
@@ -406,10 +406,10 @@ class _SettingsViewState extends State<SettingsView> {
                               decoration: BoxDecoration(
                                 color: !isDark
                                     ? AppTheme.mint.withValues(alpha: 0.15)
-                                    : AppTheme.surfaceContainer,
+                                    : AppTheme.surfaceContainerColor(context),
                                 borderRadius: BorderRadius.circular(4),
                                 border: Border.all(
-                                  color: !isDark ? AppTheme.mint : AppTheme.surfaceVariant,
+                                  color: !isDark ? AppTheme.mint : AppTheme.borderColor(context),
                                 ),
                               ),
                               child: Row(
@@ -417,7 +417,7 @@ class _SettingsViewState extends State<SettingsView> {
                                   Icon(
                                     Icons.light_mode_rounded,
                                     size: 16,
-                                    color: !isDark ? AppTheme.mint : AppTheme.onSurfaceVariant,
+                                    color: !isDark ? AppTheme.mint : AppTheme.textMuted(context),
                                   ),
                                   const SizedBox(width: 8),
                                   Text(
@@ -425,7 +425,7 @@ class _SettingsViewState extends State<SettingsView> {
                                     style: TextStyle(
                                       fontSize: 12,
                                       fontWeight: !isDark ? FontWeight.w600 : FontWeight.w400,
-                                      color: !isDark ? AppTheme.mint : AppTheme.onSurface,
+                                      color: !isDark ? AppTheme.mint : AppTheme.text(context),
                                     ),
                                   ),
                                 ],
@@ -440,9 +440,9 @@ class _SettingsViewState extends State<SettingsView> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                       decoration: BoxDecoration(
-                        color: AppTheme.surfaceContainer,
+                        color: AppTheme.surfaceContainerColor(context),
                         borderRadius: BorderRadius.circular(4),
-                        border: Border.all(color: AppTheme.surfaceVariant),
+                        border: Border.all(color: AppTheme.borderColor(context)),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -450,24 +450,24 @@ class _SettingsViewState extends State<SettingsView> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
+                              Text(
                                 'App Font Size',
                                 style: TextStyle(
                                   fontSize: 12.5,
                                   fontWeight: FontWeight.w500,
-                                  color: AppTheme.onSurface,
+                                  color: AppTheme.text(context),
                                 ),
                               ),
                               Text(
                                 'Global text scaling ratio (${AppTheme.fontScales[currentFontIndex]}x)',
-                                style: AppTheme.monoStyle(fontSize: 10, color: AppTheme.onSurfaceVariant),
+                                style: AppTheme.monoStyle(fontSize: 10, color: AppTheme.textMuted(context)),
                               ),
                             ],
                           ),
                           DropdownButtonHideUnderline(
                             child: DropdownButton<int>(
                               value: currentFontIndex,
-                              dropdownColor: AppTheme.surfaceContainerHigh,
+                              dropdownColor: AppTheme.surfaceContainerHighColor(context),
                               icon: const Icon(Icons.arrow_drop_down, color: AppTheme.mint),
                               style: AppTheme.monoStyle(
                                 fontSize: 12,
@@ -504,9 +504,9 @@ class _SettingsViewState extends State<SettingsView> {
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppTheme.surfaceContainerHigh,
+                  color: AppTheme.surfaceContainerHighColor(context),
                   borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: AppTheme.surfaceVariant),
+                  border: Border.all(color: AppTheme.borderColor(context)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -515,9 +515,9 @@ class _SettingsViewState extends State<SettingsView> {
                       children: [
                         const Icon(Icons.notifications_outlined, size: 18, color: AppTheme.mint),
                         const SizedBox(width: 8),
-                        const Text(
+                        Text(
                           'Notifications & Reminders',
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppTheme.onSurface),
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppTheme.text(context)),
                         ),
                       ],
                     ),
@@ -525,28 +525,28 @@ class _SettingsViewState extends State<SettingsView> {
                     SwitchListTile(
                       dense: true,
                       contentPadding: EdgeInsets.zero,
-                      title: const Text('Task Assignments', style: TextStyle(fontSize: 12.5, color: AppTheme.onSurface)),
-                      subtitle: Text('Notify when someone delegates a task to you', style: AppTheme.monoStyle(fontSize: 10.5)),
+                      title: Text('Task Assignments', style: TextStyle(fontSize: 12.5, color: AppTheme.text(context))),
+                      subtitle: Text('Notify when someone delegates a task to you', style: AppTheme.monoStyle(fontSize: 10.5, color: AppTheme.textMuted(context))),
                       value: settings.taskAssignmentsEnabled ?? true,
                       activeTrackColor: AppTheme.mint,
                       onChanged: (v) => _handleNotificationToggle('taskAssignments', v, themeProvider),
                     ),
-                    const Divider(color: AppTheme.surfaceVariant, height: 1),
+                    Divider(color: AppTheme.borderColor(context), height: 1),
                     SwitchListTile(
                       dense: true,
                       contentPadding: EdgeInsets.zero,
-                      title: const Text('Due Date Reminders', style: TextStyle(fontSize: 12.5, color: AppTheme.onSurface)),
-                      subtitle: Text('Alert before due date and overdue deadlines', style: AppTheme.monoStyle(fontSize: 10.5)),
+                      title: Text('Due Date Reminders', style: TextStyle(fontSize: 12.5, color: AppTheme.text(context))),
+                      subtitle: Text('Alert before due date and overdue deadlines', style: AppTheme.monoStyle(fontSize: 10.5, color: AppTheme.textMuted(context))),
                       value: settings.dueDateRemindersEnabled ?? true,
                       activeTrackColor: AppTheme.mint,
                       onChanged: (v) => _handleNotificationToggle('dueDateReminders', v, themeProvider),
                     ),
-                    const Divider(color: AppTheme.surfaceVariant, height: 1),
+                    Divider(color: AppTheme.borderColor(context), height: 1),
                     SwitchListTile(
                       dense: true,
                       contentPadding: EdgeInsets.zero,
-                      title: const Text('Community Mentions', style: TextStyle(fontSize: 12.5, color: AppTheme.onSurface)),
-                      subtitle: Text('Alert when mentioned in workspace discussions', style: AppTheme.monoStyle(fontSize: 10.5)),
+                      title: Text('Community Mentions', style: TextStyle(fontSize: 12.5, color: AppTheme.text(context))),
+                      subtitle: Text('Alert when mentioned in workspace discussions', style: AppTheme.monoStyle(fontSize: 10.5, color: AppTheme.textMuted(context))),
                       value: settings.communityMentionsEnabled ?? true,
                       activeTrackColor: AppTheme.mint,
                       onChanged: (v) => _handleNotificationToggle('communityMentions', v, themeProvider),
