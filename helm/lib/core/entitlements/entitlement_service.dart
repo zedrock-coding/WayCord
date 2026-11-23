@@ -20,6 +20,11 @@ class EntitlementService with ChangeNotifier {
   static const String keyDevOverride = 'dev_override_tier';
   static const String keyDeviceId = 'cached_device_id';
 
+  static const List<String> adminEmails = [
+    'lakshyajadhav15@gmail.com',
+    'zedrock@waycord.org',
+  ];
+
   static final EntitlementService _instance = EntitlementService._internal();
   factory EntitlementService() => _instance;
   EntitlementService._internal();
@@ -38,6 +43,14 @@ class EntitlementService with ChangeNotifier {
   WaycordTier get activeTier {
     if (kDebugMode && !kReleaseMode && _devOverrideTier != null) {
       return _devOverrideTier!;
+    }
+    try {
+      final userEmail = Supabase.instance.client.auth.currentUser?.email?.toLowerCase();
+      if (userEmail != null && adminEmails.contains(userEmail)) {
+        return WaycordTier.team;
+      }
+    } catch (_) {
+      // Supabase uninitialized in test environments
     }
     return _resolvedTier;
   }
@@ -124,6 +137,16 @@ class EntitlementService with ChangeNotifier {
       final user = client.auth.currentUser;
       if (user == null) {
         _resolvedTier = WaycordTier.free;
+        notifyListeners();
+        return;
+      }
+
+      final email = user.email?.toLowerCase();
+      if (email != null && adminEmails.contains(email)) {
+        _resolvedTier = WaycordTier.team;
+        if (_box != null) {
+          await _box!.put(keyTier, WaycordTier.team.name);
+        }
         notifyListeners();
         return;
       }

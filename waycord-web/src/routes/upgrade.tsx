@@ -49,7 +49,7 @@ export const initiatePhonePeCheckout = createServerFn({ method: 'POST' })
       console.error('Failed to log payment transaction:', txError)
     }
 
-    const redirectUrl = `${data.siteUrl}/billing?txn=${merchantTransactionId}&status=success`
+    const redirectUrl = `${data.siteUrl}/account?tab=billing&txn=${merchantTransactionId}&status=success`
     const callbackUrl = `${data.siteUrl}/api/webhooks/phonepe`
 
     const { base64Payload, xVerify } = createPhonePePayload({
@@ -82,7 +82,7 @@ export const initiatePhonePeCheckout = createServerFn({ method: 'POST' })
       }
     }
 
-    const simulatorUrl = `${data.siteUrl}/billing?simulated_success=true&txn=${merchantTransactionId}&plan=${plan}`
+    const simulatorUrl = `${data.siteUrl}/account?tab=billing&simulated_success=true&txn=${merchantTransactionId}&plan=${plan}`
     return { url: simulatorUrl }
   })
 

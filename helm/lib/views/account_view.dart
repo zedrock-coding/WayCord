@@ -193,6 +193,141 @@ class _AccountViewState extends State<AccountView> {
     );
   }
 
+  void _showChangePasswordDialog() {
+    final newPasswordController = TextEditingController();
+    final confirmPasswordController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+    bool dialogLoading = false;
+    bool obscurePassword = true;
+
+    showDialog(
+      context: context,
+      builder: (dialogCtx) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          backgroundColor: AppTheme.surfaceContainerHighColor(context),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4),
+            side: BorderSide(color: AppTheme.borderColor(context)),
+          ),
+          title: Text(
+            'Change Password',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: AppTheme.text(context),
+            ),
+          ),
+          content: Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Enter a new secure password (at least 6 characters).',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: AppTheme.textMuted(context),
+                  ),
+                ),
+                const SizedBox(height: 14),
+                TextFormField(
+                  controller: newPasswordController,
+                  obscureText: obscurePassword,
+                  style: TextStyle(fontSize: 13, color: AppTheme.text(context)),
+                  decoration: InputDecoration(
+                    labelText: 'New Password',
+                    labelStyle: TextStyle(fontSize: 12, color: AppTheme.textMuted(context)),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                    filled: true,
+                    fillColor: AppTheme.surfaceContainerLowestColor(context),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4),
+                      borderSide: BorderSide(color: AppTheme.borderColor(context)),
+                    ),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                        size: 16,
+                        color: AppTheme.textMuted(context),
+                      ),
+                      onPressed: () => setDialogState(() => obscurePassword = !obscurePassword),
+                    ),
+                  ),
+                  validator: (v) => (v == null || v.trim().length < 6) ? 'Minimum 6 characters required' : null,
+                ),
+                const SizedBox(height: 12),
+                TextFormField(
+                  controller: confirmPasswordController,
+                  obscureText: obscurePassword,
+                  style: TextStyle(fontSize: 13, color: AppTheme.text(context)),
+                  decoration: InputDecoration(
+                    labelText: 'Confirm Password',
+                    labelStyle: TextStyle(fontSize: 12, color: AppTheme.textMuted(context)),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                    filled: true,
+                    fillColor: AppTheme.surfaceContainerLowestColor(context),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4),
+                      borderSide: BorderSide(color: AppTheme.borderColor(context)),
+                    ),
+                  ),
+                  validator: (v) => v != newPasswordController.text ? 'Passwords do not match' : null,
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: dialogLoading ? null : () => Navigator.pop(dialogCtx),
+              child: Text('Cancel', style: TextStyle(color: AppTheme.textMuted(context))),
+            ),
+            ElevatedButton(
+              onPressed: dialogLoading
+                  ? null
+                  : () async {
+                      if (!formKey.currentState!.validate()) return;
+                      final messenger = ScaffoldMessenger.of(context);
+                      setDialogState(() => dialogLoading = true);
+                      try {
+                        await _supabase.auth.updateUser(
+                          UserAttributes(password: newPasswordController.text.trim()),
+                        );
+                        if (dialogCtx.mounted) {
+                          Navigator.pop(dialogCtx);
+                        }
+                        messenger.showSnackBar(
+                          const SnackBar(content: Text('Password updated successfully!')),
+                        );
+                      } catch (e) {
+                        setDialogState(() => dialogLoading = false);
+                        messenger.showSnackBar(
+                          SnackBar(
+                            content: Text('Failed to update password: $e'),
+                            backgroundColor: AppTheme.priorityUrgent,
+                          ),
+                        );
+                      }
+                    },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppTheme.mint,
+                foregroundColor: AppTheme.onMint,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+              ),
+              child: dialogLoading
+                  ? const SizedBox(
+                      width: 14,
+                      height: 14,
+                      child: CircularProgressIndicator(strokeWidth: 2, color: AppTheme.onMint),
+                    )
+                  : const Text('Update Password', style: TextStyle(fontWeight: FontWeight.bold)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = _supabase.auth.currentUser;
@@ -528,6 +663,60 @@ class _AccountViewState extends State<AccountView> {
                             constraints: const BoxConstraints(),
                           ),
                         ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 14),
+
+            // Security & Credentials Card
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: AppTheme.surfaceContainerColor(context),
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(color: AppTheme.borderColor(context)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.lock_outline_rounded, size: 18, color: AppTheme.mint),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Security & Credentials',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: AppTheme.text(context),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      'Manage your account password for email/password authentication across Waycord platforms.',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: AppTheme.textMuted(context),
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    OutlinedButton.icon(
+                      onPressed: _isSigningOut ? null : _showChangePasswordDialog,
+                      icon: const Icon(Icons.key_rounded, size: 15),
+                      label: const Text('Change Password', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: AppTheme.text(context),
+                        side: BorderSide(color: AppTheme.borderColor(context)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                       ),
                     ),
                   ],

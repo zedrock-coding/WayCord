@@ -61,8 +61,8 @@ export function Footer() {
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <Link to="/billing" className="hover:text-[#88C0A4] transition">
-                  Billing & Subscriptions
+                <Link to="/account" className="hover:text-[#88C0A4] transition">
+                  Account & Subscriptions
                 </Link>
               </li>
               <li>

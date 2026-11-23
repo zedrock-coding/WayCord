@@ -86,8 +86,8 @@ export function Navbar() {
           <a href="/#faq" className="hover:text-[#88C0A4] transition-colors">
             FAQ
           </a>
-          <Link to="/billing" className="hover:text-[#88C0A4] transition-colors">
-            Billing
+          <Link to="/account" className="hover:text-[#88C0A4] transition-colors">
+            Account
           </Link>
           {isAdmin && (
             <button
@@ -106,7 +106,7 @@ export function Navbar() {
           {user ? (
             <div className="flex items-center space-x-3">
               <Link
-                to="/billing"
+                to="/account"
                 className="text-xs text-[#94A3B8] hover:text-[#F8FAFC] hidden sm:inline-block truncate max-w-[150px] font-mono"
               >
                 {user.email}

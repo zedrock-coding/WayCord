@@ -37,7 +37,7 @@ function RefundPolicyPage() {
           <p>
             We offer an unconditional <strong>5-calendar-day refund window</strong> on all new Waycord Pro
             subscriptions. If you are not satisfied with Waycord, submit a refund request from your
-            <a href="/billing" className="text-[#88C0A4] underline ml-1 mr-1">Billing Portal</a>
+            <a href="/account" className="text-[#88C0A4] underline ml-1 mr-1">Account Portal</a>
             or email us at <a href="mailto:support@waycord.com" className="text-[#88C0A4] underline">support@waycord.com</a> within
             5 days of purchase.
           </p>

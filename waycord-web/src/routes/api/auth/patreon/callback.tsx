@@ -81,7 +81,7 @@ export const handlePatreonCallback = createServerFn({ method: 'GET' })
         updated_at: now.toISOString(),
       })
 
-      return { status: 'success', redirect: '/billing?success=patreon' }
+      return { status: 'success', redirect: '/account?tab=billing&success=patreon' }
     } catch (err: any) {
       console.error('Patreon token exchange error:', err)
       return { status: 'error', message: err.message || 'Patreon token exchange failed' }
