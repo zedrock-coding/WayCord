@@ -129,7 +129,7 @@ function HomePage() {
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#272A2D] border border-[#3B3E42] mb-8 shadow-sm hover:border-[#88C0A4]/60 transition">
             <span className="w-2 h-2 rounded-full bg-[#88C0A4] animate-pulse" />
             <span className="text-xs font-mono font-medium text-[#88C0A4]">
-              Offline-First Engine v2.0
+              Offline-First Engine v0.8.1
             </span>
             <span className="text-[#3B3E42]">|</span>
             <span className="text-xs text-[#94A3B8]">0ms Latency Tasking</span>
