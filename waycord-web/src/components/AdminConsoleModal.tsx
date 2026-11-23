@@ -219,7 +219,7 @@ export function AdminConsoleModal({ isOpen, onClose }: AdminConsoleModalProps) {
               <div className="mt-3 text-xs text-[#8A8E94] space-y-2 leading-relaxed">
                 <p>• <strong>Strict Server Checks:</strong> Every telemetry and mutation request validates your Supabase session token against admin emails on the server.</p>
                 <p>• <strong>Subscriptions:</strong> Manually override customer tiers to resolve billing inquiries or grant institutional trials.</p>
-                <p>• <strong>Feedback:</strong> Triage user submissions directly from the Flutter app feedback dialog.</p>
+                <p>• <strong>Feedback:</strong> Triage user submissions directly from the application feedback dialog.</p>
               </div>
             </div>
           </div>

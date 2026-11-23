@@ -772,7 +772,7 @@ function AccountPage() {
                   <span>{isUploadingAvatar ? 'Uploading...' : 'Change Profile Photo'}</span>
                 </button>
                 <p className="text-[11px] text-[#94A3B8] mt-1.5">
-                  Supported formats: PNG, JPG, or WEBP (Max 2MB). Syncs automatically with Flutter.
+                  Supported formats: PNG, JPG, or WEBP (Max 2MB). Syncs automatically with the application.
                 </p>
               </div>
             </div>
@@ -843,7 +843,7 @@ function AccountPage() {
               <span>Change Password</span>
             </h2>
             <p className="text-xs text-[#94A3B8] mb-6">
-              Update your account password for email and password authentication across Waycord Web, Windows, and Android.
+              Update your account password for email and password authentication across the web interface and the application.
             </p>
 
             <form onSubmit={handleSavePassword} className="space-y-4 max-w-md">
@@ -988,7 +988,7 @@ function AccountPage() {
                   <h4 className="text-sm font-bold text-[#F8FAFC]">Offline Access Token</h4>
                 </div>
                 <p className="text-xs text-[#94A3B8] leading-relaxed">
-                  Your cryptographic token unlocks Pro & Team features in the Flutter application on Android and Windows without an active internet connection.
+                  Your cryptographic token unlocks Pro & Team features in the application on Android and Windows without an active internet connection.
                 </p>
 
                 {sub?.signed_entitlement_jwt ? (

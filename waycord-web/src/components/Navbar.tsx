@@ -136,12 +136,14 @@ export function Navbar() {
             <span className="text-[10px]">→</span>
           </a>
 
-          <Link
-            to="/upgrade"
-            className="hidden sm:inline-flex text-xs font-semibold px-3 py-1.5 rounded bg-[#272A2D] border border-[#3B3E42] text-[#F8FAFC] hover:border-[#88C0A4] transition"
-          >
-            Upgrade
-          </Link>
+          {!isAdmin && (
+            <Link
+              to="/upgrade"
+              className="hidden sm:inline-flex text-xs font-semibold px-3 py-1.5 rounded bg-[#272A2D] border border-[#3B3E42] text-[#F8FAFC] hover:border-[#88C0A4] transition"
+            >
+              Upgrade
+            </Link>
+          )}
         </div>
       </div>
       <AdminConsoleModal
