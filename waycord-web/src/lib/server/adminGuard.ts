@@ -2,7 +2,6 @@ import { createServerSupabaseClient } from './supabase'
 
 const DEFAULT_ADMIN_EMAILS = [
   'lakshyajadhav15@gmail.com',
-  'kirajain2001@gmail.com',
   'zedrock@waycord.org',
 ]
 

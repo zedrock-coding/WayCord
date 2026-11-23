@@ -3,9 +3,15 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase/client'
 import { AdminConsoleModal } from './AdminConsoleModal'
 
+const ADMIN_EMAILS = ['lakshyajadhav15@gmail.com', 'zedrock@waycord.org']
+
 export function Navbar() {
   const [user, setUser] = useState<any>(null)
   const [showAdminConsole, setShowAdminConsole] = useState(false)
+
+  const isAdmin = Boolean(
+    user && user.email && ADMIN_EMAILS.includes(user.email.toLowerCase())
+  )
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -14,21 +20,26 @@ export function Navbar() {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      const currentUser = session?.user ?? null
+      setUser(currentUser)
+      if (event === 'SIGNED_OUT' || !currentUser) {
+        setShowAdminConsole(false)
+      }
     })
 
     return () => subscription.unsubscribe()
   }, [])
 
   useEffect(() => {
+    if (!isAdmin) {
+      setShowAdminConsole(false)
+    }
+  }, [isAdmin])
+
+  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
-        const isAdmin =
-          user &&
-          (user.email === 'lakshyajadhav15@gmail.com' ||
-            user.email === 'kirajain2001@gmail.com' ||
-            user.email === 'zedrock@waycord.org')
         if (isAdmin) {
           e.preventDefault()
           setShowAdminConsole((prev) => !prev)
@@ -37,7 +48,16 @@ export function Navbar() {
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [user])
+  }, [isAdmin])
+
+  const handleSignOut = async () => {
+    setShowAdminConsole(false)
+    setUser(null)
+    await supabase.auth.signOut()
+    if (typeof window !== 'undefined') {
+      window.location.href = '/'
+    }
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-[#3B3E42] bg-[#1E2124]/95 backdrop-blur-sm">
@@ -69,20 +89,17 @@ export function Navbar() {
           <Link to="/billing" className="hover:text-[#88C0A4] transition-colors">
             Billing
           </Link>
-          {user &&
-            (user.email === 'lakshyajadhav15@gmail.com' ||
-              user.email === 'kirajain2001@gmail.com' ||
-              user.email === 'zedrock@waycord.org') && (
-              <button
-                type="button"
-                onClick={() => setShowAdminConsole(true)}
-                className="text-[#88C0A4] font-semibold hover:underline transition-colors flex items-center gap-1.5 cursor-pointer bg-transparent border-none p-0"
-                title="Open Operator Console (Ctrl+Shift+A)"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
-                <span>Console</span>
-              </button>
-            )}
+          {isAdmin && (
+            <button
+              type="button"
+              onClick={() => setShowAdminConsole(true)}
+              className="text-[#88C0A4] font-semibold hover:underline transition-colors flex items-center gap-1.5 cursor-pointer bg-transparent border-none p-0"
+              title="Open Operator Console (Ctrl+Shift+A)"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
+              <span>Console</span>
+            </button>
+          )}
         </nav>
 
         <div className="flex items-center space-x-3">
@@ -95,8 +112,8 @@ export function Navbar() {
                 {user.email}
               </Link>
               <button
-                onClick={() => supabase.auth.signOut()}
-                className="text-xs px-2.5 py-1 rounded bg-[#272A2D] border border-[#3B3E42] text-[#94A3B8] hover:text-[#F8FAFC] hover:border-[#88C0A4] transition"
+                onClick={handleSignOut}
+                className="text-xs px-2.5 py-1 rounded bg-[#272A2D] border border-[#3B3E42] text-[#94A3B8] hover:text-[#F8FAFC] hover:border-[#88C0A4] transition cursor-pointer"
               >
                 Sign Out
               </button>
