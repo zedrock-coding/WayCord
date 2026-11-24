@@ -101,6 +101,7 @@ jobs:
       # 8. Deploy Unified Application to Vercel
       - name: Deploy to Vercel
         working-directory: ./waycord-web
+        if: env.HAS_VERCEL_TOKEN == 'true'
         run: |
           mkdir -p .vercel
           if [ -f ../helm/.vercel/project.json ]; then
@@ -112,3 +113,4 @@ jobs:
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          HAS_VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN != '' }}

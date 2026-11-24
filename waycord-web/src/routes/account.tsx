@@ -952,19 +952,37 @@ function AccountPage() {
               </div>
 
               {!data.isAdmin && (
-                <div className="mt-6 pt-4 border-t border-[#3B3E42] flex items-center justify-between">
+                <div className="mt-6 pt-4 border-t border-[#3B3E42] flex items-center justify-between gap-3">
                   {tier === 'free' ? (
                     <Link
                       to="/upgrade"
+                      search={{ plan: 'pro' }}
                       className="w-full text-center px-4 py-2 rounded bg-[#88C0A4] text-[#1E2124] font-bold text-xs hover:bg-[#9ECBB5] transition"
                     >
                       Upgrade to Pro (₹149/mo)
                     </Link>
+                  ) : tier === 'pro' ? (
+                    <>
+                      <Link
+                        to="/upgrade"
+                        search={{ plan: 'team' }}
+                        className="px-4 py-2 rounded bg-[#88C0A4] text-[#1E2124] font-bold text-xs hover:bg-[#9ECBB5] transition text-center"
+                      >
+                        Upgrade to Team / Campus
+                      </Link>
+                      <button
+                        onClick={handleCancel}
+                        disabled={loading || status === 'canceled'}
+                        className="text-xs text-[#FF5252] hover:underline disabled:opacity-50"
+                      >
+                        {status === 'canceled' ? 'Auto-Renewal Inactive' : 'Cancel Subscription'}
+                      </button>
+                    </>
                   ) : (
                     <button
                       onClick={handleCancel}
                       disabled={loading || status === 'canceled'}
-                      className="text-xs text-[#FF5252] hover:underline disabled:opacity-50"
+                      className="text-xs text-[#FF5252] hover:underline disabled:opacity-50 ml-auto"
                     >
                       {status === 'canceled' ? 'Auto-Renewal Inactive' : 'Cancel Subscription'}
                     </button>

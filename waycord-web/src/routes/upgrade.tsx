@@ -8,6 +8,34 @@ const upgradeSearchSchema = z.object({
   plan: z.enum(['pro', 'team']).optional().catch('pro'),
 })
 
+export const fetchCurrentSubscription = createServerFn({ method: 'GET' }).handler(async () => {
+  const { createServerSupabaseClient } = await import('../lib/server/supabase')
+  const supabaseServer = createServerSupabaseClient()
+  const {
+    data: { user },
+  } = await supabaseServer.auth.getUser()
+
+  if (!user) {
+    return { user: null, tier: 'free', isAdmin: false }
+  }
+
+  const ADMIN_EMAILS = ['lakshyajadhav15@gmail.com', 'zedrock@waycord.org']
+  const isAdmin = Boolean(user.email && ADMIN_EMAILS.includes(user.email.toLowerCase()))
+
+  if (isAdmin) {
+    return { user, tier: 'team', isAdmin: true }
+  }
+
+  const { data: subData } = await supabaseServer
+    .from('user_subscriptions')
+    .select('tier, status')
+    .eq('user_id', user.id)
+    .maybeSingle()
+
+  const activeTier = subData?.status === 'active' ? (subData.tier as 'pro' | 'team') : 'free'
+  return { user, tier: activeTier, isAdmin: false }
+})
+
 export const initiatePhonePeCheckout = createServerFn({ method: 'POST' })
   .validator((data: { plan: 'pro' | 'team'; siteUrl: string }) => data)
   .handler(async ({ data }) => {
@@ -114,6 +142,7 @@ function UpgradePage() {
   const navigate = useNavigate()
   const [selectedPlan, setSelectedPlan] = useState<'pro' | 'team'>(search.plan || 'pro')
   const [user, setUser] = useState<any>(null)
+  const [currentTier, setCurrentTier] = useState<'free' | 'pro' | 'team'>('free')
   const [loading, setLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
@@ -126,6 +155,12 @@ function UpgradePage() {
         })
       } else {
         setUser(session.user)
+      }
+    })
+
+    fetchCurrentSubscription().then((res) => {
+      if (res?.tier) {
+        setCurrentTier(res.tier as 'free' | 'pro' | 'team')
       }
     })
   }, [navigate, selectedPlan])
@@ -205,11 +240,15 @@ function UpgradePage() {
               : 'border-[#3B3E42] bg-[#272A2D]/60 hover:border-[#94A3B8]'
           }`}
         >
-          {selectedPlan === 'pro' && (
+          {currentTier === 'pro' ? (
+            <div className="absolute -top-2.5 right-4 px-2 py-0.5 rounded bg-[#88C0A4] text-[#1E2124] font-mono text-[9px] font-bold uppercase">
+              Current Plan
+            </div>
+          ) : selectedPlan === 'pro' ? (
             <div className="absolute -top-2.5 right-4 px-2 py-0.5 rounded bg-[#88C0A4] text-[#1E2124] font-mono text-[9px] font-bold uppercase">
               Selected
             </div>
-          )}
+          ) : null}
           <h3 className="text-base font-bold text-[#F8FAFC]">Waycord Pro</h3>
           <p className="text-xs text-[#94A3B8] mb-3">For students, builders, and active coordinators.</p>
           <div className="mb-3">
@@ -241,11 +280,15 @@ function UpgradePage() {
               : 'border-[#3B3E42] bg-[#272A2D]/60 hover:border-[#94A3B8]'
           }`}
         >
-          {selectedPlan === 'team' && (
+          {currentTier === 'team' ? (
+            <div className="absolute -top-2.5 right-4 px-2 py-0.5 rounded bg-[#88C0A4] text-[#1E2124] font-mono text-[9px] font-bold uppercase">
+              Current Plan
+            </div>
+          ) : selectedPlan === 'team' ? (
             <div className="absolute -top-2.5 right-4 px-2 py-0.5 rounded bg-[#88C0A4] text-[#1E2124] font-mono text-[9px] font-bold uppercase">
               Selected
             </div>
-          )}
+          ) : null}
           <h3 className="text-base font-bold text-[#F8FAFC]">Team / Campus</h3>
           <p className="text-xs text-[#94A3B8] mb-3">For university labs, student clubs, and teams.</p>
           <div className="mb-3">
