@@ -143,3 +143,47 @@ export const fetchAdminTransactions = createServerFn({ method: 'GET' }).handler(
     return { transactions: data || [] }
   }
 )
+
+export const fetchTripwireIncidents = createServerFn({ method: 'GET' }).handler(
+  async () => {
+    const auth = await verifyAdminUser()
+    if (!auth.isAdmin) {
+      throw new Error('Unauthorized: Admin access required')
+    }
+
+    const supabase = createServerServiceClient()
+    const { data, error } = await supabase
+      .from('security_tripwires')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(50)
+
+    if (error) {
+      return { incidents: [] }
+    }
+
+    return { incidents: data || [] }
+  }
+)
+
+export const updateTripwireQuarantine = createServerFn({ method: 'POST' })
+  .validator((data: { incidentId: string; isQuarantined: boolean }) => data)
+  .handler(async ({ data }) => {
+    const auth = await verifyAdminUser()
+    if (!auth.isAdmin) {
+      throw new Error('Unauthorized: Admin access required')
+    }
+
+    const supabase = createServerServiceClient()
+    const { error } = await supabase
+      .from('security_tripwires')
+      .update({ is_quarantined: data.isQuarantined })
+      .eq('id', data.incidentId)
+
+    if (error) {
+      throw new Error(`Failed to update quarantine: ${error.message}`)
+    }
+
+    return { success: true }
+  })
+

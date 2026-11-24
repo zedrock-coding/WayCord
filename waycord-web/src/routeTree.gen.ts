@@ -19,6 +19,7 @@ import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as UpgradeRouteImport } from './routes/upgrade'
+import { Route as ApiCanaryRouteImport } from './routes/api/canary'
 import { Route as ApiWebhooksPatreonRouteImport } from './routes/api/webhooks/patreon'
 import { Route as ApiWebhooksPhonepeRouteImport } from './routes/api/webhooks/phonepe'
 import { Route as ApiAuthPatreonCallbackRouteImport } from './routes/api/auth/patreon/callback'
@@ -73,6 +74,11 @@ const UpgradeRoute = UpgradeRouteImport.update({
   path: '/upgrade',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiCanaryRoute = ApiCanaryRouteImport.update({
+  id: '/api/canary',
+  path: '/api/canary',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiWebhooksPatreonRoute = ApiWebhooksPatreonRouteImport.update({
   id: '/api/webhooks/patreon',
   path: '/api/webhooks/patreon',
@@ -100,6 +106,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/upgrade': typeof UpgradeRoute
+  '/api/canary': typeof ApiCanaryRoute
   '/api/webhooks/patreon': typeof ApiWebhooksPatreonRoute
   '/api/webhooks/phonepe': typeof ApiWebhooksPhonepeRoute
   '/api/auth/patreon/callback': typeof ApiAuthPatreonCallbackRoute
@@ -115,6 +122,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/upgrade': typeof UpgradeRoute
+  '/api/canary': typeof ApiCanaryRoute
   '/api/webhooks/patreon': typeof ApiWebhooksPatreonRoute
   '/api/webhooks/phonepe': typeof ApiWebhooksPhonepeRoute
   '/api/auth/patreon/callback': typeof ApiAuthPatreonCallbackRoute
@@ -131,6 +139,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/upgrade': typeof UpgradeRoute
+  '/api/canary': typeof ApiCanaryRoute
   '/api/webhooks/patreon': typeof ApiWebhooksPatreonRoute
   '/api/webhooks/phonepe': typeof ApiWebhooksPhonepeRoute
   '/api/auth/patreon/callback': typeof ApiAuthPatreonCallbackRoute
@@ -148,6 +157,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/upgrade'
+    | '/api/canary'
     | '/api/webhooks/patreon'
     | '/api/webhooks/phonepe'
     | '/api/auth/patreon/callback'
@@ -163,6 +173,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/upgrade'
+    | '/api/canary'
     | '/api/webhooks/patreon'
     | '/api/webhooks/phonepe'
     | '/api/auth/patreon/callback'
@@ -178,6 +189,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/upgrade'
+    | '/api/canary'
     | '/api/webhooks/patreon'
     | '/api/webhooks/phonepe'
     | '/api/auth/patreon/callback'
@@ -194,6 +206,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
   UpgradeRoute: typeof UpgradeRoute
+  ApiCanaryRoute: typeof ApiCanaryRoute
   ApiWebhooksPatreonRoute: typeof ApiWebhooksPatreonRoute
   ApiWebhooksPhonepeRoute: typeof ApiWebhooksPhonepeRoute
   ApiAuthPatreonCallbackRoute: typeof ApiAuthPatreonCallbackRoute
@@ -271,6 +284,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UpgradeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/canary': {
+      id: '/api/canary'
+      path: '/api/canary'
+      fullPath: '/api/canary'
+      preLoaderRoute: typeof ApiCanaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/webhooks/patreon': {
       id: '/api/webhooks/patreon'
       path: '/api/webhooks/patreon'
@@ -306,6 +326,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
   UpgradeRoute: UpgradeRoute,
+  ApiCanaryRoute: ApiCanaryRoute,
   ApiWebhooksPatreonRoute: ApiWebhooksPatreonRoute,
   ApiWebhooksPhonepeRoute: ApiWebhooksPhonepeRoute,
   ApiAuthPatreonCallbackRoute: ApiAuthPatreonCallbackRoute,

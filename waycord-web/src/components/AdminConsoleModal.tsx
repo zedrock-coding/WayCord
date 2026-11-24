@@ -6,6 +6,8 @@ import {
   fetchAdminSubscriptions,
   updateUserTier,
   fetchAdminTransactions,
+  fetchTripwireIncidents,
+  updateTripwireQuarantine,
 } from '../lib/server/adminFunctions'
 
 interface AdminConsoleModalProps {
@@ -15,11 +17,12 @@ interface AdminConsoleModalProps {
 
 export function AdminConsoleModal({ isOpen, onClose }: AdminConsoleModalProps) {
   const [mounted, setMounted] = useState(false)
-  const [activeTab, setActiveTab] = useState<'overview' | 'feedback' | 'subscriptions' | 'transactions'>('overview')
+  const [activeTab, setActiveTab] = useState<'overview' | 'feedback' | 'subscriptions' | 'transactions' | 'honeypot'>('overview')
   const [stats, setStats] = useState<any>(null)
   const [feedback, setFeedback] = useState<any[]>([])
   const [subscriptions, setSubscriptions] = useState<any[]>([])
   const [transactions, setTransactions] = useState<any[]>([])
+  const [incidents, setIncidents] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [adminEmail, setAdminEmail] = useState('')
   const [actionMsg, setActionMsg] = useState<string | null>(null)
@@ -47,19 +50,31 @@ export function AdminConsoleModal({ isOpen, onClose }: AdminConsoleModalProps) {
       setStats(statsRes.stats)
       setAdminEmail(statsRes.adminEmail || 'Admin')
 
-      const [fbRes, subRes, txRes] = await Promise.all([
+      const [fbRes, subRes, txRes, incRes] = await Promise.all([
         fetchFeedbackItems(),
         fetchAdminSubscriptions(),
         fetchAdminTransactions(),
+        fetchTripwireIncidents(),
       ])
 
       setFeedback(fbRes.feedback || [])
       setSubscriptions(subRes.subscriptions || [])
       setTransactions(txRes.transactions || [])
+      setIncidents(incRes.incidents || [])
     } catch (e: any) {
       setActionMsg(`Failed to load ops data: ${e.message}`)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleQuarantineToggle = async (incidentId: string, currentQuarantine: boolean) => {
+    try {
+      await updateTripwireQuarantine({ data: { incidentId, isQuarantined: !currentQuarantine } })
+      setActionMsg(`Updated quarantine status for incident ${incidentId.slice(0, 8)}...`)
+      loadAllData()
+    } catch (e: any) {
+      setActionMsg(`Quarantine error: ${e.message}`)
     }
   }
 
@@ -153,6 +168,19 @@ export function AdminConsoleModal({ isOpen, onClose }: AdminConsoleModalProps) {
               <span>Transactions</span>
               <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-black/30">
                 {transactions.length}
+              </span>
+            </button>
+            <button
+              onClick={() => setActiveTab('honeypot')}
+              className={`px-3 py-1.5 rounded text-xs font-semibold transition cursor-pointer flex items-center gap-1.5 ${
+                activeTab === 'honeypot'
+                  ? 'bg-red-500 text-white font-bold'
+                  : 'bg-red-950/40 text-red-300 hover:text-white border border-red-900/40'
+              }`}
+            >
+              <span>Honeypot Tripwires</span>
+              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-red-900/60">
+                {incidents.length}
               </span>
             </button>
             <button
@@ -377,6 +405,94 @@ export function AdminConsoleModal({ isOpen, onClose }: AdminConsoleModalProps) {
                         </td>
                       </tr>
                     ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 5: HONEYPOT TRIPWIRES */}
+        {activeTab === 'honeypot' && (
+          <div className="mt-6 space-y-6">
+            <div className="rounded-lg bg-[#232629] border border-red-900/30 overflow-hidden">
+              <div className="p-4 border-b border-red-900/30 bg-red-950/20 flex justify-between items-center">
+                <div>
+                  <h3 className="text-sm font-bold text-red-300 font-mono flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
+                    HONEYPOT & CANARY TRIPWIRES
+                  </h3>
+                  <p className="text-[11px] text-[#8A8E94] mt-0.5">
+                    Proactive breach detection decoys and AI incident triage.
+                  </p>
+                </div>
+                <span className="text-xs font-mono text-red-400 bg-red-950/60 px-2 py-1 rounded border border-red-800/40">
+                  {incidents.length} Triggered Events
+                </span>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-[#1E2124] text-[#8A8E94] font-mono border-b border-[#33363A]">
+                    <tr>
+                      <th className="p-3">Threat</th>
+                      <th className="p-3">Type</th>
+                      <th className="p-3">Endpoint / Token</th>
+                      <th className="p-3">IP Address</th>
+                      <th className="p-3">AI Threat Assessment</th>
+                      <th className="p-3">Timestamp</th>
+                      <th className="p-3 text-right">Quarantine</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#33363A]">
+                    {incidents.length === 0 ? (
+                      <tr>
+                        <td colSpan={7} className="p-8 text-center text-[#8A8E94] font-mono text-xs">
+                          No honeypot tripwires triggered yet. Defense perimeter clear.
+                        </td>
+                      </tr>
+                    ) : (
+                      incidents.map((inc) => (
+                        <tr key={inc.id} className="hover:bg-[#282B2E]">
+                          <td className="p-3 font-mono">
+                            <span
+                              className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                                inc.threat_level === 'CRITICAL'
+                                  ? 'bg-red-900 text-red-100 font-black'
+                                  : inc.threat_level === 'HIGH'
+                                  ? 'bg-red-950/70 text-red-300 border border-red-800/60'
+                                  : 'bg-amber-950/40 text-amber-300'
+                              }`}
+                            >
+                              {inc.threat_level || 'UNKNOWN'}
+                            </span>
+                          </td>
+                          <td className="p-3 font-mono text-[#88C0A4] text-[11px]">{inc.tripwire_type}</td>
+                          <td className="p-3 font-mono text-slate-200 max-w-[200px] truncate" title={inc.endpoint || inc.token_signature}>
+                            {inc.endpoint || inc.token_signature || '—'}
+                          </td>
+                          <td className="p-3 font-mono text-xs text-amber-300">{inc.ip_address || 'unknown'}</td>
+                          <td className="p-3 text-slate-300 text-[11px] max-w-[280px]">
+                            {inc.ai_analysis || 'Automated triage pending...'}
+                          </td>
+                          <td className="p-3 font-mono text-[11px] text-[#8A8E94]">
+                            {new Date(inc.created_at).toLocaleString()}
+                          </td>
+                          <td className="p-3 text-right">
+                            <button
+                              onClick={() => handleQuarantineToggle(inc.id, !!inc.is_quarantined)}
+                              className={`px-2.5 py-1 rounded text-[10px] font-mono cursor-pointer transition ${
+                                inc.is_quarantined
+                                  ? 'bg-red-800 text-white font-bold'
+                                  : 'bg-slate-800 text-slate-300 hover:bg-red-950 hover:text-red-300 border border-slate-700'
+                              }`}
+                            >
+                              {inc.is_quarantined ? 'Quarantined' : 'Quarantine IP'}
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
