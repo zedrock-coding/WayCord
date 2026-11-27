@@ -160,7 +160,7 @@ function HomePage() {
             </a>
 
             <a
-              href="https://github.com/zedrock-coding/WayCord/releases/download/v0.7.1/Waycord-v0.7.1+29-Setup.exe"
+              href="https://github.com/zedrock-coding/Helm/releases/download/v0.8.2/waycord-v0.8.2.exe"
               className="w-full sm:w-auto px-5 py-3.5 rounded-xl bg-[#272A2D] border border-[#3B3E42] text-[#F8FAFC] font-semibold text-sm hover:border-[#88C0A4] transition flex items-center justify-center space-x-2 hover:bg-[#2F3236]"
             >
               <svg className="w-4 h-4 text-[#88C0A4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -170,7 +170,7 @@ function HomePage() {
             </a>
 
             <a
-              href="https://github.com/zedrock-coding/WayCord/releases/download/v0.7.1/waycord-v0.7.1.apk"
+              href="https://github.com/zedrock-coding/Helm/releases/download/v0.8.2/waycord-v0.8.2.apk"
               className="w-full sm:w-auto px-5 py-3.5 rounded-xl bg-[#272A2D] border border-[#3B3E42] text-[#F8FAFC] font-semibold text-sm hover:border-[#88C0A4] transition flex items-center justify-center space-x-2 hover:bg-[#2F3236]"
             >
               <svg className="w-4 h-4 text-[#88C0A4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -873,13 +873,13 @@ function HomePage() {
               Get Started Free Now →
             </a>
             <a
-              href="https://github.com/zedrock-coding/WayCord/releases/download/v0.7.1/Waycord-v0.7.1+29-Setup.exe"
+              href="https://github.com/zedrock-coding/Helm/releases/download/v0.8.2/waycord-v0.8.2.exe"
               className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-[#272A2D] border border-[#3B3E42] text-white font-semibold text-xs hover:border-[#88C0A4] transition flex items-center justify-center space-x-2"
             >
               <span>Download Windows (.exe)</span>
             </a>
             <a
-              href="https://github.com/zedrock-coding/WayCord/releases/download/v0.7.1/waycord-v0.7.1.apk"
+              href="https://github.com/zedrock-coding/Helm/releases/download/v0.8.2/waycord-v0.8.2.apk"
               className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-[#272A2D] border border-[#3B3E42] text-white font-semibold text-xs hover:border-[#88C0A4] transition flex items-center justify-center space-x-2"
             >
               <span>Download Android (.apk)</span>

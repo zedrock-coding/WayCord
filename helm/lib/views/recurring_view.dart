@@ -37,9 +37,9 @@ class RecurringView extends StatelessWidget {
                           letterSpacing: 1.0,
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 6),
-                        child: Text('•', style: TextStyle(color: AppTheme.surfaceVariant)),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        child: Text('•', style: TextStyle(color: AppTheme.borderColor(context))),
                       ),
                       Text(
                         'Periodicity Engine',

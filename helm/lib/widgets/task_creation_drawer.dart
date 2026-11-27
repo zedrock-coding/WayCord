@@ -277,30 +277,30 @@ class _TaskCreationDrawerState extends State<TaskCreationDrawer> {
   Widget build(BuildContext context) {
     final isDesktop = MediaQuery.of(context).size.width >= 768;
     final width = isDesktop ? 480.0 : MediaQuery.of(context).size.width;
-    final height = isDesktop ? MediaQuery.of(context).size.height : MediaQuery.of(context).size.height * 0.92;
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final height = isDesktop ? screenHeight : (screenHeight * 0.92);
 
-    return Material(
-      color: Colors.transparent,
-      child: Container(
-        width: width,
-        height: height,
-        decoration: BoxDecoration(
-          color: AppTheme.surfaceDark,
-          border: Border(
-            left: BorderSide(color: AppTheme.surfaceVariant, width: 1),
-            top: isDesktop ? BorderSide.none : BorderSide(color: AppTheme.surfaceVariant, width: 1),
-          ),
-          borderRadius: isDesktop ? BorderRadius.zero : const BorderRadius.vertical(top: Radius.circular(8)),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black54,
-              blurRadius: 24,
-              spreadRadius: 4,
+    return RepaintBoundary(
+      child: Material(
+        color: Colors.transparent,
+        child: AnimatedPadding(
+          padding: EdgeInsets.only(bottom: bottomInset),
+          duration: const Duration(milliseconds: 100),
+          curve: Curves.easeOut,
+          child: Container(
+            width: width,
+            height: height,
+            decoration: BoxDecoration(
+              color: AppTheme.surfaceDark,
+              border: Border(
+                left: BorderSide(color: AppTheme.surfaceVariant, width: 1),
+                top: isDesktop ? BorderSide.none : BorderSide(color: AppTheme.surfaceVariant, width: 1),
+              ),
+              borderRadius: isDesktop ? BorderRadius.zero : const BorderRadius.vertical(top: Radius.circular(8)),
             ),
-          ],
-        ),
-        child: Column(
-          children: [
+            child: Column(
+              children: [
             // 1. Header
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -798,6 +798,8 @@ class _TaskCreationDrawerState extends State<TaskCreationDrawer> {
           ],
         ),
       ),
+    ),
+    ),
     );
   }
 

@@ -111,13 +111,13 @@ void main() {
       expect(mockHandler.requestCalled, isFalse);
     });
 
-    test('Calculates delay until 08:00 AM accurately', () {
+    test('Calculates delay until 09:00 AM accurately', () {
       final at6AM = DateTime(2026, 11, 5, 6, 0);
       final delayMorning = NeedleMorningDispatchService.calculateInitialDelay(at6AM);
-      expect(delayMorning, const Duration(hours: 2));
+      expect(delayMorning, const Duration(hours: 3));
 
-      final at9AM = DateTime(2026, 11, 5, 9, 0);
-      final delayAfternoon = NeedleMorningDispatchService.calculateInitialDelay(at9AM);
+      final at10AM = DateTime(2026, 11, 5, 10, 0);
+      final delayAfternoon = NeedleMorningDispatchService.calculateInitialDelay(at10AM);
       expect(delayAfternoon, const Duration(hours: 23));
     });
 

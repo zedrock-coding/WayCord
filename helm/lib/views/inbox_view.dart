@@ -37,36 +37,36 @@ class InboxView extends StatelessWidget {
                           letterSpacing: 1.0,
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 6),
-                        child: Text('•', style: TextStyle(color: AppTheme.surfaceVariant)),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        child: Text('•', style: TextStyle(color: AppTheme.borderColor(context))),
                       ),
                       Text(
                         'Shared Workspaces',
                         style: AppTheme.monoStyle(
                           fontSize: 11,
-                          color: AppTheme.onSurfaceVariant,
+                          color: AppTheme.textMuted(context),
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 4),
-                  const Text(
+                  Text(
                     'Assigned by Others',
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
-                      color: AppTheme.onSurface,
+                      color: AppTheme.text(context),
                       letterSpacing: -0.5,
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     '${inboxTasks.length} tasks delegated across your communities',
-                    style: const TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant),
+                    style: TextStyle(fontSize: 12, color: AppTheme.textMuted(context)),
                   ),
                   const SizedBox(height: 14),
-                  const Divider(color: AppTheme.surfaceVariant, height: 1),
+                  Divider(color: AppTheme.borderColor(context), height: 1),
                 ],
               ),
             ),
@@ -79,14 +79,14 @@ class InboxView extends StatelessWidget {
                     children: [
                       const Icon(Icons.inbox_outlined, size: 40, color: AppTheme.mint),
                       const SizedBox(height: 12),
-                      const Text(
+                      Text(
                         'Inbox is clear',
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: AppTheme.onSurface),
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: AppTheme.text(context)),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         'No tasks assigned by others in your active communities.',
-                        style: AppTheme.monoStyle(fontSize: 12, color: AppTheme.onSurfaceVariant),
+                        style: AppTheme.monoStyle(fontSize: 12, color: AppTheme.textMuted(context)),
                       ),
                     ],
                   ),

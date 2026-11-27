@@ -225,7 +225,7 @@ class _TaskItemCardState extends State<TaskItemCard> {
                                           borderRadius: BorderRadius.circular(1),
                                           child: LinearProgressIndicator(
                                             value: totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) : 0,
-                                            backgroundColor: AppTheme.surfaceContainer,
+                                            backgroundColor: AppTheme.surfaceContainerColor(context),
                                             valueColor: const AlwaysStoppedAnimation<Color>(AppTheme.mint),
                                             minHeight: context.rem(0.25),
                                           ),
@@ -236,7 +236,7 @@ class _TaskItemCardState extends State<TaskItemCard> {
                                         '$completedSubtasks/$totalSubtasks subtasks',
                                         style: AppTheme.monoStyle(
                                           fontSize: 10.5,
-                                          color: AppTheme.onSurfaceVariant,
+                                          color: AppTheme.textMuted(context),
                                         ),
                                       ),
                                     ],
@@ -263,7 +263,7 @@ class _TaskItemCardState extends State<TaskItemCard> {
                                         dateStr,
                                         style: AppTheme.monoStyle(
                                           fontSize: 11,
-                                          color: AppTheme.onSurfaceVariant,
+                                          color: AppTheme.textMuted(context),
                                         ),
                                       ),
                                     ],
@@ -286,7 +286,7 @@ class _TaskItemCardState extends State<TaskItemCard> {
                                           'Community',
                                           style: AppTheme.monoStyle(
                                             fontSize: 11,
-                                            color: AppTheme.onSurfaceVariant,
+                                            color: AppTheme.textMuted(context),
                                           ),
                                         ),
                                       ],
@@ -313,8 +313,8 @@ class _TaskItemCardState extends State<TaskItemCard> {
                             children: [
                               IconButton(
                                 icon: const Icon(Icons.edit_outlined, size: 16),
-                                color: AppTheme.onSurfaceVariant,
-                                hoverColor: AppTheme.surfaceContainer,
+                                color: AppTheme.textMuted(context),
+                                hoverColor: AppTheme.surfaceContainerColor(context),
                                 padding: const EdgeInsets.all(4),
                                 constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
                                 tooltip: 'Edit Task',

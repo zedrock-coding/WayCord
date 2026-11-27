@@ -104,21 +104,21 @@ class _SettingsViewState extends State<SettingsView> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: AppTheme.surfaceContainerHigh,
+        backgroundColor: AppTheme.surfaceContainerHighColor(context),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4),
-          side: const BorderSide(color: AppTheme.surfaceVariant),
+          side: BorderSide(color: AppTheme.borderColor(context)),
         ),
         title: Row(
           children: [
             const Icon(Icons.keyboard_rounded, color: AppTheme.mint, size: 20),
             const SizedBox(width: 10),
-            const Text(
+            Text(
               'Keyboard Shortcuts',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: AppTheme.onSurface,
+                color: AppTheme.text(context),
               ),
             ),
           ],
@@ -163,14 +163,14 @@ class _SettingsViewState extends State<SettingsView> {
         children: [
           Text(
             action,
-            style: const TextStyle(fontSize: 13, color: AppTheme.onSurface),
+            style: TextStyle(fontSize: 13, color: AppTheme.text(context)),
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: AppTheme.surfaceContainer,
+              color: AppTheme.surfaceContainerColor(context),
               borderRadius: BorderRadius.circular(4),
-              border: Border.all(color: AppTheme.surfaceVariant),
+              border: Border.all(color: AppTheme.borderColor(context)),
             ),
             child: Text(
               keys,
@@ -210,14 +210,14 @@ class _SettingsViewState extends State<SettingsView> {
       children: [
         Text(
           label,
-          style: const TextStyle(fontSize: 12, color: AppTheme.onSurface),
+          style: TextStyle(fontSize: 12, color: AppTheme.text(context)),
         ),
         Text(
           value,
           style: AppTheme.monoStyle(
             fontSize: 10.5,
             fontWeight: FontWeight.bold,
-            color: isHighlight ? AppTheme.mint : AppTheme.onSurfaceVariant,
+            color: isHighlight ? AppTheme.mint : AppTheme.textMuted(context),
           ),
         ),
       ],
@@ -236,10 +236,10 @@ class _SettingsViewState extends State<SettingsView> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
-          color: isSelected ? AppTheme.mint.withValues(alpha: 0.2) : AppTheme.surfaceContainerHigh,
+          color: isSelected ? AppTheme.mint.withValues(alpha: 0.2) : AppTheme.surfaceContainerHighColor(context),
           borderRadius: BorderRadius.circular(4),
           border: Border.all(
-            color: isSelected ? AppTheme.mint : AppTheme.surfaceVariant,
+            color: isSelected ? AppTheme.mint : AppTheme.borderColor(context),
           ),
         ),
         child: Text(
@@ -247,7 +247,7 @@ class _SettingsViewState extends State<SettingsView> {
           style: AppTheme.monoStyle(
             fontSize: 11,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-            color: isSelected ? AppTheme.mint : AppTheme.onSurfaceVariant,
+            color: isSelected ? AppTheme.mint : AppTheme.textMuted(context),
           ),
         ),
       ),
@@ -292,36 +292,36 @@ class _SettingsViewState extends State<SettingsView> {
                           letterSpacing: 1.0,
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 6),
-                        child: Text('•', style: TextStyle(color: AppTheme.surfaceVariant)),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        child: Text('•', style: TextStyle(color: AppTheme.borderColor(context))),
                       ),
                       Text(
                         'Waycord Settings',
                         style: AppTheme.monoStyle(
                           fontSize: 11,
-                          color: AppTheme.onSurfaceVariant,
+                          color: AppTheme.textMuted(context),
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 4),
-                  const Text(
+                  Text(
                     'Settings & Preferences',
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
-                      color: AppTheme.onSurface,
+                      color: AppTheme.text(context),
                       letterSpacing: -0.5,
                     ),
                   ),
                   const SizedBox(height: 2),
-                  const Text(
+                  Text(
                     'Customize appearance, notifications, speech synthesis, and local storage diagnostics.',
-                    style: TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant),
+                    style: TextStyle(fontSize: 12, color: AppTheme.textMuted(context)),
                   ),
                   const SizedBox(height: 14),
-                  const Divider(color: AppTheme.surfaceVariant, height: 1),
+                  Divider(color: AppTheme.borderColor(context), height: 1),
                 ],
               ),
             ),
@@ -607,9 +607,9 @@ class _SettingsViewState extends State<SettingsView> {
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppTheme.surfaceContainerHigh,
+                  color: AppTheme.surfaceContainerHighColor(context),
                   borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: AppTheme.surfaceVariant),
+                  border: Border.all(color: AppTheme.borderColor(context)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -618,25 +618,25 @@ class _SettingsViewState extends State<SettingsView> {
                       children: [
                         const Icon(Icons.mic_rounded, size: 18, color: AppTheme.mint),
                         const SizedBox(width: 8),
-                        const Text(
+                        Text(
                           'AI Voice Assistant',
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppTheme.onSurface),
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppTheme.text(context)),
                         ),
                       ],
                     ),
                     const SizedBox(height: 4),
-                    const Text(
+                    Text(
                       'Waycord synthesizes speech confirmations and extracts tasks from spoken dictation.',
-                      style: TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant),
+                      style: TextStyle(fontSize: 12, color: AppTheme.textMuted(context)),
                     ),
                     const SizedBox(height: 14),
                     // Voice Confirmation Toggle
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: AppTheme.surfaceContainer,
+                        color: AppTheme.surfaceContainerColor(context),
                         borderRadius: BorderRadius.circular(4),
-                        border: Border.all(color: AppTheme.surfaceVariant),
+                        border: Border.all(color: AppTheme.borderColor(context)),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -644,11 +644,11 @@ class _SettingsViewState extends State<SettingsView> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
+                              Text(
                                 'Voice Confirmation',
-                                style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: AppTheme.onSurface),
+                                style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: AppTheme.text(context)),
                               ),
-                              Text('Speak back verified task details', style: AppTheme.monoStyle(fontSize: 10, color: AppTheme.onSurfaceVariant)),
+                              Text('Speak back verified task details', style: AppTheme.monoStyle(fontSize: 10, color: AppTheme.textMuted(context))),
                             ],
                           ),
                           Switch(
@@ -664,9 +664,9 @@ class _SettingsViewState extends State<SettingsView> {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: AppTheme.surfaceContainer,
+                        color: AppTheme.surfaceContainerColor(context),
                         borderRadius: BorderRadius.circular(4),
-                        border: Border.all(color: AppTheme.surfaceVariant),
+                        border: Border.all(color: AppTheme.borderColor(context)),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -674,9 +674,9 @@ class _SettingsViewState extends State<SettingsView> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text(
+                              Text(
                                 'Voice Playback Speed',
-                                style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: AppTheme.onSurface),
+                                style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: AppTheme.text(context)),
                               ),
                               Text(
                                 '${_voiceSpeed}x',
@@ -700,10 +700,10 @@ class _SettingsViewState extends State<SettingsView> {
                                       decoration: BoxDecoration(
                                         color: isSelected
                                             ? AppTheme.mint.withValues(alpha: 0.15)
-                                            : AppTheme.surfaceContainerHigh,
+                                            : AppTheme.surfaceContainerHighColor(context),
                                         borderRadius: BorderRadius.circular(4),
                                         border: Border.all(
-                                          color: isSelected ? AppTheme.mint : AppTheme.surfaceVariant,
+                                          color: isSelected ? AppTheme.mint : AppTheme.borderColor(context),
                                         ),
                                       ),
                                       child: Text(
@@ -711,7 +711,7 @@ class _SettingsViewState extends State<SettingsView> {
                                         style: AppTheme.monoStyle(
                                           fontSize: 11,
                                           fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                                          color: isSelected ? AppTheme.mint : AppTheme.onSurfaceVariant,
+                                          color: isSelected ? AppTheme.mint : AppTheme.textMuted(context),
                                         ),
                                       ),
                                     ),
@@ -745,8 +745,8 @@ class _SettingsViewState extends State<SettingsView> {
                           ),
                         ),
                         style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: AppTheme.surfaceVariant),
-                          backgroundColor: AppTheme.surfaceContainer,
+                          side: BorderSide(color: AppTheme.borderColor(context)),
+                          backgroundColor: AppTheme.surfaceContainerColor(context),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
                           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                         ),
@@ -765,9 +765,9 @@ class _SettingsViewState extends State<SettingsView> {
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppTheme.surfaceContainerHigh,
+                  color: AppTheme.surfaceContainerHighColor(context),
                   borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: AppTheme.surfaceVariant),
+                  border: Border.all(color: AppTheme.borderColor(context)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -776,25 +776,25 @@ class _SettingsViewState extends State<SettingsView> {
                       children: [
                         const Icon(Icons.dns_outlined, size: 18, color: AppTheme.mint),
                         const SizedBox(width: 8),
-                        const Text(
+                        Text(
                           'Local Storage & Sync Diagnostics',
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppTheme.onSurface),
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppTheme.text(context)),
                         ),
                       ],
                     ),
                     const SizedBox(height: 4),
-                    const Text(
+                    Text(
                       'Live telemetry of local Hive database boxes and pending cloud synchronization actions.',
-                      style: TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant),
+                      style: TextStyle(fontSize: 12, color: AppTheme.textMuted(context)),
                     ),
                     const SizedBox(height: 14),
                     // Cached Tasks Diagnostic
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: AppTheme.surfaceContainer,
+                        color: AppTheme.surfaceContainerColor(context),
                         borderRadius: BorderRadius.circular(4),
-                        border: Border.all(color: AppTheme.surfaceVariant),
+                        border: Border.all(color: AppTheme.borderColor(context)),
                       ),
                       child: ValueListenableBuilder<Box<Task>>(
                         valueListenable: Hive.box<Task>('tasks').listenable(),
@@ -805,13 +805,13 @@ class _SettingsViewState extends State<SettingsView> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
+                                  Text(
                                     'Local Hive Task Cache',
-                                    style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: AppTheme.onSurface),
+                                    style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: AppTheme.text(context)),
                                   ),
                                   Text(
                                     'Embedded offline storage (tasks box)',
-                                    style: AppTheme.monoStyle(fontSize: 10, color: AppTheme.onSurfaceVariant),
+                                    style: AppTheme.monoStyle(fontSize: 10, color: AppTheme.textMuted(context)),
                                   ),
                                 ],
                               ),
@@ -841,9 +841,9 @@ class _SettingsViewState extends State<SettingsView> {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: AppTheme.surfaceContainer,
+                        color: AppTheme.surfaceContainerColor(context),
                         borderRadius: BorderRadius.circular(4),
-                        border: Border.all(color: AppTheme.surfaceVariant),
+                        border: Border.all(color: AppTheme.borderColor(context)),
                       ),
                       child: ValueListenableBuilder<int>(
                         valueListenable: SyncService().pendingChanges,
@@ -855,9 +855,9 @@ class _SettingsViewState extends State<SettingsView> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
+                                  Text(
                                     'Pending Offline Queue',
-                                    style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: AppTheme.onSurface),
+                                    style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: AppTheme.text(context)),
                                   ),
                                   Text(
                                     hasPending
@@ -865,7 +865,7 @@ class _SettingsViewState extends State<SettingsView> {
                                         : 'Zero pending writes • Fully synchronized',
                                     style: AppTheme.monoStyle(
                                       fontSize: 10,
-                                      color: hasPending ? AppTheme.priorityHigh : AppTheme.onSurfaceVariant,
+                                      color: hasPending ? AppTheme.priorityHigh : AppTheme.textMuted(context),
                                     ),
                                   ),
                                 ],
@@ -875,10 +875,10 @@ class _SettingsViewState extends State<SettingsView> {
                                 decoration: BoxDecoration(
                                   color: hasPending
                                       ? AppTheme.priorityHigh.withValues(alpha: 0.15)
-                                      : AppTheme.surfaceContainerHigh,
+                                      : AppTheme.surfaceContainerHighColor(context),
                                   borderRadius: BorderRadius.circular(2),
                                   border: Border.all(
-                                    color: hasPending ? AppTheme.priorityHigh : AppTheme.surfaceVariant,
+                                    color: hasPending ? AppTheme.priorityHigh : AppTheme.borderColor(context),
                                   ),
                                 ),
                                 child: Text(
@@ -886,7 +886,7 @@ class _SettingsViewState extends State<SettingsView> {
                                   style: AppTheme.monoStyle(
                                     fontSize: 11,
                                     fontWeight: FontWeight.bold,
-                                    color: hasPending ? AppTheme.priorityHigh : AppTheme.onSurfaceVariant,
+                                    color: hasPending ? AppTheme.priorityHigh : AppTheme.textMuted(context),
                                   ),
                                 ),
                               ),
@@ -917,8 +917,8 @@ class _SettingsViewState extends State<SettingsView> {
                           ),
                         ),
                         style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: AppTheme.surfaceVariant),
-                          backgroundColor: AppTheme.surfaceContainer,
+                          side: BorderSide(color: AppTheme.borderColor(context)),
+                          backgroundColor: AppTheme.surfaceContainerColor(context),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
                           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                         ),
@@ -937,9 +937,9 @@ class _SettingsViewState extends State<SettingsView> {
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppTheme.surfaceContainerHigh,
+                  color: AppTheme.surfaceContainerHighColor(context),
                   borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: AppTheme.surfaceVariant),
+                  border: Border.all(color: AppTheme.borderColor(context)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -948,9 +948,9 @@ class _SettingsViewState extends State<SettingsView> {
                       children: [
                         const Icon(Icons.manage_accounts_outlined, size: 18, color: AppTheme.mint),
                         const SizedBox(width: 8),
-                        const Text(
+                        Text(
                           'Account & Profile',
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppTheme.onSurface),
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppTheme.text(context)),
                         ),
                       ],
                     ),
@@ -961,9 +961,9 @@ class _SettingsViewState extends State<SettingsView> {
                           width: 40,
                           height: 40,
                           decoration: BoxDecoration(
-                            color: AppTheme.surfaceContainer,
+                            color: AppTheme.surfaceContainerColor(context),
                             borderRadius: BorderRadius.circular(4),
-                            border: Border.all(color: AppTheme.surfaceVariant),
+                            border: Border.all(color: AppTheme.borderColor(context)),
                           ),
                           child: Center(
                             child: Text(
@@ -983,11 +983,11 @@ class _SettingsViewState extends State<SettingsView> {
                             children: [
                               Text(
                                 displayName.isNotEmpty ? displayName : email,
-                                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppTheme.onSurface),
+                                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppTheme.text(context)),
                               ),
                               Text(
                                 email,
-                                style: AppTheme.monoStyle(fontSize: 10.5, color: AppTheme.onSurfaceVariant),
+                                style: AppTheme.monoStyle(fontSize: 10.5, color: AppTheme.textMuted(context)),
                               ),
                             ],
                           ),
@@ -1022,8 +1022,8 @@ class _SettingsViewState extends State<SettingsView> {
                           ),
                         ),
                         style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: AppTheme.surfaceVariant),
-                          backgroundColor: AppTheme.surfaceContainer,
+                          side: BorderSide(color: AppTheme.borderColor(context)),
+                          backgroundColor: AppTheme.surfaceContainerColor(context),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
                           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                         ),
@@ -1042,9 +1042,9 @@ class _SettingsViewState extends State<SettingsView> {
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppTheme.surfaceContainerHigh,
+                  color: AppTheme.surfaceContainerHighColor(context),
                   borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: AppTheme.surfaceVariant),
+                  border: Border.all(color: AppTheme.borderColor(context)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1053,21 +1053,21 @@ class _SettingsViewState extends State<SettingsView> {
                       children: [
                         const Icon(Icons.workspace_premium_outlined, size: 18, color: AppTheme.mint),
                         const SizedBox(width: 8),
-                        const Text(
+                        Text(
                           'Subscription & Capabilities',
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppTheme.onSurface),
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppTheme.text(context)),
                         ),
                         const Spacer(),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                           decoration: BoxDecoration(
                             color: activeTier == WaycordTier.free
-                                ? AppTheme.surfaceVariant
+                                ? AppTheme.borderColor(context)
                                 : AppTheme.mint.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(2),
                             border: Border.all(
                               color: activeTier == WaycordTier.free
-                                  ? AppTheme.surfaceVariant
+                                  ? AppTheme.borderColor(context)
                                   : AppTheme.mint.withValues(alpha: 0.35),
                             ),
                           ),
@@ -1077,7 +1077,7 @@ class _SettingsViewState extends State<SettingsView> {
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
                               color: activeTier == WaycordTier.free
-                                  ? AppTheme.onSurfaceVariant
+                                  ? AppTheme.textMuted(context)
                                   : AppTheme.mint,
                             ),
                           ),
@@ -1085,18 +1085,18 @@ class _SettingsViewState extends State<SettingsView> {
                       ],
                     ),
                     const SizedBox(height: 6),
-                    const Text(
+                    Text(
                       'Capability-based tier access rules and limits for this account.',
-                      style: TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant),
+                      style: TextStyle(fontSize: 12, color: AppTheme.textMuted(context)),
                     ),
                     const SizedBox(height: 14),
                     // Capability badges / rows
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: AppTheme.surfaceContainer,
+                        color: AppTheme.surfaceContainerColor(context),
                         borderRadius: BorderRadius.circular(4),
-                        border: Border.all(color: AppTheme.surfaceVariant),
+                        border: Border.all(color: AppTheme.borderColor(context)),
                       ),
                       child: Column(
                         children: [
@@ -1105,31 +1105,31 @@ class _SettingsViewState extends State<SettingsView> {
                             capabilities.canUseCustomRecurrence ? 'UNLOCKED' : 'LOCKED (DAILY/WEEKLY ONLY)',
                             capabilities.canUseCustomRecurrence,
                           ),
-                          const Divider(color: AppTheme.surfaceVariant, height: 16),
+                          Divider(color: AppTheme.borderColor(context), height: 16),
                           _buildCapabilityRow(
                             'Needle AI Voice Calls',
                             capabilities.monthlyCloudAiLimit == -1 ? 'UNLIMITED' : '${capabilities.monthlyCloudAiLimit} / MONTH',
                             capabilities.monthlyCloudAiLimit == -1,
                           ),
-                          const Divider(color: AppTheme.surfaceVariant, height: 16),
+                          Divider(color: AppTheme.borderColor(context), height: 16),
                           _buildCapabilityRow(
                             'Active Workspaces',
                             capabilities.maxWorkspaces == -1 ? 'UNLIMITED' : 'MAX ${capabilities.maxWorkspaces}',
                             capabilities.maxWorkspaces == -1,
                           ),
-                          const Divider(color: AppTheme.surfaceVariant, height: 16),
+                          Divider(color: AppTheme.borderColor(context), height: 16),
                           _buildCapabilityRow(
                             'Members Per Workspace',
                             capabilities.maxMembersPerWorkspace == -1 ? 'UNLIMITED' : 'MAX ${capabilities.maxMembersPerWorkspace}',
                             capabilities.maxMembersPerWorkspace > 5,
                           ),
-                          const Divider(color: AppTheme.surfaceVariant, height: 16),
+                          Divider(color: AppTheme.borderColor(context), height: 16),
                           _buildCapabilityRow(
                             '30-Day Trash Recovery',
                             capabilities.canRecoverTrash ? 'ENABLED' : 'LOCKED',
                             capabilities.canRecoverTrash,
                           ),
-                          const Divider(color: AppTheme.surfaceVariant, height: 16),
+                          Divider(color: AppTheme.borderColor(context), height: 16),
                           _buildCapabilityRow(
                             '3-Tier Weighted RBAC',
                             capabilities.canUseWeightedRbac ? 'ENABLED' : 'LOCKED',
@@ -1171,7 +1171,7 @@ class _SettingsViewState extends State<SettingsView> {
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: AppTheme.surfaceContainer,
+                          color: AppTheme.surfaceContainerColor(context),
                           borderRadius: BorderRadius.circular(4),
                           border: Border.all(color: AppTheme.priorityHigh.withValues(alpha: 0.3)),
                         ),
@@ -1195,7 +1195,7 @@ class _SettingsViewState extends State<SettingsView> {
                             const SizedBox(height: 6),
                             Text(
                               'Test tier gating and capabilities immediately with a single tap.',
-                              style: AppTheme.monoStyle(fontSize: 10, color: AppTheme.onSurfaceVariant),
+                              style: AppTheme.monoStyle(fontSize: 10, color: AppTheme.textMuted(context)),
                             ),
                             const SizedBox(height: 10),
                             Wrap(
@@ -1245,9 +1245,9 @@ class _SettingsViewState extends State<SettingsView> {
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppTheme.surfaceContainerHigh,
+                  color: AppTheme.surfaceContainerHighColor(context),
                   borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: AppTheme.surfaceVariant),
+                  border: Border.all(color: AppTheme.borderColor(context)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1256,9 +1256,9 @@ class _SettingsViewState extends State<SettingsView> {
                       children: [
                         const Icon(Icons.tune_rounded, size: 18, color: AppTheme.mint),
                         const SizedBox(width: 8),
-                        const Text(
+                        Text(
                           'System & Application Info',
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppTheme.onSurface),
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppTheme.text(context)),
                         ),
                       ],
                     ),
@@ -1267,39 +1267,39 @@ class _SettingsViewState extends State<SettingsView> {
                       dense: true,
                       contentPadding: EdgeInsets.zero,
                       leading: const Icon(Icons.keyboard_outlined, color: AppTheme.mint, size: 20),
-                      title: const Text('Keyboard Shortcuts', style: TextStyle(fontSize: 13, color: AppTheme.onSurface)),
-                      subtitle: Text('View navigation, command bar, and action hotkeys', style: AppTheme.monoStyle(fontSize: 10)),
-                      trailing: const Icon(Icons.chevron_right_rounded, color: AppTheme.onSurfaceVariant),
+                      title: Text('Keyboard Shortcuts', style: TextStyle(fontSize: 13, color: AppTheme.text(context))),
+                      subtitle: Text('View navigation, command bar, and action hotkeys', style: AppTheme.monoStyle(fontSize: 10, color: AppTheme.textMuted(context))),
+                      trailing: Icon(Icons.chevron_right_rounded, color: AppTheme.textMuted(context)),
                       onTap: _showShortcutsDialog,
                     ),
-                    const Divider(color: AppTheme.surfaceVariant, height: 1),
+                    Divider(color: AppTheme.borderColor(context), height: 1),
                     ListTile(
                       dense: true,
                       contentPadding: EdgeInsets.zero,
                       leading: const Icon(Icons.system_update_alt_rounded, color: AppTheme.mint, size: 20),
-                      title: const Text('Check for Updates', style: TextStyle(fontSize: 13, color: AppTheme.onSurface)),
-                      subtitle: Text('Review latest releases on GitHub repository', style: AppTheme.monoStyle(fontSize: 10)),
-                      trailing: const Icon(Icons.open_in_new_rounded, color: AppTheme.onSurfaceVariant, size: 18),
+                      title: Text('Check for Updates', style: TextStyle(fontSize: 13, color: AppTheme.text(context))),
+                      subtitle: Text('Review latest releases on GitHub repository', style: AppTheme.monoStyle(fontSize: 10, color: AppTheme.textMuted(context))),
+                      trailing: Icon(Icons.open_in_new_rounded, color: AppTheme.textMuted(context), size: 18),
                       onTap: _openUpdatesPage,
                     ),
-                    const Divider(color: AppTheme.surfaceVariant, height: 1),
+                    Divider(color: AppTheme.borderColor(context), height: 1),
                     ListTile(
                       dense: true,
                       contentPadding: EdgeInsets.zero,
                       leading: const Icon(Icons.info_outline_rounded, color: AppTheme.mint, size: 20),
-                      title: const Text('About Waycord', style: TextStyle(fontSize: 13, color: AppTheme.onSurface)),
-                      subtitle: Text('Version details, architecture, and legal licenses', style: AppTheme.monoStyle(fontSize: 10)),
-                      trailing: const Icon(Icons.chevron_right_rounded, color: AppTheme.onSurfaceVariant),
+                      title: Text('About Waycord', style: TextStyle(fontSize: 13, color: AppTheme.text(context))),
+                      subtitle: Text('Version details, architecture, and legal licenses', style: AppTheme.monoStyle(fontSize: 10, color: AppTheme.textMuted(context))),
+                      trailing: Icon(Icons.chevron_right_rounded, color: AppTheme.textMuted(context)),
                       onTap: () => Navigator.pushNamed(context, '/about'),
                     ),
-                    const Divider(color: AppTheme.surfaceVariant, height: 1),
+                    Divider(color: AppTheme.borderColor(context), height: 1),
                     ListTile(
                       dense: true,
                       contentPadding: EdgeInsets.zero,
                       leading: const Icon(Icons.chat_bubble_outline_rounded, color: AppTheme.mint, size: 20),
-                      title: const Text('Send Feedback & Bug Report', style: TextStyle(fontSize: 13, color: AppTheme.onSurface)),
-                      subtitle: Text('Report bugs, request features, or send thoughts', style: AppTheme.monoStyle(fontSize: 10)),
-                      trailing: const Icon(Icons.chevron_right_rounded, color: AppTheme.onSurfaceVariant),
+                      title: Text('Send Feedback & Bug Report', style: TextStyle(fontSize: 13, color: AppTheme.text(context))),
+                      subtitle: Text('Report bugs, request features, or send thoughts', style: AppTheme.monoStyle(fontSize: 10, color: AppTheme.textMuted(context))),
+                      trailing: Icon(Icons.chevron_right_rounded, color: AppTheme.textMuted(context)),
                       onTap: () => showFeedbackDialog(context),
                     ),
                   ],

@@ -198,8 +198,13 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
         },
         child: Scaffold(
           backgroundColor: AppTheme.bg(context),
-          body: Row(
-            children: [
+          body: SafeArea(
+            top: true,
+            bottom: false,
+            left: false,
+            right: false,
+            child: Row(
+              children: [
               // 1. DESKTOP SIDEBAR (VISIBLE ON DESKTOP ONLY, HIDDEN ON MOBILE)
               if (isDesktop)
                 _buildDesktopSidebar(context, navProvider, taskProvider),
@@ -279,6 +284,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
                 ),
               ),
             ],
+          ),
           ),
 
           // 3. MOBILE BOTTOM NAVIGATION DOCK (VISIBLE ON MOBILE ONLY, HIDDEN ON DESKTOP)

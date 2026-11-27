@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/timezone.dart' as tz;
 import 'package:hive/hive.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:workmanager/workmanager.dart';
@@ -51,7 +52,7 @@ class NeedleMorningDispatchService {
 
   static Duration calculateInitialDelay([DateTime? now]) {
     final current = now ?? DateTime.now();
-    var target = DateTime(current.year, current.month, current.day, 8, 0, 0);
+    var target = DateTime(current.year, current.month, current.day, 9, 0, 0);
     if (current.isAfter(target)) {
       target = target.add(const Duration(days: 1));
     }
@@ -60,6 +61,7 @@ class NeedleMorningDispatchService {
 
   static Future<void> scheduleDailyDispatch({
     Workmanager? workmanager,
+    FlutterLocalNotificationsPlugin? notificationsPlugin,
     DateTime? now,
   }) async {
     if (kIsWeb) return;
@@ -88,6 +90,49 @@ class NeedleMorningDispatchService {
       );
     } catch (e) {
       debugPrint('NeedleMorningDispatchService: Error scheduling task: $e');
+    }
+
+    // Schedule exact daily alarm at 9:00 AM via notification plugin so it fires even if WorkManager is batched/deferred
+    try {
+      final plugin = notificationsPlugin ?? FlutterLocalNotificationsPlugin();
+      final current = now ?? DateTime.now();
+      var target = DateTime(current.year, current.month, current.day, 9, 0, 0);
+      if (current.isAfter(target)) {
+        target = target.add(const Duration(days: 1));
+      }
+
+      await plugin.zonedSchedule(
+        8000,
+        'Waycord Daily Dispatch',
+        'Your daily 9:00 AM briefing is ready. Tap to view your scheduled tasks.',
+        tz.TZDateTime.from(target, tz.local),
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            channelId,
+            channelName,
+            channelDescription: 'Daily morning briefing and task alerts',
+            importance: Importance.max,
+            priority: Priority.high,
+            actions: <AndroidNotificationAction>[
+              AndroidNotificationAction(
+                playBriefingActionId,
+                'Play Briefing',
+                showsUserInterface: true,
+              ),
+            ],
+          ),
+          iOS: DarwinNotificationDetails(
+            presentAlert: true,
+            presentBadge: true,
+            presentSound: true,
+          ),
+        ),
+        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        matchDateTimeComponents: DateTimeComponents.time,
+      );
+    } catch (e) {
+      debugPrint('NeedleMorningDispatchService: Error scheduling exact daily alarm: $e');
     }
   }
 

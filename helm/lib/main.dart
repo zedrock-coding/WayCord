@@ -55,6 +55,15 @@ import 'theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
+      statusBarBrightness: Brightness.dark,
+      systemNavigationBarColor: Color(0xFF111417),
+      systemNavigationBarIconBrightness: Brightness.light,
+    ),
+  );
   UIClamp.enableOverflowProtection();
   ErrorWidget.builder = (FlutterErrorDetails details) {
     return AppErrorWidget(details: details);
@@ -245,6 +254,16 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final isLight = themeProvider.themeMode == ThemeMode.light;
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: isLight ? Brightness.dark : Brightness.light,
+        statusBarBrightness: isLight ? Brightness.light : Brightness.dark,
+        systemNavigationBarColor: isLight ? const Color(0xFFF6F8FA) : const Color(0xFF111417),
+        systemNavigationBarIconBrightness: isLight ? Brightness.dark : Brightness.light,
+      ),
+    );
 
     return MaterialApp(
       navigatorKey: _navigatorKey,

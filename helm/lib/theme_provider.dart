@@ -47,7 +47,11 @@ class ThemeProvider with ChangeNotifier {
   Future<void> updateThemeMode(int mode) async {
     _settings.themeMode = mode;
     AppTheme.isLightGlobal = mode == 0;
-    await _settings.save();
+    if (_settings.isInBox) {
+      await _settings.save();
+    } else {
+      await _settingsBox.put('app_settings', _settings);
+    }
     notifyListeners();
   }
   

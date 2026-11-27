@@ -25,26 +25,26 @@ class _CommunitiesOverviewViewState extends State<CommunitiesOverviewView> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AppTheme.surfaceContainerHigh,
+        backgroundColor: AppTheme.surfaceContainerHighColor(context),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4),
-          side: const BorderSide(color: AppTheme.surfaceVariant),
+          side: BorderSide(color: AppTheme.borderColor(context)),
         ),
-        title: const Text('Create New Workspace / Community', style: TextStyle(fontSize: 15, color: AppTheme.onSurface)),
+        title: Text('Create New Workspace / Community', style: TextStyle(fontSize: 15, color: AppTheme.text(context))),
         content: TextField(
           controller: controller,
           autofocus: true,
-          style: const TextStyle(fontSize: 13, color: AppTheme.onSurface),
+          style: TextStyle(fontSize: 13, color: AppTheme.text(context)),
           decoration: InputDecoration(
             labelText: 'Community Name',
-            labelStyle: AppTheme.monoStyle(fontSize: 11, color: AppTheme.onSurfaceVariant),
+            labelStyle: AppTheme.monoStyle(fontSize: 11, color: AppTheme.textMuted(context)),
             hintText: 'e.g. Product Design or Engineering Team',
-            hintStyle: TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant.withValues(alpha: 0.5)),
+            hintStyle: TextStyle(fontSize: 12, color: AppTheme.textMuted(context).withValues(alpha: 0.5)),
             filled: true,
-            fillColor: AppTheme.surfaceContainerLowest,
+            fillColor: AppTheme.surfaceContainerLowestColor(context),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4),
-              borderSide: const BorderSide(color: AppTheme.surfaceVariant),
+              borderSide: BorderSide(color: AppTheme.borderColor(context)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4),
@@ -55,7 +55,7 @@ class _CommunitiesOverviewViewState extends State<CommunitiesOverviewView> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel', style: TextStyle(color: AppTheme.onSurfaceVariant)),
+            child: Text('Cancel', style: TextStyle(color: AppTheme.textMuted(context))),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -110,26 +110,26 @@ class _CommunitiesOverviewViewState extends State<CommunitiesOverviewView> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AppTheme.surfaceContainerHigh,
+        backgroundColor: AppTheme.surfaceContainerHighColor(context),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4),
-          side: const BorderSide(color: AppTheme.surfaceVariant),
+          side: BorderSide(color: AppTheme.borderColor(context)),
         ),
-        title: const Text('Join Workspace via Code', style: TextStyle(fontSize: 15, color: AppTheme.onSurface)),
+        title: Text('Join Workspace via Code', style: TextStyle(fontSize: 15, color: AppTheme.text(context))),
         content: TextField(
           controller: controller,
           autofocus: true,
-          style: const TextStyle(fontSize: 13, color: AppTheme.onSurface),
+          style: TextStyle(fontSize: 13, color: AppTheme.text(context)),
           decoration: InputDecoration(
             labelText: 'Invitation Code',
-            labelStyle: AppTheme.monoStyle(fontSize: 11, color: AppTheme.onSurfaceVariant),
+            labelStyle: AppTheme.monoStyle(fontSize: 11, color: AppTheme.textMuted(context)),
             hintText: 'Enter 6-digit or UUID code',
-            hintStyle: TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant.withValues(alpha: 0.5)),
+            hintStyle: TextStyle(fontSize: 12, color: AppTheme.textMuted(context).withValues(alpha: 0.5)),
             filled: true,
-            fillColor: AppTheme.surfaceContainerLowest,
+            fillColor: AppTheme.surfaceContainerLowestColor(context),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4),
-              borderSide: const BorderSide(color: AppTheme.surfaceVariant),
+              borderSide: BorderSide(color: AppTheme.borderColor(context)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4),
@@ -140,7 +140,7 @@ class _CommunitiesOverviewViewState extends State<CommunitiesOverviewView> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel', style: TextStyle(color: AppTheme.onSurfaceVariant)),
+            child: Text('Cancel', style: TextStyle(color: AppTheme.textMuted(context))),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -190,7 +190,7 @@ class _CommunitiesOverviewViewState extends State<CommunitiesOverviewView> {
                       Row(
                         children: [
                           IconButton(
-                            icon: const Icon(Icons.arrow_back, size: 18, color: AppTheme.onSurfaceVariant),
+                            icon: Icon(Icons.arrow_back, size: 18, color: AppTheme.textMuted(context)),
                             onPressed: widget.onBackToToday,
                             tooltip: 'Back to Today',
                           ),
@@ -212,8 +212,8 @@ class _CommunitiesOverviewViewState extends State<CommunitiesOverviewView> {
                             icon: const Icon(Icons.login_rounded, size: 14),
                             label: const Text('Join Code', style: TextStyle(fontSize: 12)),
                             style: OutlinedButton.styleFrom(
-                              foregroundColor: AppTheme.onSurface,
-                              side: const BorderSide(color: AppTheme.surfaceVariant),
+                              foregroundColor: AppTheme.text(context),
+                              side: BorderSide(color: AppTheme.borderColor(context)),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                             ),
@@ -234,22 +234,22 @@ class _CommunitiesOverviewViewState extends State<CommunitiesOverviewView> {
                     ],
                   ),
                   const SizedBox(height: 6),
-                  const Text(
+                  Text(
                     'Workspace Overview',
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
-                      color: AppTheme.onSurface,
+                      color: AppTheme.text(context),
                       letterSpacing: -0.5,
                     ),
                   ),
                   const SizedBox(height: 2),
-                  const Text(
+                  Text(
                     'Collaborate on team backlogs, campus cells, and community sprints.',
-                    style: TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant),
+                    style: TextStyle(fontSize: 12, color: AppTheme.textMuted(context)),
                   ),
                   const SizedBox(height: 14),
-                  const Divider(color: AppTheme.surfaceVariant, height: 1),
+                  Divider(color: AppTheme.borderColor(context), height: 1),
                 ],
               ),
             ),
@@ -276,14 +276,14 @@ class _CommunitiesOverviewViewState extends State<CommunitiesOverviewView> {
                           children: [
                             const Icon(Icons.hub_outlined, size: 40, color: AppTheme.mint),
                             const SizedBox(height: 12),
-                            const Text(
+                            Text(
                               'No community workspaces joined yet',
-                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: AppTheme.onSurface),
+                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: AppTheme.text(context)),
                             ),
                             const SizedBox(height: 6),
                             Text(
                               'Create a community or join using an invite code from your team.',
-                              style: AppTheme.monoStyle(fontSize: 12, color: AppTheme.onSurfaceVariant),
+                              style: AppTheme.monoStyle(fontSize: 12, color: AppTheme.textMuted(context)),
                             ),
                           ],
                         ),
@@ -355,7 +355,7 @@ class _CommunitiesOverviewViewState extends State<CommunitiesOverviewView> {
                                   ),
                                 ),
                                 const SizedBox(width: 4),
-                                const Icon(Icons.chevron_right, size: 18, color: AppTheme.onSurfaceVariant),
+                                Icon(Icons.chevron_right, size: 18, color: AppTheme.textMuted(context)),
                               ],
                             ),
                           ),

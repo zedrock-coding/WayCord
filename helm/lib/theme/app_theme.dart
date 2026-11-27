@@ -212,7 +212,7 @@ class AppTheme {
     return GoogleFonts.jetBrainsMono(
       fontSize: fontSize,
       fontWeight: fontWeight,
-      color: color ?? onSurfaceVariant,
+      color: color ?? (isLightGlobal ? const Color(0xFF656D76) : onSurfaceVariant),
       letterSpacing: letterSpacing,
     );
   }

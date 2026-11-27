@@ -72,7 +72,7 @@ export function Navbar() {
             Waycord
           </span>
           <span className="font-mono text-[10px] font-semibold px-1.5 py-0.5 rounded bg-[#272A2D] text-[#88C0A4] border border-[#3B3E42]">
-            v0.8.1
+            v0.8.2
           </span>
         </Link>
 

@@ -4,6 +4,32 @@ All notable changes to the **Helm** / **Waypoint** / **Waycord** project will be
 
 ---
 
+## [0.8.2] - 2026-11-27
+
+### 🔔 Reliable Background Notifications & Morning Dispatch
+- **Background Alarm & Reboot Recovery**:
+  - Registered `ScheduledNotificationReceiver` and `ScheduledNotificationBootReceiver` in `AndroidManifest.xml` so scheduled reminders fire reliably when the app is closed or after device reboot.
+- **2-Hour Advance Due Reminders**:
+  - Added a 2-hour-before due date alert alongside the 24-hour and 1-hour advance reminders in `NotificationService`.
+- **9:00 AM Morning Dispatch**:
+  - Updated `NeedleMorningDispatchService` to schedule an exact daily alarm at 9:00 AM via `zonedSchedule` (`exactAllowWhileIdle`), with WorkManager retained as a fallback.
+
+### 🧩 Android Home Screen Widgets & Previews
+- **Static Widget Preview Layouts**:
+  - Created dedicated RemoteViews-compatible preview layouts (`widget_month_preview.xml`, `widget_priority_preview.xml`, `widget_agenda_preview.xml`) so the Android widget picker renders accurate previews.
+- **Widget Naming & Deduplication**:
+  - Removed the duplicate legacy `WaypointWidgetProvider` receiver and labeled the 3 widgets clearly: **Monthly Task List**, **Weekly Task List**, and **Daily Task List**.
+
+### 🎨 Complete Light Theme & Layout Fixes
+- **Full Light Mode Coverage**:
+  - Replaced remaining dark-only palette constants across `CommandBarWidget`, `ScheduleView`, `AccountView`, `SettingsView` (including Developer Tier Override and diagnostics), `InboxView`, `RecurringView`, `CommunitiesOverviewView`, `TaskItemCard`, and `AppTheme.monoStyle`.
+  - Added dynamic `SystemChrome.setSystemUIOverlayStyle` switching for status and navigation bar icons and added a safe `HiveObject.isInBox` check in `ThemeProvider`.
+- **Status Bar SafeArea & Drawer Performance**:
+  - Wrapped `AppShell` body in top `SafeArea` to prevent Android status bar overlap.
+  - Optimized `TaskCreationDrawer` with `RepaintBoundary` and `AnimatedPadding` for smoother keyboard transitions.
+
+---
+
 ## [0.8.1] - 2026-11-23
 
 ### 🎨 Adaptive Light Theme Contrast & Legibility

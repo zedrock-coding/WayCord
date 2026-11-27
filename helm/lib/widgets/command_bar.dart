@@ -584,7 +584,7 @@ class _CommandBarWidgetState extends State<CommandBarWidget>
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
-                    color: AppTheme.surfaceContainer.withValues(alpha: 0.82),
+                    color: AppTheme.surfaceContainerColor(context).withValues(alpha: 0.92),
                     borderRadius: BorderRadius.circular(32),
                     boxShadow: [
                       BoxShadow(
@@ -600,7 +600,7 @@ class _CommandBarWidgetState extends State<CommandBarWidget>
                           ? const Color(0xFF88C0A4)
                           : (_isLoading
                               ? colorScheme.primary
-                              : AppTheme.surfaceVariant),
+                              : AppTheme.borderColor(context)),
                       width: (_isListening || _isLoading) ? 2 : 1,
                     ),
                   ),
@@ -645,7 +645,7 @@ class _CommandBarWidgetState extends State<CommandBarWidget>
           ),
           const SizedBox(width: 8),
           IconButton(
-            icon: const Icon(Icons.close, size: 18, color: Colors.white54),
+            icon: Icon(Icons.close, size: 18, color: AppTheme.textMuted(context)),
             tooltip: 'Cancel',
             onPressed: _cancelConversation,
           ),
@@ -738,10 +738,10 @@ class _CommandBarWidgetState extends State<CommandBarWidget>
                 final display = '0:${sec.toString().padLeft(2, '0')}';
                 return Text(
                   display,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 11,
                     fontFamily: 'monospace',
-                    color: Colors.white70,
+                    color: AppTheme.textMuted(context),
                   ),
                 );
               },
@@ -771,7 +771,7 @@ class _CommandBarWidgetState extends State<CommandBarWidget>
               visualDensity: VisualDensity.compact,
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
-              icon: const Icon(Icons.close, size: 16, color: Colors.white54),
+              icon: Icon(Icons.close, size: 16, color: AppTheme.textMuted(context)),
               tooltip: 'Cancel',
               onPressed: _cancelConversation,
             ),

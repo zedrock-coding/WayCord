@@ -64,31 +64,31 @@ class _ScheduleViewState extends State<ScheduleView> {
                           letterSpacing: 1.0,
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 6),
-                        child: Text('•', style: TextStyle(color: AppTheme.surfaceVariant)),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        child: Text('•', style: TextStyle(color: AppTheme.borderColor(context))),
                       ),
                       Text(
                         'Monthly Overview',
                         style: AppTheme.monoStyle(
                           fontSize: 11,
-                          color: AppTheme.onSurfaceVariant,
+                          color: AppTheme.textMuted(context),
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 4),
-                  const Text(
+                  Text(
                     'Schedule & Calendar',
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
-                      color: AppTheme.onSurface,
+                      color: AppTheme.text(context),
                       letterSpacing: -0.5,
                     ),
                   ),
                   const SizedBox(height: 14),
-                  const Divider(color: AppTheme.surfaceVariant, height: 1),
+                  Divider(color: AppTheme.borderColor(context), height: 1),
                 ],
               ),
             ),
@@ -100,9 +100,9 @@ class _ScheduleViewState extends State<ScheduleView> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Container(
                 decoration: BoxDecoration(
-                  color: AppTheme.surfaceContainerHigh,
+                  color: AppTheme.surfaceContainerHighColor(context),
                   borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: AppTheme.surfaceVariant),
+                  border: Border.all(color: AppTheme.borderColor(context)),
                 ),
                 child: TableCalendar(
                   firstDay: DateTime.utc(2020, 1, 1),
@@ -120,6 +120,10 @@ class _ScheduleViewState extends State<ScheduleView> {
                     setState(() => _calendarFormat = format);
                   },
                   eventLoader: (day) => _getEventsForDay(day, allTasks),
+                  daysOfWeekStyle: DaysOfWeekStyle(
+                    weekdayStyle: TextStyle(color: AppTheme.textMuted(context), fontSize: 12),
+                    weekendStyle: TextStyle(color: AppTheme.textMuted(context), fontSize: 12),
+                  ),
                   calendarStyle: CalendarStyle(
                     selectedDecoration: const BoxDecoration(
                       color: AppTheme.mint,
@@ -140,9 +144,9 @@ class _ScheduleViewState extends State<ScheduleView> {
                       color: AppTheme.mint,
                       fontWeight: FontWeight.bold,
                     ),
-                    defaultTextStyle: const TextStyle(color: AppTheme.onSurface),
-                    weekendTextStyle: const TextStyle(color: AppTheme.onSurfaceVariant),
-                    outsideTextStyle: TextStyle(color: AppTheme.onSurfaceVariant.withValues(alpha: 0.3)),
+                    defaultTextStyle: TextStyle(color: AppTheme.text(context)),
+                    weekendTextStyle: TextStyle(color: AppTheme.textMuted(context)),
+                    outsideTextStyle: TextStyle(color: AppTheme.textMuted(context).withValues(alpha: 0.3)),
                     markerDecoration: const BoxDecoration(
                       color: AppTheme.mint,
                       shape: BoxShape.circle,
@@ -152,13 +156,13 @@ class _ScheduleViewState extends State<ScheduleView> {
                   headerStyle: HeaderStyle(
                     formatButtonVisible: false,
                     titleCentered: true,
-                    titleTextStyle: const TextStyle(
+                    titleTextStyle: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: AppTheme.onSurface,
+                      color: AppTheme.text(context),
                     ),
-                    leftChevronIcon: const Icon(Icons.chevron_left, color: AppTheme.onSurfaceVariant),
-                    rightChevronIcon: const Icon(Icons.chevron_right, color: AppTheme.onSurfaceVariant),
+                    leftChevronIcon: Icon(Icons.chevron_left, color: AppTheme.textMuted(context)),
+                    rightChevronIcon: Icon(Icons.chevron_right, color: AppTheme.textMuted(context)),
                   ),
                 ),
               ),
@@ -177,17 +181,17 @@ class _ScheduleViewState extends State<ScheduleView> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                       decoration: BoxDecoration(
-                        color: _selectedDay == null ? AppTheme.mint.withValues(alpha: 0.15) : AppTheme.surfaceContainer,
+                        color: _selectedDay == null ? AppTheme.mint.withValues(alpha: 0.15) : AppTheme.surfaceContainerColor(context),
                         borderRadius: BorderRadius.circular(4),
                         border: Border.all(
-                          color: _selectedDay == null ? AppTheme.mint : AppTheme.surfaceVariant,
+                          color: _selectedDay == null ? AppTheme.mint : AppTheme.borderColor(context),
                         ),
                       ),
                       child: Text(
                         'All Tasks (${allTasks.length})',
                         style: TextStyle(
                           fontSize: 12,
-                          color: _selectedDay == null ? AppTheme.mint : AppTheme.onSurfaceVariant,
+                          color: _selectedDay == null ? AppTheme.mint : AppTheme.textMuted(context),
                           fontWeight: _selectedDay == null ? FontWeight.w600 : FontWeight.w400,
                         ),
                       ),
@@ -200,7 +204,7 @@ class _ScheduleViewState extends State<ScheduleView> {
                       style: AppTheme.monoStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
-                        color: AppTheme.onSurface,
+                        color: AppTheme.text(context),
                       ),
                     ),
                 ],
@@ -215,7 +219,7 @@ class _ScheduleViewState extends State<ScheduleView> {
                 child: Center(
                   child: Text(
                     'No tasks scheduled for this day.',
-                    style: AppTheme.monoStyle(fontSize: 12, color: AppTheme.onSurfaceVariant),
+                    style: AppTheme.monoStyle(fontSize: 12, color: AppTheme.textMuted(context)),
                   ),
                 ),
               ),

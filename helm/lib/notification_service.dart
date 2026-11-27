@@ -238,14 +238,14 @@ class NotificationService {
   ///
   /// `String.hashCode` is not stable across runs, so reminders scheduled before
   /// a restart could not be cancelled afterwards. FNV-1a folded into a range
-  /// that leaves room for the +1/+2 reminder buckets.
+  /// that leaves room for the +1/+2/+3 reminder buckets.
   static int notificationBaseId(String taskId) {
     var hash = 0x811c9dc5;
     for (final unit in taskId.codeUnits) {
       hash ^= unit;
       hash = (hash * 0x01000193) & 0x7fffffff;
     }
-    return (hash % 700000000) * 3;
+    return (hash % 500000000) * 4;
   }
 
   Future<bool> requestPermissions() async {
@@ -379,12 +379,27 @@ class NotificationService {
         );
       }
 
-      // 3. 24 Hours Before
+      // 3. 2 Hours Before
+      final twoHoursBefore = dueAt.subtract(const Duration(hours: 2));
+      if (twoHoursBefore.isAfter(now)) {
+        final tzTwoHours = tz.TZDateTime.from(twoHoursBefore, tz.local);
+        await _notificationsPlugin.zonedSchedule(
+          baseId + 2,
+          'Task Due in 2 Hours',
+          'Task "$title" is due in 2 hours.',
+          tzTwoHours,
+          details,
+          uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        );
+      }
+
+      // 4. 24 Hours Before
       final dayBefore = dueAt.subtract(const Duration(hours: 24));
       if (dayBefore.isAfter(now)) {
         final tzDayBefore = tz.TZDateTime.from(dayBefore, tz.local);
         await _notificationsPlugin.zonedSchedule(
-          baseId + 2,
+          baseId + 3,
           'Task Due Tomorrow',
           'Task "$title" is due in 24 hours.',
           tzDayBefore,
@@ -408,6 +423,7 @@ class NotificationService {
       await _notificationsPlugin.cancel(baseId);
       await _notificationsPlugin.cancel(baseId + 1);
       await _notificationsPlugin.cancel(baseId + 2);
+      await _notificationsPlugin.cancel(baseId + 3);
     } catch (e) {
       debugPrint('Failed to cancel task notification: $e');
       lastError.value = 'A task reminder could not be cancelled.';
