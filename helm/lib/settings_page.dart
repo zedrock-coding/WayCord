@@ -188,7 +188,7 @@ class _SettingPageState extends State<SettingPage> {
             subtitle: const Text('Check latest releases on GitHub'),
             trailing: const Icon(Icons.open_in_new_rounded),
             onTap: () async {
-              final uri = Uri.parse('https://waycord.org');
+              final uri = Uri.parse('https://github.com/zedrock-coding/Helm/releases');
               try {
                 final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
                 if (!launched && context.mounted) {

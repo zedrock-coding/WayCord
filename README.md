@@ -1,25 +1,25 @@
-# Waycord 0.8.1 - Production Release 🚀
+# Waycord 0.8.2 - Production Release 🚀
 
-**Waycord** (https://waycord.org) is an AI-orchestrated task management workspace. Optimized for **Android**, **Windows**, and **Web**, Waycord provides a professional, reactive experience for real-time team collaboration and personal productivity. Operated by **Lakshya Jadhav**.
+**Waycord** is an AI-orchestrated task management workspace. Optimized for **Android**, **Windows**, and **Web**, Waycord provides a professional, reactive experience for real-time team collaboration and personal productivity. Operated by **Lakshya Jadhav**.
 
 ![Aesthetic](https://img.shields.io/badge/Aesthetic-Obsidian%20%26%20Mint-88C0A4)
 ![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20Windows%20%7C%20Web-blue)
-![Version](https://img.shields.io/badge/Version-0.8.1-green)
+![Version](https://img.shields.io/badge/Version-0.8.2-green)
 ![License](https://img.shields.io/badge/License-Source--Available-orange)
 
 ---
 
 ## 📥 Download & Live Access
 
-Get the latest build for your platform directly from the [Waycord Releases](https://github.com/zedrock-coding/WayCord/releases) page:
+Get the latest build for your platform directly from the [Waycord Releases](https://github.com/zedrock-coding/Helm/releases) page:
 
 | Platform | Type | Direct Download Link |
 | :--- | :--- | :--- |
-| **Android** | APK (`release`) | [📲 Download Android APK](https://github.com/zedrock-coding/WayCord/releases/download/v0.7.1/waycord-v0.7.1.apk) |
-| **Windows** | Setup Installer (`release`) | [💻 Download Windows App](https://github.com/zedrock-coding/WayCord/releases/download/v0.7.1/Waycord-v0.7.1+29-Setup.exe) |
-| **Web** | Live Production PWA | [🌐 Launch Web App](https://waycord.org) |
+| **Android** | APK (`release`) | [📲 Download Android APK](https://github.com/zedrock-coding/Helm/releases/download/v0.8.2/waycord-v0.8.2.apk) |
+| **Windows** | Executable (`release`) | [💻 Download Windows App](https://github.com/zedrock-coding/Helm/releases/download/v0.8.2/waycord-v0.8.2.exe) |
+| **Web** | Live Production PWA | [🌐 Launch Web App](https://helm-omega-blue.vercel.app) |
 
-*Alternative release mirrors: [Waycord GitHub Releases Archive](https://github.com/zedrock-coding/WayCord/releases)*
+*Alternative release mirrors: [Waycord GitHub Releases Archive](https://github.com/zedrock-coding/Helm/releases)*
 
 ---
 
@@ -175,4 +175,4 @@ Waycord is **source-available, not open source**. Operated by **[INSERT_LEGAL_EN
 - **Source code**: proprietary, all rights reserved.
 - **Compiled builds**: free to download, install, and use for personal or commercial purposes.
 
-See [`LICENSE`](LICENSE) for complete terms. Contact **legal@waycord.org** or **support@waycord.org** for inquiries.
+See [`LICENSE`](LICENSE) for complete terms.

@@ -187,7 +187,7 @@ class _SettingsViewState extends State<SettingsView> {
   }
 
   Future<void> _openUpdatesPage() async {
-    final uri = Uri.parse('https://waycord.org');
+    final uri = Uri.parse('https://github.com/zedrock-coding/Helm/releases');
     try {
       final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
       if (!launched && mounted) {

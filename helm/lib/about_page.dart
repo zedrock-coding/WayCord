@@ -10,7 +10,7 @@ import 'widgets/waycord_logo.dart';
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
 
-  static const String updatesUrl = 'https://waycord.org';
+  static const String updatesUrl = 'https://github.com/zedrock-coding/Helm/releases';
 
   Future<void> _launchUpdatesUrl(BuildContext context) async {
     final uri = Uri.parse(updatesUrl);

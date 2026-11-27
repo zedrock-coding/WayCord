@@ -68,7 +68,7 @@ All notable changes to the **Helm** / **Waypoint** / **Waycord** project will be
 ### 🔒 Non-URL Operator Console & Security Hardening
 - **Protected Operator Surface**:
   - Replaced URL-based admin navigation with an in-memory, portal-rendered modal (`AdminConsoleModal`) toggled via keyboard shortcut (`Ctrl/Cmd+Shift+A`).
-  - Added strict SSR email whitelist verification (`lakshyajadhav15@gmail.com`, `kirajain2001@gmail.com`, `zedrock@waycord.org`).
+  - Added strict SSR email whitelist verification for authorized operator accounts.
   - Guarded `/admin` route redirecting unauthenticated or non-whitelisted visitors to root.
 
 ### 🛑 Custom 404 & Service Disruption Pages
@@ -113,7 +113,7 @@ All notable changes to the **Helm** / **Waypoint** / **Waycord** project will be
 
 ### 🚀 Waycord Rebranding & Centralized Legal Configuration
 - **Deterministic Rebrand**:
-  - Rebranded application from Waypoint to **Waycord** (`waycord.org`).
+  - Rebranded application from Waypoint to **Waycord**.
   - Created single source-of-truth configuration `config/organization.json` cascading into `lib/core/config/brand_config.dart`.
   - Added automated legal documentation synchronizer `tools/sync_brand_docs.py` keeping `PRIVACY_POLICY.md` and `EULA.md` consistently populated.
   - Updated Android manifest, iOS Info.plist, and Web metadata with Waycord branding.

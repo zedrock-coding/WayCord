@@ -1,6 +1,6 @@
 name: waypoint
 description: "Waycord — AI-orchestrated task management workspace"
-homepage: https://waycord.org
+homepage: https://github.com/zedrock-coding/Helm
 publish_to: 'none'
 
 version: 0.8.2+32

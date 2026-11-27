@@ -15,8 +15,8 @@
 
 | Platform | Distribution Target | File / Destination | Status |
 |---|---|---|---|
-| **Web Portal** | Vercel Edge Serverless | `https://waycord.org/` | `Verified & Deployed` |
-| **Workspace App** | Flutter Web SPA (`/app`) | `https://waycord.org/app/` | `Built & Staged` |
+| **Web Portal** | Vercel Edge Serverless | `https://helm-omega-blue.vercel.app/` | `Verified & Deployed` |
+| **Workspace App** | Flutter Web SPA (`/app`) | `https://helm-omega-blue.vercel.app/app/` | `Built & Staged` |
 | **Windows Desktop** | Setup Installer (`.exe`) | `Waycord-v0.7.1+29-Setup.exe` | `Direct Release Asset` |
 | **Android Mobile** | APK Package (`.apk`) | `waycord-v0.7.1.apk` | `Direct Release Asset` |
 | **Release Archive** | Historical Releases | `https://github.com/zedrock-coding/WayCord/releases` | `Linked on Portal` |
